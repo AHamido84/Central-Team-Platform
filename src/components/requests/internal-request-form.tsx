@@ -18,9 +18,13 @@ import {
   type CreateRequestState,
 } from "@/lib/actions/request-actions";
 import { optionsToSelectItems } from "@/lib/select-items";
+import { fieldSetForCategory } from "@/lib/request-type-fields";
+import { DynamicRequestFields } from "@/components/requests/dynamic-request-fields";
+import type { ScopeItemCategory } from "@prisma/client";
 
 type Option = { id: string; label: string };
 type ProjectOption = Option & { clientId: string };
+type RequestTypeOption = Option & { category: ScopeItemCategory | null };
 
 export function InternalRequestForm({
   clients,
@@ -31,7 +35,7 @@ export function InternalRequestForm({
 }: {
   clients: Option[];
   projects: ProjectOption[];
-  requestTypes: Option[];
+  requestTypes: RequestTypeOption[];
   defaultClientId?: string;
   defaultProjectId?: string;
 }) {
@@ -39,6 +43,7 @@ export function InternalRequestForm({
   const tCommon = useTranslations("common");
   const tValidation = useTranslations("validation");
   const [clientId, setClientId] = useState(defaultClientId ?? "");
+  const [requestTypeId, setRequestTypeId] = useState("");
   const [state, formAction, isPending] = useActionState<CreateRequestState, FormData>(
     createInternalRequestAction,
     undefined,
@@ -50,6 +55,8 @@ export function InternalRequestForm({
   };
 
   const projectsForClient = projects.filter((p) => !clientId || p.clientId === clientId);
+  const selectedType = requestTypes.find((rt) => rt.id === requestTypeId);
+  const fieldSet = fieldSetForCategory(selectedType?.category);
 
   return (
     <form action={formAction} className="flex flex-col gap-5">
@@ -93,7 +100,12 @@ export function InternalRequestForm({
 
       <div className="flex flex-col gap-2">
         <Label>{t("fields.requestType")}</Label>
-        <Select name="requestTypeId" items={optionsToSelectItems(requestTypes)}>
+        <Select
+          name="requestTypeId"
+          value={requestTypeId}
+          onValueChange={(value) => setRequestTypeId(value ?? "")}
+          items={optionsToSelectItems(requestTypes)}
+        >
           <SelectTrigger className="w-full">
             <SelectValue />
           </SelectTrigger>
@@ -120,6 +132,8 @@ export function InternalRequestForm({
         <Label htmlFor="description">{t("fields.description")}</Label>
         <Textarea id="description" name="description" rows={4} />
       </div>
+
+      <DynamicRequestFields fieldSet={fieldSet} />
 
       <div className="flex flex-col gap-2">
         <Label htmlFor="dueDate">{t("fields.dueDate")}</Label>

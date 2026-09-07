@@ -28,7 +28,7 @@ export default async function NewInternalRequestPage({
           <InternalRequestForm
             clients={clients.map((c) => ({ id: c.id, label: c.companyName }))}
             projects={projects.map((p) => ({ id: p.id, label: p.name, clientId: p.clientId }))}
-            requestTypes={requestTypes.map((rt) => ({ id: rt.id, label: rt.name }))}
+            requestTypes={requestTypes.map((rt) => ({ id: rt.id, label: rt.name, category: rt.category }))}
             defaultClientId={clientId}
             defaultProjectId={projectId}
           />

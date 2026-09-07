@@ -75,6 +75,13 @@
       "IN_PROGRESS": "قيد التنفيذ",
       "COMPLETED": "مكتمل",
       "CANCELLED": "ملغى"
+    },
+    "table": {
+      "item": "البند",
+      "contracted": "الكمية المتعاقد عليها",
+      "completed": "المنجز",
+      "remaining": "المتبقي",
+      "percent": "نسبة الإنجاز"
     }
   },
   "toast": {

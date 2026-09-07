@@ -42,6 +42,7 @@
     "unassigned": "Unassigned"
   },
   "typeFields": {
+    "title": "Additional details",
     "design": {
       "dimensions": "Dimensions",
       "platform": "Platform",

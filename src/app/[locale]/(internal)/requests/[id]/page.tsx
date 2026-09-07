@@ -9,6 +9,8 @@ import { RequestTimeline, type RequestTimelineEntry } from "@/components/portal/
 import { CommentThread } from "@/components/portal/comment-thread";
 import { RequestStatusSelect } from "@/components/requests/request-status-select";
 import { RequestAssigneeSelect } from "@/components/requests/request-assignee-select";
+import { RequestMetadataCard } from "@/components/requests/request-metadata-card";
+import { fieldSetForCategory } from "@/lib/request-type-fields";
 import { formatDate } from "@/lib/format-date";
 
 export default async function InternalRequestDetailPage({
@@ -46,24 +48,35 @@ export default async function InternalRequestDetailPage({
 
   if (!request) notFound();
 
+  // Only REQUEST_STATUS_UPDATED and REQUEST_ASSIGNED map to a timeline row —
+  // REQUEST_CREATED (and anything else logged against this request) is
+  // covered by the synthetic "created" entry above and must not fall through
+  // to a default, or it renders as a misleading "assigned to ..." event.
   const timeline: RequestTimelineEntry[] = [
     { id: "created", type: "created", atLabel: formatDate(request.createdAt, locale) },
-    ...auditEntries.map((entry) => {
+    ...auditEntries.flatMap((entry): RequestTimelineEntry[] => {
       const metadata = entry.metadata as { status?: string } | null;
       if (entry.action === "REQUEST_STATUS_UPDATED" && metadata?.status) {
-        return {
-          id: entry.id,
-          type: "statusChanged" as const,
-          atLabel: formatDate(entry.createdAt, locale),
-          status: metadata.status,
-        };
+        return [
+          {
+            id: entry.id,
+            type: "statusChanged",
+            atLabel: formatDate(entry.createdAt, locale),
+            status: metadata.status,
+          },
+        ];
       }
-      return {
-        id: entry.id,
-        type: "assigned" as const,
-        atLabel: formatDate(entry.createdAt, locale),
-        name: request.assignedTo?.name ?? t("noAssignee"),
-      };
+      if (entry.action === "REQUEST_ASSIGNED") {
+        return [
+          {
+            id: entry.id,
+            type: "assigned",
+            atLabel: formatDate(entry.createdAt, locale),
+            name: request.assignedTo?.name ?? t("noAssignee"),
+          },
+        ];
+      }
+      return [];
     }),
   ];
 
@@ -103,6 +116,11 @@ export default async function InternalRequestDetailPage({
               </p>
             </CardContent>
           </Card>
+
+          <RequestMetadataCard
+            fieldSet={fieldSetForCategory(request.requestType.category)}
+            metadata={request.metadata as Record<string, string> | null}
+          />
 
           <CommentThread
             comments={comments.map((c) => ({

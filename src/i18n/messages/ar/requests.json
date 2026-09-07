@@ -42,6 +42,7 @@
     "unassigned": "غير مسند"
   },
   "typeFields": {
+    "title": "تفاصيل إضافية",
     "design": {
       "dimensions": "الأبعاد",
       "platform": "المنصة",

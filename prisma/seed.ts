@@ -1,5 +1,6 @@
 import "dotenv/config";
 import { PrismaClient } from "@prisma/client";
+import type { ScopeItemCategory } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
 import bcrypt from "bcryptjs";
 
@@ -73,21 +74,70 @@ const ROLES: {
   },
 ];
 
+// Arabic-first: ProjectType/RequestType names are free-text DB content (not
+// translation keys), so the seed data itself must be Arabic.
 const PROJECT_TYPES = [
-  "Creative",
-  "Marketing Strategy",
-  "Advertising",
-  "Social Media",
-  "Video Production",
-  "Branding",
-  "Website",
-  "SEO",
-  "Lead Generation",
-  "Sales Support",
-  "Full Marketing",
+  "إبداعي",
+  "استراتيجية تسويقية",
+  "إعلانات",
+  "التواصل الاجتماعي",
+  "إنتاج فيديو",
+  "هوية بصرية",
+  "موقع إلكتروني",
+  "تحسين محركات البحث",
+  "توليد العملاء المحتملين",
+  "دعم المبيعات",
+  "تسويق متكامل",
 ];
 
-const REQUEST_TYPES = ["New project request", "Change request", "Support request", "General inquiry"];
+// Category drives which dynamic fields the "new request" form shows (see
+// src/lib/request-type-fields.ts) — null means a generic request with no
+// extra fields beyond title/description.
+const REQUEST_TYPES: { name: string; category: ScopeItemCategory | null }[] = [
+  { name: "طلب مشروع جديد", category: null },
+  { name: "طلب تعديل", category: null },
+  { name: "طلب دعم", category: null },
+  { name: "استفسار عام", category: null },
+  { name: "طلب تصميم", category: "DESIGN" },
+  { name: "طلب فيديو", category: "VIDEO" },
+  { name: "طلب بروشور", category: "BROCHURE" },
+  { name: "طلب حملة إعلانية", category: "ADVERTISING" },
+];
+
+// One-time rename of the English names Phase 0/1 originally seeded — a
+// plain upsert can't do this (it only matches on the *current* `name`), and
+// renaming in place (rather than deleting + recreating) preserves every
+// existing Project/Request's foreign key. Safe to leave running forever:
+// once a row has been renamed, these updates match zero rows and no-op.
+const LEGACY_PROJECT_TYPE_RENAMES: Record<string, string> = {
+  Creative: "إبداعي",
+  "Marketing Strategy": "استراتيجية تسويقية",
+  Advertising: "إعلانات",
+  "Social Media": "التواصل الاجتماعي",
+  "Video Production": "إنتاج فيديو",
+  Branding: "هوية بصرية",
+  Website: "موقع إلكتروني",
+  SEO: "تحسين محركات البحث",
+  "Lead Generation": "توليد العملاء المحتملين",
+  "Sales Support": "دعم المبيعات",
+  "Full Marketing": "تسويق متكامل",
+};
+const LEGACY_REQUEST_TYPE_RENAMES: Record<string, string> = {
+  "New project request": "طلب مشروع جديد",
+  "Change request": "طلب تعديل",
+  "Support request": "طلب دعم",
+  "General inquiry": "استفسار عام",
+};
+// These four were briefly (re-)seeded in English before this file settled on
+// Arabic names — their Arabic counterparts already exist, so (unlike the
+// rename map above) the fix is to delete the English duplicate, and only
+// when nothing references it.
+const STALE_ENGLISH_REQUEST_TYPE_NAMES = [
+  "Design request",
+  "Video request",
+  "Brochure request",
+  "Campaign request",
+];
 
 function daysAgo(n: number): Date {
   const d = new Date();
@@ -139,6 +189,17 @@ async function main() {
     }
   }
 
+  console.log("Renaming legacy English project/request types to Arabic...");
+  for (const [oldName, newName] of Object.entries(LEGACY_PROJECT_TYPE_RENAMES)) {
+    await prisma.projectType.updateMany({ where: { name: oldName }, data: { name: newName } });
+  }
+  for (const [oldName, newName] of Object.entries(LEGACY_REQUEST_TYPE_RENAMES)) {
+    await prisma.requestType.updateMany({ where: { name: oldName }, data: { name: newName } });
+  }
+  await prisma.requestType.deleteMany({
+    where: { name: { in: STALE_ENGLISH_REQUEST_TYPE_NAMES }, requests: { none: {} } },
+  });
+
   console.log("Seeding project types...");
   for (const name of PROJECT_TYPES) {
     await prisma.projectType.upsert({
@@ -150,11 +211,11 @@ async function main() {
 
   console.log("Seeding request types...");
   const requestTypeIdByName = new Map<string, string>();
-  for (const name of REQUEST_TYPES) {
+  for (const { name, category } of REQUEST_TYPES) {
     const rt = await prisma.requestType.upsert({
       where: { name },
-      update: {},
-      create: { name },
+      update: { category },
+      create: { name, category },
     });
     requestTypeIdByName.set(name, rt.id);
   }
@@ -199,7 +260,7 @@ async function main() {
   });
 
   const fullMarketingType = await prisma.projectType.findUniqueOrThrow({
-    where: { name: "Full Marketing" },
+    where: { name: "تسويق متكامل" },
   });
 
   const demoProject = await prisma.project.upsert({
@@ -234,29 +295,31 @@ async function main() {
     category: Parameters<typeof prisma.scopeItem.create>[0]["data"]["category"];
     name: string;
     quantity: number;
+    unit: string;
     status: "PLANNED" | "IN_PROGRESS" | "COMPLETED";
   }[] = [
-    { id: "demo-si-strategy", category: "MARKETING_STRATEGY", name: "الخطة التسويقية", quantity: 1, status: "COMPLETED" },
-    { id: "demo-si-design-done", category: "DESIGN", name: "تصميمات السوشيال ميديا", quantity: 15, status: "COMPLETED" },
-    { id: "demo-si-design-progress", category: "DESIGN", name: "تصميمات إضافية للحملة", quantity: 5, status: "IN_PROGRESS" },
-    { id: "demo-si-video-done", category: "VIDEO", name: "فيديوهات قصيرة", quantity: 3, status: "COMPLETED" },
-    { id: "demo-si-video-planned", category: "VIDEO", name: "فيديو تعريفي طويل", quantity: 2, status: "PLANNED" },
-    { id: "demo-si-voice-done", category: "VOICE_OVER", name: "تعليق صوتي - الحملة", quantity: 2, status: "COMPLETED" },
-    { id: "demo-si-voice-planned", category: "VOICE_OVER", name: "تعليق صوتي إضافي", quantity: 1, status: "PLANNED" },
-    { id: "demo-si-landing", category: "LANDING_PAGE", name: "صفحة الهبوط", quantity: 1, status: "COMPLETED" },
-    { id: "demo-si-advertising", category: "ADVERTISING", name: "الحملة الإعلانية", quantity: 1, status: "IN_PROGRESS" },
+    { id: "demo-si-strategy", category: "MARKETING_STRATEGY", name: "الخطة التسويقية", quantity: 1, unit: "مستند", status: "COMPLETED" },
+    { id: "demo-si-design-done", category: "DESIGN", name: "تصميمات السوشيال ميديا", quantity: 15, unit: "تصميم", status: "COMPLETED" },
+    { id: "demo-si-design-progress", category: "DESIGN", name: "تصميمات إضافية للحملة", quantity: 5, unit: "تصميم", status: "IN_PROGRESS" },
+    { id: "demo-si-video-done", category: "VIDEO", name: "فيديوهات قصيرة", quantity: 3, unit: "فيديو", status: "COMPLETED" },
+    { id: "demo-si-video-planned", category: "VIDEO", name: "فيديو تعريفي طويل", quantity: 2, unit: "فيديو", status: "PLANNED" },
+    { id: "demo-si-voice-done", category: "VOICE_OVER", name: "تعليق صوتي - الحملة", quantity: 2, unit: "مقطع", status: "COMPLETED" },
+    { id: "demo-si-voice-planned", category: "VOICE_OVER", name: "تعليق صوتي إضافي", quantity: 1, unit: "مقطع", status: "PLANNED" },
+    { id: "demo-si-landing", category: "LANDING_PAGE", name: "صفحة الهبوط", quantity: 1, unit: "صفحة", status: "COMPLETED" },
+    { id: "demo-si-advertising", category: "ADVERTISING", name: "الحملة الإعلانية", quantity: 1, unit: "حملة", status: "IN_PROGRESS" },
   ];
 
   for (const item of scopeItems) {
     await prisma.scopeItem.upsert({
       where: { id: item.id },
-      update: {},
+      update: { unit: item.unit },
       create: {
         id: item.id,
         projectScopeId: demoScope.id,
         category: item.category,
         name: item.name,
         quantity: item.quantity,
+        unit: item.unit,
         status: item.status,
       },
     });
@@ -382,7 +445,7 @@ async function main() {
       id: "demo-request-banner",
       clientId: demoClient.id,
       projectId: demoProject.id,
-      requestTypeId: requestTypeIdByName.get("Change request")!,
+      requestTypeId: requestTypeIdByName.get("طلب تعديل")!,
       title: "طلب إضافة بانر إعلاني إضافي",
       description: "نحتاج بانر بمقاس مربع لمنصات التواصل الاجتماعي",
       status: "REVIEWING",
@@ -396,7 +459,7 @@ async function main() {
       id: "demo-request-timeline",
       clientId: demoClient.id,
       projectId: demoProject.id,
-      requestTypeId: requestTypeIdByName.get("General inquiry")!,
+      requestTypeId: requestTypeIdByName.get("استفسار عام")!,
       title: "استفسار عن الجدول الزمني للتسليم",
       status: "NEW",
     },
@@ -526,7 +589,7 @@ async function main() {
   });
 
   const brandingType = await prisma.projectType.findUniqueOrThrow({
-    where: { name: "Branding" },
+    where: { name: "هوية بصرية" },
   });
 
   const secondProject = await prisma.project.upsert({
@@ -549,13 +612,14 @@ async function main() {
   });
   await prisma.scopeItem.upsert({
     where: { id: "demo-si-branding-logo" },
-    update: {},
+    update: { unit: "تصميم" },
     create: {
       id: "demo-si-branding-logo",
       projectScopeId: secondScope.id,
       category: "DESIGN",
       name: "تصميم الشعار",
       quantity: 3,
+      unit: "تصميم",
       status: "PLANNED",
     },
   });
@@ -656,7 +720,7 @@ async function main() {
   });
 
   const advertisingType = await prisma.projectType.findUniqueOrThrow({
-    where: { name: "Advertising" },
+    where: { name: "إعلانات" },
   });
 
   const thirdProject = await prisma.project.upsert({
@@ -687,23 +751,25 @@ async function main() {
     category: Parameters<typeof prisma.scopeItem.create>[0]["data"]["category"];
     name: string;
     quantity: number;
+    unit: string;
     status: "PLANNED" | "IN_PROGRESS" | "COMPLETED";
   }[] = [
-    { id: "demo-si-food-strategy", category: "MARKETING_STRATEGY", name: "استراتيجية الإطلاق", quantity: 1, status: "COMPLETED" },
-    { id: "demo-si-food-design", category: "DESIGN", name: "تصميمات العبوة والحملة", quantity: 8, status: "IN_PROGRESS" },
-    { id: "demo-si-food-video", category: "VIDEO", name: "فيديو إعلاني رئيسي", quantity: 1, status: "IN_PROGRESS" },
-    { id: "demo-si-food-media", category: "MEDIA_BUYING", name: "الشراء الإعلاني", quantity: 1, status: "PLANNED" },
+    { id: "demo-si-food-strategy", category: "MARKETING_STRATEGY", name: "استراتيجية الإطلاق", quantity: 1, unit: "مستند", status: "COMPLETED" },
+    { id: "demo-si-food-design", category: "DESIGN", name: "تصميمات العبوة والحملة", quantity: 8, unit: "تصميم", status: "IN_PROGRESS" },
+    { id: "demo-si-food-video", category: "VIDEO", name: "فيديو إعلاني رئيسي", quantity: 1, unit: "فيديو", status: "IN_PROGRESS" },
+    { id: "demo-si-food-media", category: "MEDIA_BUYING", name: "الشراء الإعلاني", quantity: 1, unit: "حملة", status: "PLANNED" },
   ];
   for (const item of thirdScopeItems) {
     await prisma.scopeItem.upsert({
       where: { id: item.id },
-      update: {},
+      update: { unit: item.unit },
       create: {
         id: item.id,
         projectScopeId: thirdScope.id,
         category: item.category,
         name: item.name,
         quantity: item.quantity,
+        unit: item.unit,
         status: item.status,
       },
     });

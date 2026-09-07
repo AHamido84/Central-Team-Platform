@@ -14,6 +14,7 @@ import { recordAudit } from "@/lib/audit";
 import { redirect } from "@/i18n/navigation";
 import { getLocale } from "next-intl/server";
 import { zodFieldErrors } from "@/lib/form-utils";
+import { fieldSetForCategory, collectRequestMetadata } from "@/lib/request-type-fields";
 import type { RequestStatus } from "@prisma/client";
 
 export type CreateRequestState = {
@@ -67,6 +68,15 @@ export async function createRequestAction(
     assertClientScope(user, project.clientId);
   }
 
+  // The dynamic field set (dimensions/platform for design, duration/script
+  // for video, ...) is derived from the request type's category server-side
+  // — never trust which fields the client happened to submit.
+  const requestType = await prisma.requestType.findUnique({
+    where: { id: data.requestTypeId },
+    select: { category: true },
+  });
+  const metadata = collectRequestMetadata(formData, fieldSetForCategory(requestType?.category));
+
   const request = await prisma.request.create({
     data: {
       clientId,
@@ -75,6 +85,7 @@ export async function createRequestAction(
       title: data.title,
       description: data.description || null,
       dueDate: data.dueDate ? new Date(data.dueDate) : null,
+      metadata: metadata ?? undefined,
       requestedById: user.id,
     },
   });
@@ -135,6 +146,12 @@ export async function createInternalRequestAction(
     }
   }
 
+  const requestType = await prisma.requestType.findUnique({
+    where: { id: data.requestTypeId },
+    select: { category: true },
+  });
+  const metadata = collectRequestMetadata(formData, fieldSetForCategory(requestType?.category));
+
   const request = await prisma.request.create({
     data: {
       clientId: data.clientId,
@@ -143,6 +160,7 @@ export async function createInternalRequestAction(
       title: data.title,
       description: data.description || null,
       dueDate: data.dueDate ? new Date(data.dueDate) : null,
+      metadata: metadata ?? undefined,
       requestedById: user.id,
     },
   });

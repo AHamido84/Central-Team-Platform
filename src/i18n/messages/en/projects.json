@@ -75,6 +75,13 @@
       "IN_PROGRESS": "In progress",
       "COMPLETED": "Completed",
       "CANCELLED": "Cancelled"
+    },
+    "table": {
+      "item": "Item",
+      "contracted": "Contracted quantity",
+      "completed": "Completed",
+      "remaining": "Remaining",
+      "percent": "Progress"
     }
   },
   "toast": {

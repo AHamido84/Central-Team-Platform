@@ -1,6 +1,6 @@
 "use client";
 
-import { useActionState } from "react";
+import { useActionState, useState } from "react";
 import { useTranslations } from "next-intl";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -15,8 +15,12 @@ import {
 } from "@/components/ui/select";
 import { createRequestAction, type CreateRequestState } from "@/lib/actions/request-actions";
 import { optionsToSelectItems } from "@/lib/select-items";
+import { fieldSetForCategory } from "@/lib/request-type-fields";
+import { DynamicRequestFields } from "@/components/requests/dynamic-request-fields";
+import type { ScopeItemCategory } from "@prisma/client";
 
 type Option = { id: string; label: string };
+type RequestTypeOption = Option & { category: ScopeItemCategory | null };
 
 export function RequestForm({
   projects,
@@ -24,12 +28,13 @@ export function RequestForm({
   defaultProjectId,
 }: {
   projects: Option[];
-  requestTypes: Option[];
+  requestTypes: RequestTypeOption[];
   defaultProjectId?: string;
 }) {
   const t = useTranslations("requests");
   const tCommon = useTranslations("common");
   const tValidation = useTranslations("validation");
+  const [requestTypeId, setRequestTypeId] = useState("");
   const [state, formAction, isPending] = useActionState<CreateRequestState, FormData>(
     createRequestAction,
     undefined,
@@ -39,6 +44,9 @@ export function RequestForm({
     const key = state?.errors?.[field];
     return key ? tValidation(key) : undefined;
   };
+
+  const selectedType = requestTypes.find((rt) => rt.id === requestTypeId);
+  const fieldSet = fieldSetForCategory(selectedType?.category);
 
   return (
     <form action={formAction} className="flex flex-col gap-5">
@@ -60,7 +68,12 @@ export function RequestForm({
 
       <div className="flex flex-col gap-2">
         <Label>{t("fields.requestType")}</Label>
-        <Select name="requestTypeId" items={optionsToSelectItems(requestTypes)}>
+        <Select
+          name="requestTypeId"
+          value={requestTypeId}
+          onValueChange={(value) => setRequestTypeId(value ?? "")}
+          items={optionsToSelectItems(requestTypes)}
+        >
           <SelectTrigger className="w-full">
             <SelectValue />
           </SelectTrigger>
@@ -87,6 +100,8 @@ export function RequestForm({
         <Label htmlFor="description">{t("fields.description")}</Label>
         <Textarea id="description" name="description" rows={4} />
       </div>
+
+      <DynamicRequestFields fieldSet={fieldSet} />
 
       <div className="flex flex-col gap-2">
         <Label htmlFor="dueDate">{t("fields.dueDate")}</Label>

@@ -15,7 +15,7 @@ export default async function ProjectScopePage({
   const scope = await prisma.projectScope.findFirst({
     where: { projectId: id },
     orderBy: { version: "desc" },
-    include: { items: { select: { category: true, quantity: true, status: true } } },
+    include: { items: { select: { category: true, quantity: true, status: true, unit: true } } },
   });
 
   return <ScopeBreakdown items={scope?.items ?? []} />;

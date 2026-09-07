@@ -35,7 +35,7 @@ export default async function NewRequestPage({
         <CardContent>
           <RequestForm
             projects={projects.map((p) => ({ id: p.id, label: p.name }))}
-            requestTypes={requestTypes.map((rt) => ({ id: rt.id, label: rt.name }))}
+            requestTypes={requestTypes.map((rt) => ({ id: rt.id, label: rt.name, category: rt.category }))}
             defaultProjectId={projectId}
           />
         </CardContent>

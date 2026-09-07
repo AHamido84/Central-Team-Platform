@@ -13,7 +13,7 @@ export default async function InternalProjectScopePage({
   const scope = await prisma.projectScope.findFirst({
     where: { projectId: id },
     orderBy: { version: "desc" },
-    include: { items: { select: { category: true, quantity: true, status: true } } },
+    include: { items: { select: { category: true, quantity: true, status: true, unit: true } } },
   });
 
   const addItemAction = scope ? addScopeItemAction.bind(null, scope.id, id) : null;
