@@ -1,0 +1,38 @@
+{
+  "title": "العملاء",
+  "subtitle": "إدارة بيانات العملاء وحساباتهم",
+  "createButton": "عميل جديد",
+  "editTitle": "تعديل بيانات العميل",
+  "createTitle": "إضافة عميل جديد",
+  "empty": {
+    "title": "لا يوجد عملاء بعد",
+    "description": "ابدأ بإضافة أول عميل لمتابعة مشاريعه وطلباته من هنا."
+  },
+  "fields": {
+    "companyName": "اسم الشركة",
+    "legalName": "الاسم القانوني",
+    "industry": "المجال",
+    "website": "الموقع الإلكتروني",
+    "email": "البريد الإلكتروني",
+    "phone": "رقم الهاتف",
+    "address": "العنوان",
+    "status": "الحالة",
+    "accountManager": "مدير الحساب",
+    "notes": "ملاحظات"
+  },
+  "status": {
+    "ACTIVE": "نشط",
+    "ON_HOLD": "متوقف مؤقتًا",
+    "ARCHIVED": "مؤرشف"
+  },
+  "toast": {
+    "created": "تم إنشاء العميل بنجاح",
+    "updated": "تم تحديث بيانات العميل",
+    "deleted": "تم حذف العميل"
+  },
+  "detail": {
+    "projectsTitle": "مشاريع العميل",
+    "contactsTitle": "جهات الاتصال",
+    "contractsTitle": "العقود"
+  }
+}

@@ -1,0 +1,682 @@
+// Central Team Platform — Phase 0 data model.
+// See ARCHITECTURE.md §4 for the reasoning behind the non-obvious calls below.
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+// ---------------------------------------------------------------------------
+// Identity, roles, permissions
+// ---------------------------------------------------------------------------
+
+model User {
+  id           String   @id @default(cuid())
+  name         String
+  email        String   @unique
+  passwordHash String
+  avatar       String?
+  status       UserStatus @default(ACTIVE)
+  locale       String   @default("ar")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  roleId String
+  role   Role   @relation(fields: [roleId], references: [id])
+
+  // Null for internal agency staff. Set for client-portal users — this is the
+  // field every client-scoping authorization check hinges on.
+  clientId String?
+  client   Client? @relation("ClientUsers", fields: [clientId], references: [id])
+
+  managedClients      Client[]       @relation("AccountManager")
+  ownedProjects       Project[]      @relation("ProjectOwner")
+  managedProjects      Project[]      @relation("ProjectAccountManager")
+  assignedTasks       Task[]         @relation("TaskAssignee")
+  requestedRequests   Request[]      @relation("RequestedBy")
+  ownedOpportunities  Opportunity[]  @relation("OpportunityOwner")
+  assignedLeads       Lead[]         @relation("LeadAssignee")
+  uploadedAssets      Asset[]        @relation("AssetUploadedBy")
+  notifications       Notification[]
+  comments            Comment[]
+  approvalsRequested  Approval[]     @relation("ApprovalRequestedBy")
+  approvalsDecided    Approval[]     @relation("ApprovalApprover")
+  auditLogs           AuditLog[]
+  connectedIntegrations Integration[] @relation("IntegrationConnectedBy")
+
+  @@index([clientId])
+  @@index([roleId])
+}
+
+enum UserStatus {
+  ACTIVE
+  INVITED
+  SUSPENDED
+}
+
+model Role {
+  id          String   @id @default(cuid())
+  name        String   @unique // e.g. SUPER_ADMIN, ACCOUNT_MANAGER, PROJECT_MANAGER, STAFF, CLIENT_ADMIN, CLIENT_USER
+  description String?
+  isSystem    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  users       User[]
+  permissions RolePermission[]
+}
+
+model Permission {
+  id          String   @id @default(cuid())
+  key         String   @unique // e.g. "clients.create", "projects.update"
+  description String?
+  createdAt   DateTime @default(now())
+
+  roles RolePermission[]
+}
+
+model RolePermission {
+  roleId       String
+  permissionId String
+  role         Role       @relation(fields: [roleId], references: [id], onDelete: Cascade)
+  permission   Permission @relation(fields: [permissionId], references: [id], onDelete: Cascade)
+
+  @@id([roleId, permissionId])
+}
+
+// ---------------------------------------------------------------------------
+// Client
+// ---------------------------------------------------------------------------
+
+model Client {
+  id              String       @id @default(cuid())
+  companyName     String
+  legalName       String?
+  logo            String?
+  industry        String?
+  website         String?
+  email           String?
+  phone           String?
+  address         String?
+  status          ClientStatus @default(ACTIVE)
+  notes           String?
+  createdAt       DateTime     @default(now())
+  updatedAt       DateTime     @updatedAt
+
+  accountManagerId String?
+  accountManager    User?   @relation("AccountManager", fields: [accountManagerId], references: [id])
+
+  users     User[]          @relation("ClientUsers")
+  contacts  ClientContact[]
+  contracts Contract[]
+  projects  Project[]
+  requests  Request[]
+  leads     Lead[]
+  opportunities Opportunity[]
+  assets    Asset[]
+  integrations Integration[]
+
+  @@index([accountManagerId])
+}
+
+enum ClientStatus {
+  ACTIVE
+  ON_HOLD
+  ARCHIVED
+}
+
+model ClientContact {
+  id        String   @id @default(cuid())
+  clientId  String
+  client    Client   @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  name      String
+  email     String?
+  phone     String?
+  position  String?
+  isPrimary Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([clientId])
+}
+
+model Contract {
+  id        String         @id @default(cuid())
+  clientId  String
+  client    Client         @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  title     String
+  type      String?
+  startDate DateTime?
+  endDate   DateTime?
+  value     Decimal?       @db.Decimal(14, 2)
+  currency  String?        @default("SAR")
+  status    ContractStatus @default(DRAFT)
+  fileUrl   String?
+  notes     String?
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  projects Project[]
+
+  @@index([clientId])
+}
+
+enum ContractStatus {
+  DRAFT
+  ACTIVE
+  EXPIRED
+  TERMINATED
+}
+
+// ---------------------------------------------------------------------------
+// Project
+// ---------------------------------------------------------------------------
+
+model ProjectType {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  isCustom    Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  projects Project[]
+}
+
+model Project {
+  id          String        @id @default(cuid())
+  clientId    String
+  client      Client        @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  contractId  String?
+  contract    Contract?     @relation(fields: [contractId], references: [id])
+  projectTypeId String
+  projectType   ProjectType @relation(fields: [projectTypeId], references: [id])
+
+  name        String
+  description String?
+  status      ProjectStatus @default(PLANNED)
+  priority    Priority      @default(MEDIUM)
+  startDate   DateTime?
+  dueDate     DateTime?
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  ownerId String?
+  owner   User?   @relation("ProjectOwner", fields: [ownerId], references: [id])
+
+  accountManagerId String?
+  accountManager    User?   @relation("ProjectAccountManager", fields: [accountManagerId], references: [id])
+
+  scopes       ProjectScope[]
+  requests     Request[]
+  tasks        Task[]
+  deliverables Deliverable[]
+  campaigns    Campaign[]
+  leads        Lead[]
+  opportunities Opportunity[]
+  assets       Asset[]
+
+  @@index([clientId])
+  @@index([projectTypeId])
+  @@index([ownerId])
+}
+
+enum ProjectStatus {
+  PLANNED
+  IN_PROGRESS
+  ON_HOLD
+  COMPLETED
+  CANCELLED
+}
+
+enum Priority {
+  LOW
+  MEDIUM
+  HIGH
+  URGENT
+}
+
+model ProjectScope {
+  id         String     @id @default(cuid())
+  projectId  String
+  project    Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  version    Int        @default(1)
+  status     ScopeStatus @default(DRAFT)
+  approvedAt DateTime?
+  notes      String?
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  items ScopeItem[]
+
+  @@index([projectId])
+}
+
+enum ScopeStatus {
+  DRAFT
+  APPROVED
+  ARCHIVED
+}
+
+model ScopeItem {
+  id             String            @id @default(cuid())
+  projectScopeId String
+  projectScope   ProjectScope      @relation(fields: [projectScopeId], references: [id], onDelete: Cascade)
+
+  category       ScopeItemCategory
+  name           String
+  description    String?
+  quantity       Int?              @default(1)
+  unit           String?
+  estimatedHours Decimal?          @db.Decimal(8, 2)
+  included       Boolean           @default(true)
+  status         ScopeItemStatus   @default(PLANNED)
+  startDate      DateTime?
+  dueDate        DateTime?
+  notes          String?
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+
+  tasks Task[]
+
+  @@index([projectScopeId])
+}
+
+enum ScopeItemCategory {
+  DESIGN
+  VIDEO
+  VOICE_OVER
+  COPYWRITING
+  PHOTOGRAPHY
+  BROCHURE
+  WEBSITE
+  LANDING_PAGE
+  SEO
+  MARKETING_STRATEGY
+  ADVERTISING
+  MEDIA_BUYING
+  COMMUNITY_MANAGEMENT
+  LEAD_GENERATION
+  SALES_SUPPORT
+  REPORTING
+  OTHER
+}
+
+enum ScopeItemStatus {
+  PLANNED
+  IN_PROGRESS
+  COMPLETED
+  CANCELLED
+}
+
+// ---------------------------------------------------------------------------
+// Requests, Tasks, Deliverables, Assets
+// ---------------------------------------------------------------------------
+
+model RequestType {
+  id          String   @id @default(cuid())
+  name        String   @unique
+  description String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  requests Request[]
+}
+
+model Request {
+  id            String        @id @default(cuid())
+  clientId      String
+  client        Client        @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  projectId     String?
+  project       Project?      @relation(fields: [projectId], references: [id])
+  requestTypeId String
+  requestType   RequestType   @relation(fields: [requestTypeId], references: [id])
+
+  title       String
+  description String?
+  status      RequestStatus @default(NEW)
+  priority    Priority      @default(MEDIUM)
+  createdAt   DateTime      @default(now())
+  updatedAt   DateTime      @updatedAt
+
+  requestedById String?
+  requestedBy   User?   @relation("RequestedBy", fields: [requestedById], references: [id])
+
+  @@index([clientId])
+  @@index([projectId])
+}
+
+enum RequestStatus {
+  NEW
+  REVIEWING
+  APPROVED
+  CONVERTED
+  REJECTED
+}
+
+model Task {
+  id          String     @id @default(cuid())
+  projectId   String
+  project     Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  scopeItemId String?
+  scopeItem   ScopeItem? @relation(fields: [scopeItemId], references: [id])
+
+  title       String
+  description String?
+  status      TaskStatus @default(TODO)
+  priority    Priority   @default(MEDIUM)
+  dueDate     DateTime?
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  assigneeId String?
+  assignee   User?   @relation("TaskAssignee", fields: [assigneeId], references: [id])
+
+  deliverables Deliverable[]
+
+  @@index([projectId])
+  @@index([assigneeId])
+}
+
+enum TaskStatus {
+  TODO
+  IN_PROGRESS
+  IN_REVIEW
+  DONE
+  CANCELLED
+}
+
+model Deliverable {
+  id          String            @id @default(cuid())
+  projectId   String
+  project     Project           @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  taskId      String?
+  task        Task?             @relation(fields: [taskId], references: [id])
+
+  title       String
+  description String?
+  type        String?
+  status      DeliverableStatus @default(DRAFT)
+  version     Int               @default(1)
+  dueDate     DateTime?
+  deliveredAt DateTime?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  assets Asset[]
+
+  @@index([projectId])
+  @@index([taskId])
+}
+
+enum DeliverableStatus {
+  DRAFT
+  IN_REVIEW
+  APPROVED
+  DELIVERED
+  REJECTED
+}
+
+model Asset {
+  id            String       @id @default(cuid())
+  clientId      String?
+  client        Client?      @relation(fields: [clientId], references: [id])
+  projectId     String?
+  project       Project?     @relation(fields: [projectId], references: [id])
+  deliverableId String?
+  deliverable   Deliverable? @relation(fields: [deliverableId], references: [id])
+
+  fileName String
+  fileUrl  String
+  fileType String?
+  fileSize Int?
+  createdAt DateTime @default(now())
+
+  uploadedById String?
+  uploadedBy   User?   @relation("AssetUploadedBy", fields: [uploadedById], references: [id])
+
+  @@index([clientId])
+  @@index([projectId])
+  @@index([deliverableId])
+}
+
+// ---------------------------------------------------------------------------
+// Optional project components: Campaign, Lead, Opportunity
+// ---------------------------------------------------------------------------
+
+model Campaign {
+  id        String         @id @default(cuid())
+  projectId String
+  project   Project        @relation(fields: [projectId], references: [id], onDelete: Cascade)
+
+  name      String
+  platform  CampaignPlatform
+  status    CampaignStatus @default(PLANNED)
+  objective String?
+  budget    Decimal?       @db.Decimal(14, 2)
+  currency  String?        @default("SAR")
+  startDate DateTime?
+  endDate   DateTime?
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+
+  leads Lead[]
+
+  @@index([projectId])
+}
+
+enum CampaignPlatform {
+  META
+  GOOGLE
+  TIKTOK
+  SNAPCHAT
+  LINKEDIN
+  X
+  OTHER
+}
+
+enum CampaignStatus {
+  PLANNED
+  ACTIVE
+  PAUSED
+  COMPLETED
+  CANCELLED
+}
+
+model Lead {
+  id         String     @id @default(cuid())
+  clientId   String
+  client     Client     @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  projectId  String?
+  project    Project?   @relation(fields: [projectId], references: [id])
+  campaignId String?
+  campaign   Campaign?  @relation(fields: [campaignId], references: [id])
+
+  name      String
+  email     String?
+  phone     String?
+  source    String?
+  status    LeadStatus @default(NEW)
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+
+  assignedToId String?
+  assignedTo   User?   @relation("LeadAssignee", fields: [assignedToId], references: [id])
+
+  opportunities Opportunity[]
+
+  @@index([clientId])
+  @@index([projectId])
+  @@index([campaignId])
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  QUALIFIED
+  DISQUALIFIED
+  CONVERTED
+}
+
+model Opportunity {
+  id        String            @id @default(cuid())
+  clientId  String
+  client    Client            @relation(fields: [clientId], references: [id], onDelete: Cascade)
+  projectId String?
+  project   Project?          @relation(fields: [projectId], references: [id])
+  leadId    String?
+  lead      Lead?             @relation(fields: [leadId], references: [id])
+
+  title       String
+  stage       OpportunityStage @default(NEW)
+  value       Decimal?         @db.Decimal(14, 2)
+  currency    String?          @default("SAR")
+  probability Int?
+  expectedCloseDate DateTime?
+  status      OpportunityStatus @default(OPEN)
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  ownerId String?
+  owner   User?   @relation("OpportunityOwner", fields: [ownerId], references: [id])
+
+  @@index([clientId])
+  @@index([projectId])
+  @@index([leadId])
+}
+
+enum OpportunityStage {
+  NEW
+  QUALIFYING
+  PROPOSAL
+  NEGOTIATION
+  WON
+  LOST
+}
+
+enum OpportunityStatus {
+  OPEN
+  WON
+  LOST
+}
+
+// ---------------------------------------------------------------------------
+// Cross-cutting: Notification, Comment, Approval, Integration, AuditLog
+// ---------------------------------------------------------------------------
+
+model Notification {
+  id        String   @id @default(cuid())
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String
+  title     String
+  message   String?
+  link      String?
+  isRead    Boolean  @default(false)
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+}
+
+// Polymorphic association via entityType + entityId — no DB-level FK, enforced
+// in application code. See ARCHITECTURE.md §4.
+enum CommentableType {
+  PROJECT
+  TASK
+  REQUEST
+  DELIVERABLE
+  OPPORTUNITY
+}
+
+model Comment {
+  id         String          @id @default(cuid())
+  entityType CommentableType
+  entityId   String
+  authorId   String
+  author     User            @relation(fields: [authorId], references: [id])
+  body       String
+  createdAt  DateTime        @default(now())
+  updatedAt  DateTime        @updatedAt
+
+  @@index([entityType, entityId])
+  @@index([authorId])
+}
+
+enum ApprovableType {
+  PROJECT_SCOPE
+  DELIVERABLE
+  CONTRACT
+}
+
+model Approval {
+  id         String         @id @default(cuid())
+  entityType ApprovableType
+  entityId   String
+  status     ApprovalStatus @default(PENDING)
+  comment    String?
+  decidedAt  DateTime?
+  createdAt  DateTime       @default(now())
+
+  requestedById String?
+  requestedBy   User?   @relation("ApprovalRequestedBy", fields: [requestedById], references: [id])
+
+  approverId String?
+  approver   User?   @relation("ApprovalApprover", fields: [approverId], references: [id])
+
+  @@index([entityType, entityId])
+}
+
+enum ApprovalStatus {
+  PENDING
+  APPROVED
+  REJECTED
+}
+
+model Integration {
+  id          String            @id @default(cuid())
+  clientId    String?
+  client      Client?           @relation(fields: [clientId], references: [id])
+  provider    IntegrationProvider
+  status      IntegrationStatus @default(DISCONNECTED)
+  credentials Json?
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  connectedById String?
+  connectedBy   User?   @relation("IntegrationConnectedBy", fields: [connectedById], references: [id])
+
+  @@index([clientId])
+}
+
+enum IntegrationProvider {
+  META_ADS
+  GOOGLE_ADS
+  GOOGLE_ANALYTICS
+  TIKTOK_ADS
+  WHATSAPP
+  OTHER
+}
+
+enum IntegrationStatus {
+  CONNECTED
+  DISCONNECTED
+  ERROR
+}
+
+model AuditLog {
+  id         String   @id @default(cuid())
+  actorId    String?
+  actor      User?    @relation(fields: [actorId], references: [id])
+  action     String
+  entityType String
+  entityId   String
+  metadata   Json?
+  ipAddress  String?
+  createdAt  DateTime @default(now())
+
+  @@index([entityType, entityId])
+  @@index([actorId])
+}

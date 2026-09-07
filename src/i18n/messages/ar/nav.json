@@ -1,0 +1,28 @@
+{
+  "internal": {
+    "dashboard": "لوحة التحكم",
+    "clients": "العملاء",
+    "projects": "المشاريع",
+    "requests": "الطلبات",
+    "tasks": "المهام",
+    "deliverables": "التسليمات",
+    "campaigns": "الحملات",
+    "leads": "العملاء المحتملون",
+    "opportunities": "فرص البيع",
+    "reports": "التقارير",
+    "settings": "الإعدادات"
+  },
+  "portal": {
+    "dashboard": "الرئيسية",
+    "myProjects": "مشاريعي",
+    "myRequests": "طلباتي",
+    "myDeliverables": "تسليماتي"
+  },
+  "userMenu": {
+    "profile": "الملف الشخصي",
+    "logout": "تسجيل الخروج"
+  },
+  "breadcrumbs": {
+    "home": "الرئيسية"
+  }
+}

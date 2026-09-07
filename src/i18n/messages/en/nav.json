@@ -1,0 +1,28 @@
+{
+  "internal": {
+    "dashboard": "Dashboard",
+    "clients": "Clients",
+    "projects": "Projects",
+    "requests": "Requests",
+    "tasks": "Tasks",
+    "deliverables": "Deliverables",
+    "campaigns": "Campaigns",
+    "leads": "Leads",
+    "opportunities": "Opportunities",
+    "reports": "Reports",
+    "settings": "Settings"
+  },
+  "portal": {
+    "dashboard": "Home",
+    "myProjects": "My Projects",
+    "myRequests": "My Requests",
+    "myDeliverables": "My Deliverables"
+  },
+  "userMenu": {
+    "profile": "Profile",
+    "logout": "Log out"
+  },
+  "breadcrumbs": {
+    "home": "Home"
+  }
+}

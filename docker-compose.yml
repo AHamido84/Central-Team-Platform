@@ -1,0 +1,15 @@
+services:
+  postgres:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ctp
+      POSTGRES_PASSWORD: ctp
+      POSTGRES_DB: ctp
+    ports:
+      - "5432:5432"
+    volumes:
+      - ctp_postgres_data:/var/lib/postgresql/data
+
+volumes:
+  ctp_postgres_data:

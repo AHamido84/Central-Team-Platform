@@ -1,0 +1,42 @@
+{
+  "appName": "منصة الفريق المركزي",
+  "actions": {
+    "save": "حفظ",
+    "cancel": "إلغاء",
+    "edit": "تعديل",
+    "delete": "حذف",
+    "create": "إنشاء",
+    "add": "إضافة",
+    "search": "بحث",
+    "filter": "تصفية",
+    "back": "رجوع",
+    "next": "التالي",
+    "previous": "السابق",
+    "close": "إغلاق",
+    "confirm": "تأكيد",
+    "view": "عرض",
+    "viewAll": "عرض الكل",
+    "submit": "إرسال",
+    "saveChanges": "حفظ التغييرات",
+    "confirmDelete": "تأكيد الحذف"
+  },
+  "status": {
+    "loading": "جارٍ التحميل...",
+    "saving": "جارٍ الحفظ...",
+    "noResults": "لا توجد نتائج",
+    "empty": "لا توجد بيانات لعرضها بعد"
+  },
+  "language": {
+    "label": "اللغة",
+    "ar": "العربية",
+    "en": "English"
+  },
+  "table": {
+    "rowsPerPage": "عدد الصفوف",
+    "page": "صفحة {current} من {total}"
+  },
+  "confirmDialog": {
+    "title": "هل أنت متأكد؟",
+    "deleteDescription": "لا يمكن التراجع عن هذا الإجراء بعد تنفيذه."
+  }
+}

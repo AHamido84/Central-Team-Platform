@@ -1,0 +1,38 @@
+{
+  "title": "Clients",
+  "subtitle": "Manage client accounts and information",
+  "createButton": "New client",
+  "editTitle": "Edit client",
+  "createTitle": "Add new client",
+  "empty": {
+    "title": "No clients yet",
+    "description": "Add your first client to start tracking their projects and requests here."
+  },
+  "fields": {
+    "companyName": "Company name",
+    "legalName": "Legal name",
+    "industry": "Industry",
+    "website": "Website",
+    "email": "Email",
+    "phone": "Phone",
+    "address": "Address",
+    "status": "Status",
+    "accountManager": "Account manager",
+    "notes": "Notes"
+  },
+  "status": {
+    "ACTIVE": "Active",
+    "ON_HOLD": "On hold",
+    "ARCHIVED": "Archived"
+  },
+  "toast": {
+    "created": "Client created successfully",
+    "updated": "Client updated",
+    "deleted": "Client deleted"
+  },
+  "detail": {
+    "projectsTitle": "Client projects",
+    "contactsTitle": "Contacts",
+    "contractsTitle": "Contracts"
+  }
+}

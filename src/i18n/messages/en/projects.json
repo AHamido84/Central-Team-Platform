@@ -1,0 +1,86 @@
+{
+  "title": "Projects",
+  "subtitle": "Track client projects from kickoff to delivery",
+  "createButton": "New project",
+  "editTitle": "Edit project",
+  "createTitle": "Create new project",
+  "empty": {
+    "title": "No projects yet",
+    "description": "Create the first project for this client to define scope and tasks."
+  },
+  "fields": {
+    "name": "Project name",
+    "description": "Description",
+    "client": "Client",
+    "projectType": "Project type",
+    "contract": "Contract",
+    "status": "Status",
+    "priority": "Priority",
+    "startDate": "Start date",
+    "dueDate": "Due date",
+    "owner": "Project owner",
+    "accountManager": "Account manager"
+  },
+  "status": {
+    "PLANNED": "Planned",
+    "IN_PROGRESS": "In progress",
+    "ON_HOLD": "On hold",
+    "COMPLETED": "Completed",
+    "CANCELLED": "Cancelled"
+  },
+  "priority": {
+    "LOW": "Low",
+    "MEDIUM": "Medium",
+    "HIGH": "High",
+    "URGENT": "Urgent"
+  },
+  "scope": {
+    "title": "Scope of work",
+    "addItem": "Add item",
+    "empty": "No scope has been defined for this project yet",
+    "fields": {
+      "category": "Category",
+      "name": "Item name",
+      "description": "Description",
+      "quantity": "Quantity",
+      "unit": "Unit",
+      "estimatedHours": "Estimated hours",
+      "included": "Included in scope",
+      "status": "Status",
+      "startDate": "Start date",
+      "dueDate": "Due date",
+      "notes": "Notes"
+    },
+    "category": {
+      "DESIGN": "Design",
+      "VIDEO": "Video",
+      "VOICE_OVER": "Voice over",
+      "COPYWRITING": "Copywriting",
+      "PHOTOGRAPHY": "Photography",
+      "BROCHURE": "Brochure",
+      "WEBSITE": "Website",
+      "LANDING_PAGE": "Landing page",
+      "SEO": "SEO",
+      "MARKETING_STRATEGY": "Marketing strategy",
+      "ADVERTISING": "Advertising",
+      "MEDIA_BUYING": "Media buying",
+      "COMMUNITY_MANAGEMENT": "Community management",
+      "LEAD_GENERATION": "Lead generation",
+      "SALES_SUPPORT": "Sales support",
+      "REPORTING": "Reporting",
+      "OTHER": "Other"
+    },
+    "status": {
+      "PLANNED": "Planned",
+      "IN_PROGRESS": "In progress",
+      "COMPLETED": "Completed",
+      "CANCELLED": "Cancelled"
+    }
+  },
+  "toast": {
+    "created": "Project created successfully",
+    "updated": "Project updated",
+    "deleted": "Project deleted",
+    "scopeItemAdded": "Scope item added"
+  }
+}

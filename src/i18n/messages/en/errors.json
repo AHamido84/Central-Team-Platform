@@ -1,0 +1,13 @@
+{
+  "generic": "Something unexpected happened, please try again",
+  "notFound": {
+    "title": "Page not found",
+    "description": "The page you're looking for isn't available or has moved"
+  },
+  "forbidden": {
+    "title": "Access denied",
+    "description": "You don't have permission to access this page or data"
+  },
+  "unauthorized": "Please sign in to continue",
+  "serverError": "A server error occurred, please try again later"
+}

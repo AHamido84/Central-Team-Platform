@@ -1,0 +1,86 @@
+{
+  "title": "المشاريع",
+  "subtitle": "متابعة مشاريع العملاء من البداية حتى التسليم",
+  "createButton": "مشروع جديد",
+  "editTitle": "تعديل المشروع",
+  "createTitle": "إنشاء مشروع جديد",
+  "empty": {
+    "title": "لا توجد مشاريع بعد",
+    "description": "أنشئ أول مشروع لهذا العميل لتتمكن من تحديد النطاق والمهام."
+  },
+  "fields": {
+    "name": "اسم المشروع",
+    "description": "الوصف",
+    "client": "العميل",
+    "projectType": "نوع المشروع",
+    "contract": "العقد",
+    "status": "الحالة",
+    "priority": "الأولوية",
+    "startDate": "تاريخ البدء",
+    "dueDate": "تاريخ التسليم",
+    "owner": "مسؤول المشروع",
+    "accountManager": "مدير الحساب"
+  },
+  "status": {
+    "PLANNED": "مخطط له",
+    "IN_PROGRESS": "قيد التنفيذ",
+    "ON_HOLD": "متوقف مؤقتًا",
+    "COMPLETED": "مكتمل",
+    "CANCELLED": "ملغى"
+  },
+  "priority": {
+    "LOW": "منخفضة",
+    "MEDIUM": "متوسطة",
+    "HIGH": "عالية",
+    "URGENT": "عاجلة"
+  },
+  "scope": {
+    "title": "نطاق العمل",
+    "addItem": "إضافة بند",
+    "empty": "لم يتم تحديد نطاق العمل لهذا المشروع بعد",
+    "fields": {
+      "category": "الفئة",
+      "name": "اسم البند",
+      "description": "الوصف",
+      "quantity": "الكمية",
+      "unit": "الوحدة",
+      "estimatedHours": "الساعات المقدرة",
+      "included": "ضمن النطاق",
+      "status": "الحالة",
+      "startDate": "تاريخ البدء",
+      "dueDate": "تاريخ التسليم",
+      "notes": "ملاحظات"
+    },
+    "category": {
+      "DESIGN": "تصميم",
+      "VIDEO": "فيديو",
+      "VOICE_OVER": "تعليق صوتي",
+      "COPYWRITING": "كتابة محتوى",
+      "PHOTOGRAPHY": "تصوير",
+      "BROCHURE": "بروشور",
+      "WEBSITE": "موقع إلكتروني",
+      "LANDING_PAGE": "صفحة هبوط",
+      "SEO": "تحسين محركات البحث",
+      "MARKETING_STRATEGY": "استراتيجية تسويقية",
+      "ADVERTISING": "إعلانات",
+      "MEDIA_BUYING": "شراء إعلاني",
+      "COMMUNITY_MANAGEMENT": "إدارة المجتمع الرقمي",
+      "LEAD_GENERATION": "توليد العملاء المحتملين",
+      "SALES_SUPPORT": "دعم المبيعات",
+      "REPORTING": "تقارير",
+      "OTHER": "أخرى"
+    },
+    "status": {
+      "PLANNED": "مخطط له",
+      "IN_PROGRESS": "قيد التنفيذ",
+      "COMPLETED": "مكتمل",
+      "CANCELLED": "ملغى"
+    }
+  },
+  "toast": {
+    "created": "تم إنشاء المشروع بنجاح",
+    "updated": "تم تحديث المشروع",
+    "deleted": "تم حذف المشروع",
+    "scopeItemAdded": "تمت إضافة بند النطاق"
+  }
+}

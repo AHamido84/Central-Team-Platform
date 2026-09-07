@@ -1,0 +1,42 @@
+{
+  "appName": "Central Team Platform",
+  "actions": {
+    "save": "Save",
+    "cancel": "Cancel",
+    "edit": "Edit",
+    "delete": "Delete",
+    "create": "Create",
+    "add": "Add",
+    "search": "Search",
+    "filter": "Filter",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous",
+    "close": "Close",
+    "confirm": "Confirm",
+    "view": "View",
+    "viewAll": "View all",
+    "submit": "Submit",
+    "saveChanges": "Save changes",
+    "confirmDelete": "Confirm delete"
+  },
+  "status": {
+    "loading": "Loading...",
+    "saving": "Saving...",
+    "noResults": "No results found",
+    "empty": "No data to show yet"
+  },
+  "language": {
+    "label": "Language",
+    "ar": "العربية",
+    "en": "English"
+  },
+  "table": {
+    "rowsPerPage": "Rows per page",
+    "page": "Page {current} of {total}"
+  },
+  "confirmDialog": {
+    "title": "Are you sure?",
+    "deleteDescription": "This action cannot be undone."
+  }
+}
