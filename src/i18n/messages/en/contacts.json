@@ -1,0 +1,31 @@
+{
+  "title": "Contacts",
+  "addButton": "Add contact",
+  "editTitle": "Edit contact",
+  "empty": "No contacts added yet",
+  "primaryBadge": "Primary",
+  "setPrimary": "Set as primary",
+  "deleteContact": "Delete contact",
+  "deleteContactConfirm": "This will permanently remove this contact.",
+  "archiveContact": "Archive contact",
+  "fields": {
+    "name": "Name",
+    "position": "Job title",
+    "department": "Department",
+    "email": "Email",
+    "phone": "Phone",
+    "whatsapp": "WhatsApp",
+    "preferredContactMethod": "Preferred contact method",
+    "notes": "Notes",
+    "isPrimary": "Primary contact"
+  },
+  "contactMethod": {
+    "EMAIL": "Email",
+    "PHONE": "Phone",
+    "WHATSAPP": "WhatsApp"
+  },
+  "status": {
+    "ACTIVE": "Active",
+    "ARCHIVED": "Archived"
+  }
+}

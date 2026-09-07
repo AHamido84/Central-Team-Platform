@@ -8,6 +8,10 @@ import arAuth from "./messages/ar/auth.json";
 import enAuth from "./messages/en/auth.json";
 import arClients from "./messages/ar/clients.json";
 import enClients from "./messages/en/clients.json";
+import arContacts from "./messages/ar/contacts.json";
+import enContacts from "./messages/en/contacts.json";
+import arContracts from "./messages/ar/contracts.json";
+import enContracts from "./messages/en/contracts.json";
 import arProjects from "./messages/ar/projects.json";
 import enProjects from "./messages/en/projects.json";
 import arErrors from "./messages/ar/errors.json";
@@ -50,6 +54,8 @@ const namespaces: [string, unknown, unknown][] = [
   ["nav", arNav, enNav],
   ["auth", arAuth, enAuth],
   ["clients", arClients, enClients],
+  ["contacts", arContacts, enContacts],
+  ["contracts", arContracts, enContracts],
   ["projects", arProjects, enProjects],
   ["errors", arErrors, enErrors],
   ["validation", arValidation, enValidation],

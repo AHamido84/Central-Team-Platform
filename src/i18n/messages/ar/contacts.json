@@ -1,0 +1,31 @@
+{
+  "title": "جهات الاتصال",
+  "addButton": "إضافة جهة اتصال",
+  "editTitle": "تعديل جهة الاتصال",
+  "empty": "لا توجد جهات اتصال مضافة بعد",
+  "primaryBadge": "رئيسية",
+  "setPrimary": "تعيين كجهة اتصال رئيسية",
+  "deleteContact": "حذف جهة الاتصال",
+  "deleteContactConfirm": "سيتم حذف جهة الاتصال هذه نهائيًا.",
+  "archiveContact": "أرشفة جهة الاتصال",
+  "fields": {
+    "name": "الاسم",
+    "position": "المسمى الوظيفي",
+    "department": "القسم",
+    "email": "البريد الإلكتروني",
+    "phone": "رقم الهاتف",
+    "whatsapp": "واتساب",
+    "preferredContactMethod": "طريقة التواصل المفضلة",
+    "notes": "ملاحظات",
+    "isPrimary": "جهة الاتصال الرئيسية"
+  },
+  "contactMethod": {
+    "EMAIL": "البريد الإلكتروني",
+    "PHONE": "الهاتف",
+    "WHATSAPP": "واتساب"
+  },
+  "status": {
+    "ACTIVE": "نشطة",
+    "ARCHIVED": "مؤرشفة"
+  }
+}

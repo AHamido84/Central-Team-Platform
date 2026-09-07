@@ -10,6 +10,7 @@
   },
   "fields": {
     "name": "Project name",
+    "projectCode": "Project code",
     "description": "Description",
     "client": "Client",
     "projectType": "Project type",
@@ -18,6 +19,8 @@
     "priority": "Priority",
     "startDate": "Start date",
     "dueDate": "Due date",
+    "budget": "Budget",
+    "currency": "Currency",
     "owner": "Project owner",
     "accountManager": "Account manager"
   },
@@ -26,7 +29,8 @@
     "IN_PROGRESS": "In progress",
     "ON_HOLD": "On hold",
     "COMPLETED": "Completed",
-    "CANCELLED": "Cancelled"
+    "CANCELLED": "Cancelled",
+    "ARCHIVED": "Archived"
   },
   "priority": {
     "LOW": "Low",
@@ -49,8 +53,20 @@
       "status": "Status",
       "startDate": "Start date",
       "dueDate": "Due date",
-      "notes": "Notes"
+      "notes": "Notes",
+      "progressMode": "Progress tracking",
+      "manualProgressPercent": "Manual progress (%)",
+      "weight": "Weight"
     },
+    "progressMode": {
+      "QUANTITY": "By quantity",
+      "TASK_BASED": "By linked tasks",
+      "MANUAL": "Manual entry",
+      "WEIGHTED": "Weighted"
+    },
+    "editItem": "Edit item",
+    "deleteItem": "Delete scope item",
+    "deleteItemConfirm": "This will permanently remove this scope item.",
     "category": {
       "DESIGN": "Design",
       "VIDEO": "Video",

@@ -14,6 +14,7 @@ import {
   Users,
   Plug,
   Settings,
+  FileText,
 } from "lucide-react";
 
 /**
@@ -41,6 +42,7 @@ export const NAV_ICONS = {
   Users,
   Plug,
   Settings,
+  FileText,
 } as const;
 
 export type NavIconName = keyof typeof NAV_ICONS;

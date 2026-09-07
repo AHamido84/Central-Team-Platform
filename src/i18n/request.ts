@@ -7,6 +7,8 @@ const namespaces = [
   "nav",
   "auth",
   "clients",
+  "contacts",
+  "contracts",
   "projects",
   "errors",
   "validation",

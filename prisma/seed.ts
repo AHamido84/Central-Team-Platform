@@ -30,6 +30,13 @@ const PERMISSIONS = [
   "integrations.manage",
   "settings.manage",
   "comments.create",
+  "contacts.create",
+  "contacts.update",
+  "contacts.delete",
+  "contracts.view",
+  "contracts.create",
+  "contracts.update",
+  "contracts.delete",
 ] as const;
 
 const ROLES: {
@@ -55,6 +62,9 @@ const ROLES: {
       "projects.view",
       "projects.create",
       "projects.update",
+      "contacts.create",
+      "contacts.update",
+      "contracts.view",
     ],
   },
   {
@@ -259,6 +269,57 @@ async function main() {
     },
   });
 
+  await prisma.clientContact.upsert({
+    where: { id: "demo-contact-1" },
+    update: {},
+    create: {
+      id: "demo-contact-1",
+      clientId: demoClient.id,
+      name: "سارة العتيبي",
+      position: "مديرة التسويق",
+      department: "التسويق",
+      email: "sara@example.com",
+      phone: "+966501111111",
+      whatsapp: "+966501111111",
+      preferredContactMethod: "EMAIL",
+      isPrimary: true,
+    },
+  });
+  await prisma.clientContact.upsert({
+    where: { id: "demo-contact-2" },
+    update: {},
+    create: {
+      id: "demo-contact-2",
+      clientId: demoClient.id,
+      name: "خالد المطيري",
+      position: "الرئيس التنفيذي",
+      email: "khaled@example.com",
+      phone: "+966502222222",
+      preferredContactMethod: "PHONE",
+      isPrimary: false,
+    },
+  });
+
+  const demoContract = await prisma.contract.upsert({
+    where: { id: "demo-contract-1" },
+    update: {},
+    create: {
+      id: "demo-contract-1",
+      clientId: demoClient.id,
+      title: "اتفاقية التسويق المتكامل 2026",
+      contractNumber: "CTP-2026-001",
+      type: "سنوي",
+      startDate: daysAgo(30),
+      endDate: daysFromNow(335),
+      value: 250000,
+      currency: "SAR",
+      paymentTerms: "دفعة مقدمة 30% والباقي على 3 دفعات ربع سنوية",
+      status: "ACTIVE",
+      createdById: adminUser.id,
+      updatedById: adminUser.id,
+    },
+  });
+
   const fullMarketingType = await prisma.projectType.findUniqueOrThrow({
     where: { name: "تسويق متكامل" },
   });
@@ -269,13 +330,19 @@ async function main() {
     create: {
       id: "demo-project-brochure",
       clientId: demoClient.id,
+      contractId: demoContract.id,
       projectTypeId: fullMarketingType.id,
       name: "إطلاق البروشور والحملة الرقمية",
+      projectCode: "PRJ-0001",
       description: "تصميم بروشور تعريفي بالشركة وخدماتها مع حملة إعلانية داعمة",
       status: "IN_PROGRESS",
       priority: "HIGH",
       startDate: daysAgo(21),
       dueDate: daysFromNow(14),
+      budget: 90000,
+      currency: "SAR",
+      createdById: adminUser.id,
+      updatedById: adminUser.id,
     },
   });
 

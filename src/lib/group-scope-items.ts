@@ -1,4 +1,5 @@
-import type { ScopeItemCategory, ScopeItemStatus } from "@prisma/client";
+import type { ScopeItemCategory, ScopeItemStatus, ScopeProgressMode } from "@prisma/client";
+import { computeScopeItemProgress } from "@/lib/scope-progress";
 
 export type ScopeCategoryGroup = {
   category: ScopeItemCategory;
@@ -17,18 +18,39 @@ export type ScopeCategoryGroup = {
   unit: string | null;
 };
 
+export type ScopeGroupableItem = {
+  id?: string;
+  category: ScopeItemCategory;
+  quantity: number | null;
+  status: ScopeItemStatus;
+  unit?: string | null;
+  progressMode?: ScopeProgressMode;
+  manualProgressPercent?: number | null;
+  weight?: number | null;
+};
+
 /**
- * Rolls scope items up by category with a quantity-weighted completed/total
- * count, so both the portal and internal scope tabs render the exact same
- * per-category progress bars from the same input shape.
+ * Rolls scope items up by category using each item's own progress mode
+ * (see src/lib/scope-progress.ts) — a mix of quantity-based, task-based,
+ * manual, and weighted items in the same category all combine correctly,
+ * since every mode ultimately produces a `contracted`/`completed` pair in
+ * the same unit.
  */
 export function groupScopeItemsByCategory(
-  items: { category: ScopeItemCategory; quantity: number | null; status: ScopeItemStatus; unit?: string | null }[],
+  items: ScopeGroupableItem[],
+  taskStatsByItemId?: Map<string, { total: number; done: number }>,
 ): ScopeCategoryGroup[] {
   const byCategory = new Map<ScopeItemCategory, ScopeCategoryGroup>();
   for (const item of items) {
     if (item.status === "CANCELLED") continue;
-    const qty = item.quantity ?? 1;
+    const progress = computeScopeItemProgress({
+      quantity: item.quantity,
+      status: item.status,
+      progressMode: item.progressMode ?? "QUANTITY",
+      manualProgressPercent: item.manualProgressPercent ?? null,
+      weight: item.weight ?? null,
+      taskStats: item.id ? taskStatsByItemId?.get(item.id) : undefined,
+    });
     const group = byCategory.get(item.category) ?? {
       category: item.category,
       total: 0,
@@ -39,10 +61,10 @@ export function groupScopeItemsByCategory(
       dominantStatus: "PLANNED" as ScopeItemStatus,
       unit: null,
     };
-    group.total += qty;
-    if (item.status === "COMPLETED") group.completed += qty;
-    else if (item.status === "IN_PROGRESS") group.inProgress += qty;
-    else group.planned += qty;
+    group.total += progress.contracted;
+    group.completed += progress.completed;
+    if (item.status === "IN_PROGRESS") group.inProgress += progress.contracted;
+    else if (item.status !== "COMPLETED") group.planned += progress.contracted;
     if (!group.unit && item.unit) group.unit = item.unit;
     byCategory.set(item.category, group);
   }

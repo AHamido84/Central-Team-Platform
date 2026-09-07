@@ -16,7 +16,14 @@ export default async function EditClientPage({
   const t = await getTranslations("clients");
   const tCommon = await getTranslations("common");
 
-  const client = await prisma.client.findUnique({ where: { id } });
+  const [client, internalUsers] = await Promise.all([
+    prisma.client.findUnique({ where: { id } }),
+    prisma.user.findMany({
+      where: { clientId: null },
+      orderBy: { name: "asc" },
+      select: { id: true, name: true },
+    }),
+  ]);
   if (!client) notFound();
 
   const updateAction = updateClientAction.bind(null, client.id);
@@ -32,14 +39,20 @@ export default async function EditClientPage({
           <ClientForm
             action={updateAction}
             submitLabel={tCommon("actions.saveChanges")}
+            internalUsers={internalUsers.map((u) => ({ id: u.id, label: u.name }))}
             defaultValues={{
               companyName: client.companyName,
               legalName: client.legalName ?? undefined,
+              commercialRegistration: client.commercialRegistration ?? undefined,
+              taxNumber: client.taxNumber ?? undefined,
               industry: client.industry ?? undefined,
               website: client.website ?? undefined,
               email: client.email ?? undefined,
               phone: client.phone ?? undefined,
               address: client.address ?? undefined,
+              country: client.country ?? undefined,
+              city: client.city ?? undefined,
+              accountManagerId: client.accountManagerId ?? undefined,
               status: client.status,
               notes: client.notes ?? undefined,
             }}

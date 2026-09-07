@@ -10,6 +10,7 @@
   },
   "fields": {
     "name": "اسم المشروع",
+    "projectCode": "رمز المشروع",
     "description": "الوصف",
     "client": "العميل",
     "projectType": "نوع المشروع",
@@ -18,6 +19,8 @@
     "priority": "الأولوية",
     "startDate": "تاريخ البدء",
     "dueDate": "تاريخ التسليم",
+    "budget": "الميزانية",
+    "currency": "العملة",
     "owner": "مسؤول المشروع",
     "accountManager": "مدير الحساب"
   },
@@ -26,7 +29,8 @@
     "IN_PROGRESS": "قيد التنفيذ",
     "ON_HOLD": "متوقف مؤقتًا",
     "COMPLETED": "مكتمل",
-    "CANCELLED": "ملغى"
+    "CANCELLED": "ملغى",
+    "ARCHIVED": "مؤرشف"
   },
   "priority": {
     "LOW": "منخفضة",
@@ -49,8 +53,20 @@
       "status": "الحالة",
       "startDate": "تاريخ البدء",
       "dueDate": "تاريخ التسليم",
-      "notes": "ملاحظات"
+      "notes": "ملاحظات",
+      "progressMode": "طريقة تتبع الإنجاز",
+      "manualProgressPercent": "نسبة الإنجاز اليدوية (%)",
+      "weight": "الوزن النسبي"
     },
+    "progressMode": {
+      "QUANTITY": "حسب الكمية",
+      "TASK_BASED": "حسب المهام المرتبطة",
+      "MANUAL": "إدخال يدوي",
+      "WEIGHTED": "مرجّح"
+    },
+    "editItem": "تعديل البند",
+    "deleteItem": "حذف بند النطاق",
+    "deleteItemConfirm": "سيتم حذف بند النطاق هذا نهائيًا.",
     "category": {
       "DESIGN": "تصميم",
       "VIDEO": "فيديو",

@@ -6,19 +6,24 @@ export const projectStatusValues = [
   "ON_HOLD",
   "COMPLETED",
   "CANCELLED",
+  "ARCHIVED",
 ] as const;
 
 export const priorityValues = ["LOW", "MEDIUM", "HIGH", "URGENT"] as const;
 
 export const projectSchema = z.object({
   clientId: z.string().min(1, "required"),
+  contractId: z.string().optional().or(z.literal("")),
   projectTypeId: z.string().min(1, "required"),
   name: z.string().trim().min(1, "required").max(200, "maxLength"),
+  projectCode: z.string().trim().max(50, "maxLength").optional().or(z.literal("")),
   description: z.string().trim().max(2000, "maxLength").optional().or(z.literal("")),
   status: z.enum(projectStatusValues),
   priority: z.enum(priorityValues),
   startDate: z.string().optional().or(z.literal("")),
   dueDate: z.string().optional().or(z.literal("")),
+  budget: z.coerce.number().min(0).optional(),
+  currency: z.string().trim().max(10, "maxLength").optional().or(z.literal("")),
   ownerId: z.string().optional().or(z.literal("")),
   accountManagerId: z.string().optional().or(z.literal("")),
 });
@@ -45,6 +50,8 @@ export const scopeItemCategoryValues = [
   "OTHER",
 ] as const;
 
+export const scopeProgressModeValues = ["QUANTITY", "TASK_BASED", "MANUAL", "WEIGHTED"] as const;
+
 export const scopeItemSchema = z.object({
   category: z.enum(scopeItemCategoryValues),
   name: z.string().trim().min(1, "required").max(200, "maxLength"),
@@ -52,6 +59,9 @@ export const scopeItemSchema = z.object({
   quantity: z.coerce.number().int().min(0).optional(),
   unit: z.string().trim().max(50, "maxLength").optional().or(z.literal("")),
   estimatedHours: z.coerce.number().min(0).optional(),
+  progressMode: z.enum(scopeProgressModeValues).optional(),
+  manualProgressPercent: z.coerce.number().int().min(0).max(100).optional(),
+  weight: z.coerce.number().min(0).optional(),
   dueDate: z.string().optional().or(z.literal("")),
 });
 

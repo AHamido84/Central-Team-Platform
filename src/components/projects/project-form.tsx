@@ -24,6 +24,7 @@ export function ProjectForm({
   clients,
   projectTypes,
   internalUsers,
+  contracts,
   submitLabel,
   defaultValues,
 }: {
@@ -31,16 +32,21 @@ export function ProjectForm({
   clients: Option[];
   projectTypes: Option[];
   internalUsers: Option[];
+  contracts: Option[];
   submitLabel: string;
   defaultValues?: {
     clientId?: string;
+    contractId?: string;
     projectTypeId?: string;
     name?: string;
+    projectCode?: string;
     description?: string;
     status?: string;
     priority?: string;
     startDate?: string;
     dueDate?: string;
+    budget?: string;
+    currency?: string;
     ownerId?: string;
     accountManagerId?: string;
   };
@@ -79,6 +85,23 @@ export function ProjectForm({
               ))}
             </SelectContent>
           </Select>
+        </Field>
+        <Field label={t("contract")} error={errorFor("contractId")}>
+          <Select name="contractId" defaultValue={defaultValues?.contractId} items={optionsToSelectItems(contracts)}>
+            <SelectTrigger className="w-full">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {contracts.map((c) => (
+                <SelectItem key={c.id} value={c.id}>
+                  {c.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </Field>
+        <Field label={t("projectCode")} error={errorFor("projectCode")}>
+          <Input name="projectCode" defaultValue={defaultValues?.projectCode} />
         </Field>
         <Field label={t("projectType")} error={errorFor("projectTypeId")}>
           <Select
@@ -171,6 +194,12 @@ export function ProjectForm({
         </Field>
         <Field label={t("dueDate")} error={errorFor("dueDate")}>
           <Input type="date" name="dueDate" defaultValue={defaultValues?.dueDate} />
+        </Field>
+        <Field label={t("budget")} error={errorFor("budget")}>
+          <Input name="budget" type="number" min={0} step="0.01" defaultValue={defaultValues?.budget} />
+        </Field>
+        <Field label={t("currency")} error={errorFor("currency")}>
+          <Input name="currency" defaultValue={defaultValues?.currency ?? "SAR"} />
         </Field>
       </div>
       <Field label={t("description")} error={errorFor("description")}>

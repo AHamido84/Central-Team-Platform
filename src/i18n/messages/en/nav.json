@@ -3,6 +3,7 @@
   "internal": {
     "dashboard": "Dashboard",
     "clients": "Clients",
+    "contracts": "Contracts",
     "projects": "Projects",
     "requests": "Requests",
     "tasks": "Tasks",
@@ -47,6 +48,8 @@
   },
   "workspace": {
     "overview": "Overview",
+    "contacts": "Contacts",
+    "contracts": "Contracts",
     "projects": "Projects",
     "scope": "Scope",
     "requests": "Requests",

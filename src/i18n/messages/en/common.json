@@ -37,6 +37,11 @@
   },
   "confirmDialog": {
     "title": "Are you sure?",
-    "deleteDescription": "This action cannot be undone."
+    "deleteDescription": "This action cannot be undone.",
+    "hasDependencies": "This record contains related data. You should archive it instead of permanently deleting it."
+  },
+  "archive": {
+    "confirmTitle": "Archive record",
+    "confirmDescription": "You can restore it later from the archived records list."
   }
 }

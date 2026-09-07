@@ -11,21 +11,17 @@ import {
 } from "@/components/ui/table";
 import { ProgressMeter } from "@/components/portal/progress-meter";
 import { EmptyState } from "@/components/portal/empty-state";
-import { groupScopeItemsByCategory } from "@/lib/group-scope-items";
-import type { ScopeItemCategory, ScopeItemStatus } from "@prisma/client";
+import { groupScopeItemsByCategory, type ScopeGroupableItem } from "@/lib/group-scope-items";
 
 export async function ScopeBreakdown({
   items,
+  taskStatsByItemId,
 }: {
-  items: {
-    category: ScopeItemCategory;
-    quantity: number | null;
-    status: ScopeItemStatus;
-    unit?: string | null;
-  }[];
+  items: ScopeGroupableItem[];
+  taskStatsByItemId?: Map<string, { total: number; done: number }>;
 }) {
   const t = await getTranslations("projects.scope");
-  const groups = groupScopeItemsByCategory(items);
+  const groups = groupScopeItemsByCategory(items, taskStatsByItemId);
 
   if (groups.length === 0) {
     return <EmptyState icon={ListChecks} title={t("empty")} />;

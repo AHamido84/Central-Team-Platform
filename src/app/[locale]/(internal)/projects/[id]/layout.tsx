@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { getInternalProjectOrNotFound } from "@/lib/internal-project";
 import { PageBreadcrumb } from "@/components/layout/page-breadcrumb";
 import { WorkspaceTabs } from "@/components/portal/workspace-tabs";
+import { ProjectHeaderActions } from "@/components/projects/project-header-actions";
 import { prisma } from "@/lib/prisma";
 
 export default async function InternalProjectWorkspaceLayout({
@@ -70,6 +71,11 @@ export default async function InternalProjectWorkspaceLayout({
                 {t("common.actions.edit")}
               </Link>
             }
+          />
+          <ProjectHeaderActions
+            projectId={project.id}
+            clientId={project.client.id}
+            isArchived={project.status === "ARCHIVED"}
           />
         </div>
       </div>

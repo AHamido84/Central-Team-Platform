@@ -11,28 +11,39 @@
   "fields": {
     "companyName": "اسم الشركة",
     "legalName": "الاسم القانوني",
+    "commercialRegistration": "السجل التجاري",
+    "taxNumber": "الرقم الضريبي",
     "industry": "المجال",
     "website": "الموقع الإلكتروني",
     "email": "البريد الإلكتروني",
     "phone": "رقم الهاتف",
     "address": "العنوان",
+    "country": "الدولة",
+    "city": "المدينة",
     "status": "الحالة",
     "accountManager": "مدير الحساب",
     "notes": "ملاحظات"
   },
   "status": {
     "ACTIVE": "نشط",
+    "INACTIVE": "غير نشط",
+    "PROSPECT": "عميل محتمل",
     "ON_HOLD": "متوقف مؤقتًا",
     "ARCHIVED": "مؤرشف"
   },
   "toast": {
     "created": "تم إنشاء العميل بنجاح",
     "updated": "تم تحديث بيانات العميل",
-    "deleted": "تم حذف العميل"
+    "deleted": "تم حذف العميل",
+    "archived": "تمت أرشفة العميل"
   },
   "detail": {
     "projectsTitle": "مشاريع العميل",
     "contactsTitle": "جهات الاتصال",
-    "contractsTitle": "العقود"
+    "contractsTitle": "العقود",
+    "notesTitle": "ملاحظات",
+    "deleteClient": "حذف العميل",
+    "deleteClientConfirm": "سيتم حذف هذا العميل نهائيًا ولا يمكن التراجع عن ذلك.",
+    "archiveClient": "أرشفة العميل"
   }
 }

@@ -1,0 +1,54 @@
+{
+  "title": "Contracts",
+  "subtitle": "Manage client contracts and payment terms",
+  "createButton": "New contract",
+  "createTitle": "Add new contract",
+  "editTitle": "Edit contract",
+  "empty": {
+    "title": "No contracts yet",
+    "description": "Add a contract to link projects and scope of work to it."
+  },
+  "fields": {
+    "client": "Client",
+    "title": "Contract title",
+    "contractNumber": "Contract number",
+    "type": "Contract type",
+    "startDate": "Start date",
+    "endDate": "End date",
+    "value": "Value",
+    "currency": "Currency",
+    "paymentTerms": "Payment terms",
+    "status": "Status",
+    "fileUrl": "File URL",
+    "notes": "Notes"
+  },
+  "status": {
+    "DRAFT": "Draft",
+    "PENDING_APPROVAL": "Pending approval",
+    "ACTIVE": "Active",
+    "EXPIRED": "Expired",
+    "TERMINATED": "Terminated",
+    "CANCELLED": "Cancelled",
+    "ARCHIVED": "Archived"
+  },
+  "table": {
+    "title": "Contract",
+    "client": "Client",
+    "status": "Status",
+    "value": "Value",
+    "endDate": "End date",
+    "projects": "Projects"
+  },
+  "detail": {
+    "infoTitle": "Contract information",
+    "projectsTitle": "Linked projects",
+    "deleteContract": "Delete contract",
+    "deleteContractConfirm": "This will permanently remove this contract.",
+    "archiveContract": "Archive contract"
+  },
+  "toast": {
+    "created": "Contract created successfully",
+    "updated": "Contract updated",
+    "archived": "Contract archived"
+  }
+}

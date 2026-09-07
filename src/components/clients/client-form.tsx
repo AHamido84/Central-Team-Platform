@@ -14,29 +14,38 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { clientStatusValues } from "@/lib/validations/client";
-import { valuesToSelectItems } from "@/lib/select-items";
+import { valuesToSelectItems, optionsToSelectItems } from "@/lib/select-items";
 import type { ClientFormState } from "@/lib/actions/client-actions";
 
 type ClientDefaults = {
   companyName?: string;
   legalName?: string;
+  commercialRegistration?: string;
+  taxNumber?: string;
   industry?: string;
   website?: string;
   email?: string;
   phone?: string;
   address?: string;
+  country?: string;
+  city?: string;
+  accountManagerId?: string;
   status?: string;
   notes?: string;
 };
+
+type Option = { id: string; label: string };
 
 export function ClientForm({
   action,
   defaultValues,
   submitLabel,
+  internalUsers,
 }: {
   action: (prevState: ClientFormState, formData: FormData) => Promise<ClientFormState>;
   defaultValues?: ClientDefaults;
   submitLabel: string;
+  internalUsers: Option[];
 }) {
   const t = useTranslations("clients.fields");
   const tValidation = useTranslations("validation");
@@ -61,6 +70,12 @@ export function ClientForm({
         <Field label={t("legalName")} error={errorFor("legalName")}>
           <Input name="legalName" defaultValue={defaultValues?.legalName} />
         </Field>
+        <Field label={t("commercialRegistration")} error={errorFor("commercialRegistration")}>
+          <Input name="commercialRegistration" defaultValue={defaultValues?.commercialRegistration} />
+        </Field>
+        <Field label={t("taxNumber")} error={errorFor("taxNumber")}>
+          <Input name="taxNumber" defaultValue={defaultValues?.taxNumber} />
+        </Field>
         <Field label={t("industry")} error={errorFor("industry")}>
           <Input name="industry" defaultValue={defaultValues?.industry} />
         </Field>
@@ -72,6 +87,30 @@ export function ClientForm({
         </Field>
         <Field label={t("phone")} error={errorFor("phone")}>
           <Input name="phone" defaultValue={defaultValues?.phone} />
+        </Field>
+        <Field label={t("country")} error={errorFor("country")}>
+          <Input name="country" defaultValue={defaultValues?.country} />
+        </Field>
+        <Field label={t("city")} error={errorFor("city")}>
+          <Input name="city" defaultValue={defaultValues?.city} />
+        </Field>
+        <Field label={t("accountManager")} error={errorFor("accountManagerId")}>
+          <Select
+            name="accountManagerId"
+            defaultValue={defaultValues?.accountManagerId}
+            items={optionsToSelectItems(internalUsers)}
+          >
+            <SelectTrigger className="w-full">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              {internalUsers.map((u) => (
+                <SelectItem key={u.id} value={u.id}>
+                  {u.label}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
         </Field>
         <Field label={t("status")} error={errorFor("status")}>
           <Select

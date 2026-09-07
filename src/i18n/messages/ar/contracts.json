@@ -1,0 +1,54 @@
+{
+  "title": "العقود",
+  "subtitle": "إدارة عقود العملاء وشروط الدفع",
+  "createButton": "عقد جديد",
+  "createTitle": "إضافة عقد جديد",
+  "editTitle": "تعديل العقد",
+  "empty": {
+    "title": "لا توجد عقود بعد",
+    "description": "أضف عقدًا لربط المشاريع ونطاق العمل به."
+  },
+  "fields": {
+    "client": "العميل",
+    "title": "عنوان العقد",
+    "contractNumber": "رقم العقد",
+    "type": "نوع العقد",
+    "startDate": "تاريخ البدء",
+    "endDate": "تاريخ الانتهاء",
+    "value": "القيمة",
+    "currency": "العملة",
+    "paymentTerms": "شروط الدفع",
+    "status": "الحالة",
+    "fileUrl": "رابط الملف",
+    "notes": "ملاحظات"
+  },
+  "status": {
+    "DRAFT": "مسودة",
+    "PENDING_APPROVAL": "بانتظار الاعتماد",
+    "ACTIVE": "ساري",
+    "EXPIRED": "منتهي",
+    "TERMINATED": "مُنهى",
+    "CANCELLED": "ملغى",
+    "ARCHIVED": "مؤرشف"
+  },
+  "table": {
+    "title": "العقد",
+    "client": "العميل",
+    "status": "الحالة",
+    "value": "القيمة",
+    "endDate": "تاريخ الانتهاء",
+    "projects": "المشاريع"
+  },
+  "detail": {
+    "infoTitle": "بيانات العقد",
+    "projectsTitle": "المشاريع المرتبطة",
+    "deleteContract": "حذف العقد",
+    "deleteContractConfirm": "سيتم حذف هذا العقد نهائيًا.",
+    "archiveContract": "أرشفة العقد"
+  },
+  "toast": {
+    "created": "تم إنشاء العقد بنجاح",
+    "updated": "تم تحديث العقد",
+    "archived": "تمت أرشفة العقد"
+  }
+}

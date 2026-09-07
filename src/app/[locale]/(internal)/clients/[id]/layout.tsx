@@ -7,6 +7,7 @@ import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { getClientOrNotFound } from "@/lib/internal-client";
 import { PageBreadcrumb } from "@/components/layout/page-breadcrumb";
 import { WorkspaceTabs } from "@/components/portal/workspace-tabs";
+import { ClientHeaderActions } from "@/components/clients/client-header-actions";
 import { prisma } from "@/lib/prisma";
 
 function initialsFor(name: string) {
@@ -35,6 +36,8 @@ export default async function ClientWorkspaceLayout({
   const base = `/clients/${id}`;
   const tabs = [
     { href: base, label: t("nav.workspace.overview") },
+    { href: `${base}/contacts`, label: t("nav.workspace.contacts") },
+    { href: `${base}/contracts`, label: t("nav.workspace.contracts") },
     { href: `${base}/projects`, label: t("nav.workspace.projects") },
     { href: `${base}/requests`, label: t("nav.workspace.requests") },
     { href: `${base}/tasks`, label: t("nav.workspace.tasks") },
@@ -70,7 +73,7 @@ export default async function ClientWorkspaceLayout({
             </p>
           </div>
         </div>
-        <div className="flex items-center gap-2">
+        <div className="flex flex-wrap items-center gap-2">
           <Button
             variant="outline"
             size="sm"
@@ -90,6 +93,7 @@ export default async function ClientWorkspaceLayout({
               </Link>
             }
           />
+          <ClientHeaderActions clientId={client.id} isArchived={client.status === "ARCHIVED"} />
         </div>
       </div>
       <WorkspaceTabs tabs={tabs} />

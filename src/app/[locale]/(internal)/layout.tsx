@@ -38,6 +38,7 @@ export default async function InternalLayout({
       label: t("nav.groups.clientsProjects"),
       items: [
         { href: "/clients", label: t("nav.internal.clients"), icon: "Building2" },
+        { href: "/contracts", label: t("nav.internal.contracts"), icon: "FileText" },
         { href: "/projects", label: t("nav.internal.projects"), icon: "FolderKanban" },
       ],
     },

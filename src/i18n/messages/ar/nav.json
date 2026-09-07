@@ -3,6 +3,7 @@
   "internal": {
     "dashboard": "لوحة التحكم",
     "clients": "العملاء",
+    "contracts": "العقود",
     "projects": "المشاريع",
     "requests": "الطلبات",
     "tasks": "المهام",
@@ -47,6 +48,8 @@
   },
   "workspace": {
     "overview": "نظرة عامة",
+    "contacts": "جهات الاتصال",
+    "contracts": "العقود",
     "projects": "المشاريع",
     "scope": "نطاق العمل",
     "requests": "الطلبات",
