@@ -1,0 +1,36 @@
+{
+  "title": "Integrations",
+  "subtitle": "Connect client accounts to ad and analytics platforms",
+  "empty": {
+    "title": "No integrations yet",
+    "description": "A client's connection status to ad and analytics platforms will show up here."
+  },
+  "fields": {
+    "provider": "Platform",
+    "client": "Client",
+    "status": "Status",
+    "connectedBy": "Connected by",
+    "updatedAt": "Last updated"
+  },
+  "provider": {
+    "META_ADS": "Meta Ads",
+    "GOOGLE_ADS": "Google Ads",
+    "GOOGLE_ANALYTICS": "Google Analytics",
+    "TIKTOK_ADS": "TikTok Ads",
+    "WHATSAPP": "WhatsApp Business",
+    "OTHER": "Other"
+  },
+  "status": {
+    "CONNECTED": "Connected",
+    "DISCONNECTED": "Disconnected",
+    "ERROR": "Connection error"
+  },
+  "actions": {
+    "connect": "Connect",
+    "disconnect": "Disconnect"
+  },
+  "toast": {
+    "connected": "Integration connected",
+    "disconnected": "Integration disconnected"
+  }
+}

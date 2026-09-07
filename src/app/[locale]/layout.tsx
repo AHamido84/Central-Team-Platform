@@ -5,6 +5,7 @@ import { getTranslations, setRequestLocale } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import { Toaster } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
 import "../globals.css";
 
 const fontArabic = IBM_Plex_Sans_Arabic({
@@ -57,8 +58,10 @@ export default async function LocaleLayout({
     <html lang={locale} dir={dir} className={`${font.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-background text-foreground">
         <NextIntlClientProvider>
-          {children}
-          <Toaster position={dir === "rtl" ? "top-left" : "top-right"} dir={dir} />
+          <TooltipProvider>
+            {children}
+            <Toaster position={dir === "rtl" ? "top-left" : "top-right"} dir={dir} />
+          </TooltipProvider>
         </NextIntlClientProvider>
       </body>
     </html>

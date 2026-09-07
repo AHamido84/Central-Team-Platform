@@ -1,17 +1,27 @@
 {
   "title": "Deliverables",
   "subtitle": "Designs, videos, and finished files from the team",
+  "internalTitle": "Deliverable library",
+  "internalSubtitle": "Every deliverable uploaded across client projects",
+  "newButton": "New deliverable",
+  "createTitle": "Upload a new deliverable",
+  "uploadNewVersion": "Upload new version",
   "empty": {
     "title": "No deliverables yet",
     "description": "Designs, videos, and other deliverables will show up here as soon as they're ready for review."
   },
   "fields": {
     "title": "Deliverable",
+    "description": "Description",
     "project": "Project",
+    "task": "Linked task",
     "category": "Type",
+    "type": "File format",
     "status": "Status",
     "version": "Version",
-    "dueDate": "Due date"
+    "dueDate": "Due date",
+    "fileName": "File name",
+    "fileUrl": "File link"
   },
   "status": {
     "DRAFT": "Draft",
@@ -39,6 +49,7 @@
   },
   "toast": {
     "approved": "Deliverable approved",
-    "changesRequested": "Change request sent"
+    "changesRequested": "Change request sent",
+    "created": "Deliverable uploaded"
   }
 }

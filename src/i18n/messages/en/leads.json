@@ -1,0 +1,33 @@
+{
+  "title": "Leads",
+  "subtitle": "Track leads from source through qualification",
+  "newButton": "New lead",
+  "createTitle": "Add a lead",
+  "empty": {
+    "title": "No leads yet",
+    "description": "Leads will show up here as soon as they're added."
+  },
+  "fields": {
+    "name": "Name",
+    "email": "Email",
+    "phone": "Phone",
+    "source": "Source",
+    "status": "Status",
+    "client": "Client",
+    "project": "Project",
+    "campaign": "Campaign",
+    "assignee": "Assignee",
+    "createdAt": "Added"
+  },
+  "status": {
+    "NEW": "New",
+    "CONTACTED": "Contacted",
+    "QUALIFIED": "Qualified",
+    "DISQUALIFIED": "Disqualified",
+    "CONVERTED": "Converted"
+  },
+  "toast": {
+    "created": "Lead added",
+    "statusUpdated": "Lead status updated"
+  }
+}

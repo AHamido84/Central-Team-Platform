@@ -37,6 +37,7 @@ model User {
   managedProjects      Project[]      @relation("ProjectAccountManager")
   assignedTasks       Task[]         @relation("TaskAssignee")
   requestedRequests   Request[]      @relation("RequestedBy")
+  assignedRequests    Request[]      @relation("RequestAssignee")
   ownedOpportunities  Opportunity[]  @relation("OpportunityOwner")
   assignedLeads       Lead[]         @relation("LeadAssignee")
   uploadedAssets      Asset[]        @relation("AssetUploadedBy")
@@ -281,7 +282,8 @@ model ScopeItem {
   createdAt      DateTime          @default(now())
   updatedAt      DateTime          @updatedAt
 
-  tasks Task[]
+  tasks    Task[]
+  requests Request[]
 
   @@index([projectScopeId])
 }
@@ -318,11 +320,15 @@ enum ScopeItemStatus {
 // ---------------------------------------------------------------------------
 
 model RequestType {
-  id          String   @id @default(cuid())
-  name        String   @unique
+  id          String             @id @default(cuid())
+  name        String             @unique
   description String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  // Drives which extra fields the "new request" form shows (dimensions for a
+  // design request, duration/script for video, ...) without fuzzy-matching
+  // on the free-text name. Null = generic request, no extra fields.
+  category    ScopeItemCategory?
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
 
   requests Request[]
 }
@@ -336,20 +342,29 @@ model Request {
   project       Project?      @relation(fields: [projectId], references: [id])
   requestTypeId String
   requestType   RequestType   @relation(fields: [requestTypeId], references: [id])
+  scopeItemId   String?
+  scopeItem     ScopeItem?    @relation(fields: [scopeItemId], references: [id])
 
   title       String
   description String?
   status      RequestStatus @default(NEW)
   priority    Priority      @default(MEDIUM)
   dueDate     DateTime?
+  // Request-type-specific fields (design dimensions, video duration, campaign
+  // budget, ...) that don't warrant their own rarely-populated columns.
+  metadata    Json?
   createdAt   DateTime      @default(now())
   updatedAt   DateTime      @updatedAt
 
   requestedById String?
   requestedBy   User?   @relation("RequestedBy", fields: [requestedById], references: [id])
 
+  assignedToId String?
+  assignedTo   User?   @relation("RequestAssignee", fields: [assignedToId], references: [id])
+
   @@index([clientId])
   @@index([projectId])
+  @@index([assignedToId])
 }
 
 enum RequestStatus {
@@ -417,6 +432,13 @@ model Deliverable {
   updatedAt   DateTime          @updatedAt
 
   assets Asset[]
+
+  // Versioning: uploading a new version creates a NEW Deliverable row linked
+  // back to the one it replaces — the old row is never overwritten, so the
+  // full v1/v2/v3 history stays queryable. See ARCHITECTURE.md.
+  supersedesId String?       @unique
+  supersedes   Deliverable?  @relation("DeliverableVersions", fields: [supersedesId], references: [id])
+  nextVersion  Deliverable?  @relation("DeliverableVersions")
 
   @@index([projectId])
   @@index([taskId])

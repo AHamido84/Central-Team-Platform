@@ -1,0 +1,36 @@
+{
+  "title": "الربط والتكاملات",
+  "subtitle": "ربط حسابات العملاء بمنصات الإعلانات والتحليلات",
+  "empty": {
+    "title": "لا توجد تكاملات بعد",
+    "description": "ستظهر هنا حالة ربط العميل بمنصات الإعلانات والتحليلات."
+  },
+  "fields": {
+    "provider": "المنصة",
+    "client": "العميل",
+    "status": "الحالة",
+    "connectedBy": "تم الربط بواسطة",
+    "updatedAt": "آخر تحديث"
+  },
+  "provider": {
+    "META_ADS": "إعلانات ميتا",
+    "GOOGLE_ADS": "إعلانات جوجل",
+    "GOOGLE_ANALYTICS": "تحليلات جوجل",
+    "TIKTOK_ADS": "إعلانات تيك توك",
+    "WHATSAPP": "واتساب بيزنس",
+    "OTHER": "أخرى"
+  },
+  "status": {
+    "CONNECTED": "متصل",
+    "DISCONNECTED": "غير متصل",
+    "ERROR": "خطأ في الاتصال"
+  },
+  "actions": {
+    "connect": "ربط",
+    "disconnect": "إلغاء الربط"
+  },
+  "toast": {
+    "connected": "تم ربط التكامل بنجاح",
+    "disconnected": "تم إلغاء ربط التكامل"
+  }
+}

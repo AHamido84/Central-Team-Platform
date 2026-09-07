@@ -1,0 +1,38 @@
+{
+  "title": "Team",
+  "subtitle": "Internal staff members and their roles",
+  "inviteButton": "Invite member",
+  "empty": {
+    "title": "No members yet",
+    "description": "Internal team members will show up here once invited."
+  },
+  "fields": {
+    "name": "Name",
+    "email": "Email",
+    "role": "Role",
+    "status": "Status",
+    "workload": "Workload"
+  },
+  "status": {
+    "ACTIVE": "Active",
+    "INVITED": "Pending acceptance",
+    "SUSPENDED": "Suspended"
+  },
+  "inviteDialog": {
+    "title": "Invite a new member",
+    "nameLabel": "Name",
+    "emailLabel": "Email",
+    "roleLabel": "Role",
+    "submit": "Send invite"
+  },
+  "invited": {
+    "title": "Member invited successfully",
+    "description": "There's no email service wired up yet, so share the credentials below with them manually.",
+    "emailLabel": "Email",
+    "temporaryPasswordLabel": "Temporary password",
+    "warning": "This password will not be shown again — save it now."
+  },
+  "toast": {
+    "invited": "Member invited successfully"
+  }
+}

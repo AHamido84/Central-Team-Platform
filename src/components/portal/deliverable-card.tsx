@@ -22,9 +22,12 @@ type DeliverableCardData = {
 export async function DeliverableCard({
   deliverable,
   showProject,
+  basePath = "/portal",
 }: {
   deliverable: DeliverableCardData;
   showProject: boolean;
+  /** "" for internal, "/portal" for the client portal. */
+  basePath?: string;
 }) {
   const t = await getTranslations("deliverables");
   const tCategory = await getTranslations("projects.scope.category");
@@ -51,7 +54,7 @@ export async function DeliverableCard({
             {showProject && deliverable.project && (
               <>
                 {" · "}
-                <Link href={`/portal/projects/${deliverable.project.id}`} className="hover:underline">
+                <Link href={`${basePath}/projects/${deliverable.project.id}`} className="hover:underline">
                   {deliverable.project.name}
                 </Link>
               </>

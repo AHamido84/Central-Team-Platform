@@ -5,5 +5,6 @@
   "maxLength": "Must be no more than {max} characters",
   "invalidDate": "Invalid date",
   "invalidNumber": "Please enter a valid number",
-  "invalidUrl": "Please enter a valid URL"
+  "invalidUrl": "Please enter a valid URL",
+  "emailTaken": "This email address is already in use"
 }

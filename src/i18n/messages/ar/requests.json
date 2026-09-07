@@ -1,6 +1,8 @@
 {
   "title": "الطلبات",
   "subtitle": "متابعة الطلبات المقدمة لجميع مشاريعك",
+  "internalTitle": "طلبات العملاء",
+  "internalSubtitle": "إدارة جميع الطلبات الواردة من العملاء",
   "newButton": "طلب جديد",
   "createTitle": "تقديم طلب جديد",
   "empty": {
@@ -11,12 +13,17 @@
     "requestNumber": "رقم الطلب",
     "title": "عنوان الطلب",
     "requestType": "نوع الطلب",
+    "client": "العميل",
     "project": "المشروع",
+    "scopeItem": "البند من نطاق العمل",
     "status": "الحالة",
     "priority": "الأولوية",
+    "assignee": "المسؤول",
     "dueDate": "تاريخ التسليم",
     "updatedAt": "آخر تحديث",
-    "description": "التفاصيل"
+    "description": "التفاصيل",
+    "attachmentUrl": "رابط المرفقات",
+    "clientNotes": "ملاحظات العميل"
   },
   "status": {
     "NEW": "جديد",
@@ -25,8 +32,58 @@
     "CONVERTED": "تم التحويل لمشروع",
     "REJECTED": "مرفوض"
   },
-  "toast": {
-    "created": "تم تقديم الطلب بنجاح"
+  "filters": {
+    "allClients": "كل العملاء",
+    "allProjects": "كل المشاريع",
+    "allTypes": "كل الأنواع",
+    "allStatuses": "كل الحالات",
+    "allPriorities": "كل الأولويات",
+    "allAssignees": "كل المسؤولين",
+    "unassigned": "غير مسند"
   },
-  "noProject": "بدون مشروع محدد"
+  "typeFields": {
+    "design": {
+      "dimensions": "الأبعاد",
+      "platform": "المنصة",
+      "format": "الصيغة",
+      "references": "مراجع تصميمية",
+      "brandGuidelines": "دليل الهوية البصرية"
+    },
+    "video": {
+      "duration": "المدة",
+      "script": "النص",
+      "voiceOver": "تعليق صوتي",
+      "platform": "المنصة",
+      "aspectRatio": "نسبة العرض للارتفاع",
+      "references": "مراجع"
+    },
+    "brochure": {
+      "pages": "عدد الصفحات",
+      "size": "المقاس",
+      "language": "اللغة",
+      "content": "المحتوى",
+      "brandAssets": "عناصر الهوية البصرية"
+    },
+    "campaign": {
+      "platform": "المنصة",
+      "objective": "الهدف",
+      "audience": "الجمهور المستهدف",
+      "budget": "الميزانية",
+      "duration": "المدة",
+      "landingPage": "صفحة الهبوط",
+      "tracking": "تتبع التحويلات"
+    }
+  },
+  "timeline": {
+    "created": "تم إنشاء الطلب",
+    "statusChanged": "تم تحديث الحالة إلى {status}",
+    "assigned": "تم إسناد الطلب إلى {name}"
+  },
+  "toast": {
+    "created": "تم تقديم الطلب بنجاح",
+    "statusUpdated": "تم تحديث حالة الطلب",
+    "assigned": "تم إسناد الطلب"
+  },
+  "noProject": "بدون مشروع محدد",
+  "noAssignee": "غير مسند"
 }

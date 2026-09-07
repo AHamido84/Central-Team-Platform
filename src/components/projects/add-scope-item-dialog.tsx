@@ -23,6 +23,7 @@ import {
 } from "@/components/ui/select";
 import { Plus } from "lucide-react";
 import { scopeItemCategoryValues } from "@/lib/validations/project";
+import { valuesToSelectItems } from "@/lib/select-items";
 import type { ScopeItemFormState } from "@/lib/actions/project-actions";
 
 export function AddScopeItemDialog({
@@ -70,7 +71,11 @@ export function AddScopeItemDialog({
           <div className="grid gap-4 sm:grid-cols-2">
             <div className="flex flex-col gap-2">
               <Label>{t("fields.category")}</Label>
-              <Select name="category" defaultValue="OTHER">
+              <Select
+                name="category"
+                defaultValue="OTHER"
+                items={valuesToSelectItems(scopeItemCategoryValues, (value) => t(`category.${value}`))}
+              >
                 <SelectTrigger className="w-full">
                   <SelectValue />
                 </SelectTrigger>

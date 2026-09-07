@@ -1,0 +1,13 @@
+{
+  "trigger": "بحث...",
+  "placeholder": "ابحث عن عميل، مشروع، طلب، مهمة أو مخرج",
+  "noResults": "لا توجد نتائج مطابقة",
+  "shortcutHint": "للبحث السريع",
+  "sections": {
+    "clients": "العملاء",
+    "projects": "المشاريع",
+    "requests": "الطلبات",
+    "tasks": "المهام",
+    "deliverables": "المخرجات"
+  }
+}

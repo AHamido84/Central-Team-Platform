@@ -8,5 +8,35 @@
     "deliverablesInReview": "Deliverables in review"
   },
   "projectsOverview": "Projects overview",
-  "viewAllProjects": "View all projects"
+  "viewAllProjects": "View all projects",
+  "internalGreeting": "Welcome, {name}",
+  "internalSubtitle": "Here's how the team is doing today",
+  "kpis": {
+    "totalClients": "Total clients",
+    "activeProjects": "Active projects",
+    "openRequests": "Open requests",
+    "tasksInProgress": "Tasks in progress",
+    "deliverablesInReview": "Deliverables in review",
+    "activeCampaigns": "Active campaigns"
+  },
+  "trend": {
+    "vsLastPeriod": "vs. the previous 30 days"
+  },
+  "projectProgress": {
+    "title": "Project progress",
+    "empty": "No active projects right now"
+  },
+  "requestActivity": {
+    "title": "Request activity by status",
+    "empty": "No requests yet"
+  },
+  "teamWorkload": {
+    "title": "Team workload",
+    "subtitle": "In-progress tasks per team member",
+    "empty": "No tasks currently assigned"
+  },
+  "marketingPerformance": {
+    "title": "Marketing performance",
+    "empty": "No performance data available yet"
+  }
 }

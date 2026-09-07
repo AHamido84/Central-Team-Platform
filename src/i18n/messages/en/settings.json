@@ -1,0 +1,38 @@
+{
+  "title": "Settings",
+  "subtitle": "Your account settings and the platform's configurable pieces",
+  "profile": {
+    "title": "Profile",
+    "nameLabel": "Name",
+    "emailLabel": "Email",
+    "localeLabel": "Preferred interface language",
+    "submit": "Save changes"
+  },
+  "projectTypes": {
+    "title": "Project types",
+    "description": "The types available when creating a new project",
+    "addButton": "Add type",
+    "fields": {
+      "name": "Name",
+      "description": "Description"
+    },
+    "empty": "No project types yet"
+  },
+  "requestTypes": {
+    "title": "Request types",
+    "description": "The types available when submitting a new request, optionally linked to a scope category",
+    "addButton": "Add type",
+    "fields": {
+      "name": "Name",
+      "description": "Description",
+      "category": "Linked scope category"
+    },
+    "noCategory": "No category",
+    "empty": "No request types yet"
+  },
+  "toast": {
+    "profileUpdated": "Profile updated",
+    "projectTypeCreated": "Project type added",
+    "requestTypeCreated": "Request type added"
+  }
+}

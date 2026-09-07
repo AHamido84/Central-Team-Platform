@@ -20,16 +20,22 @@ type TaskRow = {
   status: TaskStatus;
   dueDate: Date | null;
   project?: { id: string; name: string } | null;
+  assignee?: { name: string } | null;
 };
 
 export async function TasksTable({
   tasks,
   locale,
+  basePath = "/portal",
   showProject,
+  showAssignee = false,
 }: {
   tasks: TaskRow[];
   locale: string;
+  /** "" for internal, "/portal" for the client portal. */
+  basePath?: string;
   showProject: boolean;
+  showAssignee?: boolean;
 }) {
   const t = await getTranslations("tasks");
 
@@ -40,6 +46,7 @@ export async function TasksTable({
           <TableRow>
             <TableHead>{t("fields.task")}</TableHead>
             {showProject && <TableHead>{t("fields.project")}</TableHead>}
+            {showAssignee && <TableHead>{t("fields.assignee")}</TableHead>}
             <TableHead>{t("fields.status")}</TableHead>
             <TableHead className="w-40">{t("fields.progress")}</TableHead>
             <TableHead>{t("fields.dueDate")}</TableHead>
@@ -54,10 +61,15 @@ export async function TasksTable({
                 {showProject && (
                   <TableCell className="text-muted-foreground">
                     {task.project && (
-                      <Link href={`/portal/projects/${task.project.id}`} className="hover:underline">
+                      <Link href={`${basePath}/projects/${task.project.id}`} className="hover:underline">
                         {task.project.name}
                       </Link>
                     )}
+                  </TableCell>
+                )}
+                {showAssignee && (
+                  <TableCell className="text-muted-foreground">
+                    {task.assignee?.name ?? "—"}
                   </TableCell>
                 )}
                 <TableCell>

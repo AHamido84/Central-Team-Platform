@@ -1,0 +1,39 @@
+{
+  "title": "Sales Pipeline",
+  "subtitle": "Track opportunities across pipeline stages",
+  "newButton": "New opportunity",
+  "createTitle": "Add an opportunity",
+  "empty": {
+    "title": "No opportunities yet",
+    "description": "Opportunities will show up here as soon as they're added."
+  },
+  "fields": {
+    "title": "Opportunity title",
+    "client": "Client",
+    "project": "Project",
+    "lead": "Lead",
+    "stage": "Stage",
+    "value": "Value",
+    "probability": "Probability",
+    "expectedCloseDate": "Expected close date",
+    "owner": "Owner",
+    "status": "Status"
+  },
+  "stage": {
+    "NEW": "New",
+    "QUALIFYING": "Qualifying",
+    "PROPOSAL": "Proposal",
+    "NEGOTIATION": "Negotiation",
+    "WON": "Won",
+    "LOST": "Lost"
+  },
+  "status": {
+    "OPEN": "Open",
+    "WON": "Won",
+    "LOST": "Lost"
+  },
+  "toast": {
+    "created": "Opportunity added",
+    "stageUpdated": "Opportunity stage updated"
+  }
+}

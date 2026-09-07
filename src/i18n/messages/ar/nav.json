@@ -10,8 +10,29 @@
     "campaigns": "الحملات",
     "leads": "العملاء المحتملون",
     "opportunities": "فرص البيع",
+    "sales": "فرص البيع",
+    "team": "الفريق",
+    "integrations": "الربط والتكاملات",
+    "notifications": "الإشعارات",
     "reports": "التقارير",
     "settings": "الإعدادات"
+  },
+  "groups": {
+    "overview": "نظرة عامة",
+    "clientsProjects": "العملاء والمشاريع",
+    "work": "الأعمال",
+    "marketingSales": "التسويق والمبيعات",
+    "admin": "الإدارة"
+  },
+  "quickCreate": {
+    "label": "إنشاء جديد",
+    "client": "عميل جديد",
+    "project": "مشروع جديد",
+    "request": "طلب جديد",
+    "task": "مهمة جديدة",
+    "deliverable": "مخرج جديد",
+    "campaign": "حملة جديدة",
+    "lead": "عميل محتمل جديد"
   },
   "portal": {
     "dashboard": "الرئيسية",
@@ -26,6 +47,7 @@
   },
   "workspace": {
     "overview": "نظرة عامة",
+    "projects": "المشاريع",
     "scope": "نطاق العمل",
     "requests": "الطلبات",
     "tasks": "المهام",
@@ -41,5 +63,13 @@
   },
   "breadcrumbs": {
     "home": "الرئيسية"
+  },
+  "sidebar": {
+    "toggle": "طي/توسيع القائمة الجانبية"
+  },
+  "notificationBell": {
+    "title": "الإشعارات",
+    "empty": "لا توجد إشعارات جديدة",
+    "viewAll": "عرض كل الإشعارات"
   }
 }

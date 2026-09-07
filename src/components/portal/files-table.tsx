@@ -18,16 +18,22 @@ type AssetRow = {
   createdAt: Date;
   deliverable?: { title: string } | null;
   project?: { id: string; name: string } | null;
+  client?: { id: string; companyName: string } | null;
 };
 
 export async function FilesTable({
   assets,
   locale,
+  basePath = "/portal",
   showProject,
+  showClient = false,
 }: {
   assets: AssetRow[];
   locale: string;
+  /** "" for internal, "/portal" for the client portal. */
+  basePath?: string;
   showProject: boolean;
+  showClient?: boolean;
 }) {
   const t = await getTranslations("files");
 
@@ -37,6 +43,7 @@ export async function FilesTable({
         <TableHeader>
           <TableRow>
             <TableHead>{t("fields.fileName")}</TableHead>
+            {showClient && <TableHead>{t("fields.client")}</TableHead>}
             {showProject && <TableHead>{t("fields.project")}</TableHead>}
             <TableHead>{t("fields.deliverable")}</TableHead>
             <TableHead>{t("fields.uploadedAt")}</TableHead>
@@ -56,10 +63,21 @@ export async function FilesTable({
                   {asset.fileName}
                 </a>
               </TableCell>
+              {showClient && (
+                <TableCell className="text-muted-foreground">
+                  {asset.client ? (
+                    <Link href={`/clients/${asset.client.id}`} className="hover:underline">
+                      {asset.client.companyName}
+                    </Link>
+                  ) : (
+                    "—"
+                  )}
+                </TableCell>
+              )}
               {showProject && (
                 <TableCell className="text-muted-foreground">
                   {asset.project && (
-                    <Link href={`/portal/projects/${asset.project.id}`} className="hover:underline">
+                    <Link href={`${basePath}/projects/${asset.project.id}`} className="hover:underline">
                       {asset.project.name}
                     </Link>
                   )}

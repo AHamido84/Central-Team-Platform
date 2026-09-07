@@ -19,6 +19,12 @@ const namespaces = [
   "notifications",
   "account",
   "activity",
+  "leads",
+  "sales",
+  "team",
+  "integrations",
+  "settings",
+  "search",
 ] as const;
 
 export default getRequestConfig(async ({ requestLocale }) => {

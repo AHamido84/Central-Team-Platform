@@ -1,0 +1,13 @@
+{
+  "trigger": "Search...",
+  "placeholder": "Search clients, projects, requests, tasks, deliverables",
+  "noResults": "No matching results",
+  "shortcutHint": "for quick search",
+  "sections": {
+    "clients": "Clients",
+    "projects": "Projects",
+    "requests": "Requests",
+    "tasks": "Tasks",
+    "deliverables": "Deliverables"
+  }
+}

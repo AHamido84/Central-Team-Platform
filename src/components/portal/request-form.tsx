@@ -14,6 +14,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { createRequestAction, type CreateRequestState } from "@/lib/actions/request-actions";
+import { optionsToSelectItems } from "@/lib/select-items";
 
 type Option = { id: string; label: string };
 
@@ -43,7 +44,7 @@ export function RequestForm({
     <form action={formAction} className="flex flex-col gap-5">
       <div className="flex flex-col gap-2">
         <Label>{t("fields.project")}</Label>
-        <Select name="projectId" defaultValue={defaultProjectId}>
+        <Select name="projectId" defaultValue={defaultProjectId} items={optionsToSelectItems(projects)}>
           <SelectTrigger className="w-full">
             <SelectValue placeholder={t("noProject")} />
           </SelectTrigger>
@@ -59,7 +60,7 @@ export function RequestForm({
 
       <div className="flex flex-col gap-2">
         <Label>{t("fields.requestType")}</Label>
-        <Select name="requestTypeId">
+        <Select name="requestTypeId" items={optionsToSelectItems(requestTypes)}>
           <SelectTrigger className="w-full">
             <SelectValue />
           </SelectTrigger>

@@ -1,5 +1,11 @@
 {
   "title": "Activity",
+  "comments": {
+    "title": "Comments",
+    "empty": "No comments yet",
+    "placeholder": "Write a comment...",
+    "submit": "Post"
+  },
   "empty": {
     "title": "No activity yet",
     "description": "A log of everything that happens on this project will show up here."
@@ -16,6 +22,20 @@
     "DELIVERABLE_VERSION_UPLOADED": "New version uploaded",
     "DELIVERABLE_SENT_FOR_REVIEW": "Deliverable sent for review",
     "DELIVERABLE_APPROVED": "Deliverable approved",
-    "DELIVERABLE_CHANGES_REQUESTED": "Changes requested on deliverable"
+    "DELIVERABLE_CHANGES_REQUESTED": "Changes requested on deliverable",
+    "REQUEST_STATUS_UPDATED": "Request status updated",
+    "REQUEST_ASSIGNED": "Request assigned",
+    "CAMPAIGN_CREATED": "Ad campaign created",
+    "CAMPAIGN_METRICS_UPDATED": "Campaign performance data updated",
+    "LEAD_CREATED": "Lead added",
+    "LEAD_STATUS_UPDATED": "Lead status updated",
+    "OPPORTUNITY_CREATED": "Opportunity added",
+    "OPPORTUNITY_STAGE_UPDATED": "Opportunity stage updated",
+    "COMMENT_CREATED": "Comment added",
+    "TEAM_MEMBER_INVITED": "Team member invited",
+    "INTEGRATION_CONNECTED": "Integration connected",
+    "INTEGRATION_DISCONNECTED": "Integration disconnected",
+    "PROJECT_TYPE_CREATED": "Project type added",
+    "REQUEST_TYPE_CREATED": "Request type added"
   }
 }

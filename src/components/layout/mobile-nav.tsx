@@ -12,14 +12,17 @@ import {
 } from "@/components/ui/sheet";
 import type { NavItemDef } from "./nav-item";
 import { NavList } from "./nav-list";
+import { SidebarGroup, type NavGroupDef } from "./sidebar-group";
 
 export function MobileNav({
   appName,
   navItems,
+  navGroups,
   menuLabel,
 }: {
   appName: string;
-  navItems: NavItemDef[];
+  navItems?: NavItemDef[];
+  navGroups?: NavGroupDef[];
   menuLabel: string;
 }) {
   const [open, setOpen] = useState(false);
@@ -40,7 +43,20 @@ export function MobileNav({
             {appName}
           </SheetTitle>
         </SheetHeader>
-        <NavList navItems={navItems} onNavigate={() => setOpen(false)} />
+        {navGroups ? (
+          <div className="flex flex-1 flex-col gap-2 overflow-y-auto px-3 py-2">
+            {navGroups.map((group) => (
+              <SidebarGroup
+                key={group.label}
+                label={group.label}
+                items={group.items}
+                onNavigate={() => setOpen(false)}
+              />
+            ))}
+          </div>
+        ) : (
+          navItems && <NavList navItems={navItems} onNavigate={() => setOpen(false)} />
+        )}
       </SheetContent>
       <Button
         variant="ghost"

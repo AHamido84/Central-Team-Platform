@@ -32,6 +32,18 @@ import arAccount from "./messages/ar/account.json";
 import enAccount from "./messages/en/account.json";
 import arActivity from "./messages/ar/activity.json";
 import enActivity from "./messages/en/activity.json";
+import arLeads from "./messages/ar/leads.json";
+import enLeads from "./messages/en/leads.json";
+import arSales from "./messages/ar/sales.json";
+import enSales from "./messages/en/sales.json";
+import arTeam from "./messages/ar/team.json";
+import enTeam from "./messages/en/team.json";
+import arIntegrations from "./messages/ar/integrations.json";
+import enIntegrations from "./messages/en/integrations.json";
+import arSettings from "./messages/ar/settings.json";
+import enSettings from "./messages/en/settings.json";
+import arSearch from "./messages/ar/search.json";
+import enSearch from "./messages/en/search.json";
 
 const namespaces: [string, unknown, unknown][] = [
   ["common", arCommon, enCommon],
@@ -50,6 +62,12 @@ const namespaces: [string, unknown, unknown][] = [
   ["notifications", arNotifications, enNotifications],
   ["account", arAccount, enAccount],
   ["activity", arActivity, enActivity],
+  ["leads", arLeads, enLeads],
+  ["sales", arSales, enSales],
+  ["team", arTeam, enTeam],
+  ["integrations", arIntegrations, enIntegrations],
+  ["settings", arSettings, enSettings],
+  ["search", arSearch, enSearch],
 ];
 
 function collectKeyPaths(value: unknown, prefix = ""): string[] {

@@ -1,6 +1,10 @@
 {
   "title": "Ad Campaigns",
   "subtitle": "How your ad campaigns are performing across platforms",
+  "internalTitle": "Ad Campaigns",
+  "internalSubtitle": "Ad campaign performance across every client project",
+  "newButton": "New campaign",
+  "createTitle": "Create an ad campaign",
   "empty": {
     "title": "No ad campaigns",
     "description": "This project doesn't have any ad campaigns right now."
@@ -43,5 +47,13 @@
     "conversions": "Conversions",
     "revenue": "Revenue",
     "roas": "ROAS"
+  },
+  "editMetrics": {
+    "title": "Update performance data",
+    "submit": "Save data"
+  },
+  "toast": {
+    "created": "Campaign created",
+    "metricsUpdated": "Performance data updated"
   }
 }

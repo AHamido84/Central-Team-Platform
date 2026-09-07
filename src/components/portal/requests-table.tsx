@@ -16,22 +16,33 @@ type RequestRow = {
   requestNumber: number;
   title: string;
   status: string;
+  priority?: string;
   dueDate: Date | null;
   updatedAt: Date;
   requestType: { name: string };
   project?: { id: string; name: string } | null;
+  client?: { id: string; companyName: string } | null;
+  assignedTo?: { name: string } | null;
 };
 
 export async function RequestsTable({
   requests,
   locale,
-  showProject,
+  basePath = "/portal",
+  showProject = true,
+  showClient = false,
+  showPriorityAssignee = false,
 }: {
   requests: RequestRow[];
   locale: string;
-  showProject: boolean;
+  /** "" for internal, "/portal" for the client portal. */
+  basePath?: string;
+  showProject?: boolean;
+  showClient?: boolean;
+  showPriorityAssignee?: boolean;
 }) {
   const t = await getTranslations("requests");
+  const tPriority = await getTranslations("projects.priority");
 
   return (
     <div className="overflow-x-auto rounded-xl border border-border bg-card">
@@ -40,8 +51,11 @@ export async function RequestsTable({
           <TableRow>
             <TableHead>{t("fields.requestNumber")}</TableHead>
             <TableHead>{t("fields.title")}</TableHead>
-            <TableHead>{t("fields.requestType")}</TableHead>
+            {showClient && <TableHead>{t("fields.client")}</TableHead>}
             {showProject && <TableHead>{t("fields.project")}</TableHead>}
+            <TableHead>{t("fields.requestType")}</TableHead>
+            {showPriorityAssignee && <TableHead>{t("fields.priority")}</TableHead>}
+            {showPriorityAssignee && <TableHead>{t("fields.assignee")}</TableHead>}
             <TableHead>{t("fields.status")}</TableHead>
             <TableHead>{t("fields.dueDate")}</TableHead>
             <TableHead>{t("fields.updatedAt")}</TableHead>
@@ -54,20 +68,41 @@ export async function RequestsTable({
                 #{request.requestNumber}
               </TableCell>
               <TableCell className="font-medium">
-                <Link href={`/portal/requests/${request.id}`} className="hover:underline">
+                <Link href={`${basePath}/requests/${request.id}`} className="hover:underline">
                   {request.title}
                 </Link>
               </TableCell>
-              <TableCell className="text-muted-foreground">{request.requestType.name}</TableCell>
+              {showClient && (
+                <TableCell className="text-muted-foreground">
+                  {request.client ? (
+                    <Link href={`/clients/${request.client.id}`} className="hover:underline">
+                      {request.client.companyName}
+                    </Link>
+                  ) : (
+                    "—"
+                  )}
+                </TableCell>
+              )}
               {showProject && (
                 <TableCell className="text-muted-foreground">
                   {request.project ? (
-                    <Link href={`/portal/projects/${request.project.id}`} className="hover:underline">
+                    <Link href={`${basePath}/projects/${request.project.id}`} className="hover:underline">
                       {request.project.name}
                     </Link>
                   ) : (
                     t("noProject")
                   )}
+                </TableCell>
+              )}
+              <TableCell className="text-muted-foreground">{request.requestType.name}</TableCell>
+              {showPriorityAssignee && (
+                <TableCell className="text-muted-foreground">
+                  {request.priority ? tPriority(request.priority) : "—"}
+                </TableCell>
+              )}
+              {showPriorityAssignee && (
+                <TableCell className="text-muted-foreground">
+                  {request.assignedTo?.name ?? "—"}
                 </TableCell>
               )}
               <TableCell>

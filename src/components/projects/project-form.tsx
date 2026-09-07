@@ -14,6 +14,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { projectStatusValues, priorityValues } from "@/lib/validations/project";
+import { optionsToSelectItems, valuesToSelectItems } from "@/lib/select-items";
 import type { ProjectFormState } from "@/lib/actions/project-actions";
 
 type Option = { id: string; label: string };
@@ -66,7 +67,7 @@ export function ProjectForm({
           <Input name="name" defaultValue={defaultValues?.name} required />
         </Field>
         <Field label={t("client")} error={errorFor("clientId")}>
-          <Select name="clientId" defaultValue={defaultValues?.clientId}>
+          <Select name="clientId" defaultValue={defaultValues?.clientId} items={optionsToSelectItems(clients)}>
             <SelectTrigger className="w-full">
               <SelectValue />
             </SelectTrigger>
@@ -80,7 +81,11 @@ export function ProjectForm({
           </Select>
         </Field>
         <Field label={t("projectType")} error={errorFor("projectTypeId")}>
-          <Select name="projectTypeId" defaultValue={defaultValues?.projectTypeId}>
+          <Select
+            name="projectTypeId"
+            defaultValue={defaultValues?.projectTypeId}
+            items={optionsToSelectItems(projectTypes)}
+          >
             <SelectTrigger className="w-full">
               <SelectValue />
             </SelectTrigger>
@@ -94,7 +99,11 @@ export function ProjectForm({
           </Select>
         </Field>
         <Field label={t("status")} error={errorFor("status")}>
-          <Select name="status" defaultValue={defaultValues?.status ?? "PLANNED"}>
+          <Select
+            name="status"
+            defaultValue={defaultValues?.status ?? "PLANNED"}
+            items={valuesToSelectItems(projectStatusValues, tStatus)}
+          >
             <SelectTrigger className="w-full">
               <SelectValue />
             </SelectTrigger>
@@ -108,7 +117,11 @@ export function ProjectForm({
           </Select>
         </Field>
         <Field label={t("priority")} error={errorFor("priority")}>
-          <Select name="priority" defaultValue={defaultValues?.priority ?? "MEDIUM"}>
+          <Select
+            name="priority"
+            defaultValue={defaultValues?.priority ?? "MEDIUM"}
+            items={valuesToSelectItems(priorityValues, tPriority)}
+          >
             <SelectTrigger className="w-full">
               <SelectValue />
             </SelectTrigger>
@@ -122,7 +135,7 @@ export function ProjectForm({
           </Select>
         </Field>
         <Field label={t("owner")} error={errorFor("ownerId")}>
-          <Select name="ownerId" defaultValue={defaultValues?.ownerId}>
+          <Select name="ownerId" defaultValue={defaultValues?.ownerId} items={optionsToSelectItems(internalUsers)}>
             <SelectTrigger className="w-full">
               <SelectValue />
             </SelectTrigger>
@@ -136,7 +149,11 @@ export function ProjectForm({
           </Select>
         </Field>
         <Field label={t("accountManager")} error={errorFor("accountManagerId")}>
-          <Select name="accountManagerId" defaultValue={defaultValues?.accountManagerId}>
+          <Select
+            name="accountManagerId"
+            defaultValue={defaultValues?.accountManagerId}
+            items={optionsToSelectItems(internalUsers)}
+          >
             <SelectTrigger className="w-full">
               <SelectValue />
             </SelectTrigger>

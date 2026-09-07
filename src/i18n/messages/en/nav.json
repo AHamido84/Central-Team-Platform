@@ -10,8 +10,29 @@
     "campaigns": "Campaigns",
     "leads": "Leads",
     "opportunities": "Opportunities",
+    "sales": "Sales Pipeline",
+    "team": "Team",
+    "integrations": "Integrations",
+    "notifications": "Notifications",
     "reports": "Reports",
     "settings": "Settings"
+  },
+  "groups": {
+    "overview": "Overview",
+    "clientsProjects": "Clients & Projects",
+    "work": "Work",
+    "marketingSales": "Marketing & Sales",
+    "admin": "Admin"
+  },
+  "quickCreate": {
+    "label": "Create new",
+    "client": "New client",
+    "project": "New project",
+    "request": "New request",
+    "task": "New task",
+    "deliverable": "New deliverable",
+    "campaign": "New campaign",
+    "lead": "New lead"
   },
   "portal": {
     "dashboard": "Dashboard",
@@ -26,6 +47,7 @@
   },
   "workspace": {
     "overview": "Overview",
+    "projects": "Projects",
     "scope": "Scope",
     "requests": "Requests",
     "tasks": "Tasks",
@@ -41,5 +63,13 @@
   },
   "breadcrumbs": {
     "home": "Home"
+  },
+  "sidebar": {
+    "toggle": "Collapse/expand sidebar"
+  },
+  "notificationBell": {
+    "title": "Notifications",
+    "empty": "No new notifications",
+    "viewAll": "View all notifications"
   }
 }

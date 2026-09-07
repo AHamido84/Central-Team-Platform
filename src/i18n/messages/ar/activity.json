@@ -1,5 +1,11 @@
 {
   "title": "النشاط",
+  "comments": {
+    "title": "التعليقات",
+    "empty": "لا توجد تعليقات بعد",
+    "placeholder": "اكتب تعليقًا...",
+    "submit": "إرسال"
+  },
   "empty": {
     "title": "لا يوجد نشاط بعد",
     "description": "سيظهر هنا سجل الأحداث المتعلقة بهذا المشروع أولاً بأول."
@@ -16,6 +22,20 @@
     "DELIVERABLE_VERSION_UPLOADED": "تم رفع نسخة جديدة من المخرج",
     "DELIVERABLE_SENT_FOR_REVIEW": "تم إرسال المخرج للمراجعة",
     "DELIVERABLE_APPROVED": "تم اعتماد المخرج",
-    "DELIVERABLE_CHANGES_REQUESTED": "تم طلب تعديل على المخرج"
+    "DELIVERABLE_CHANGES_REQUESTED": "تم طلب تعديل على المخرج",
+    "REQUEST_STATUS_UPDATED": "تم تحديث حالة الطلب",
+    "REQUEST_ASSIGNED": "تم إسناد الطلب",
+    "CAMPAIGN_CREATED": "تم إنشاء حملة إعلانية",
+    "CAMPAIGN_METRICS_UPDATED": "تم تحديث بيانات أداء الحملة",
+    "LEAD_CREATED": "تمت إضافة عميل محتمل",
+    "LEAD_STATUS_UPDATED": "تم تحديث حالة العميل المحتمل",
+    "OPPORTUNITY_CREATED": "تمت إضافة فرصة بيع",
+    "OPPORTUNITY_STAGE_UPDATED": "تم تحديث مرحلة فرصة البيع",
+    "COMMENT_CREATED": "تمت إضافة تعليق",
+    "TEAM_MEMBER_INVITED": "تمت دعوة عضو فريق جديد",
+    "INTEGRATION_CONNECTED": "تم ربط تكامل",
+    "INTEGRATION_DISCONNECTED": "تم إلغاء ربط تكامل",
+    "PROJECT_TYPE_CREATED": "تمت إضافة نوع مشروع",
+    "REQUEST_TYPE_CREATED": "تمت إضافة نوع طلب"
   }
 }

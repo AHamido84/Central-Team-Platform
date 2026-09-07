@@ -1,6 +1,8 @@
 {
   "title": "Requests",
   "subtitle": "Track requests submitted across all your projects",
+  "internalTitle": "Client requests",
+  "internalSubtitle": "Manage every request coming in from clients",
   "newButton": "New request",
   "createTitle": "Submit a new request",
   "empty": {
@@ -11,12 +13,17 @@
     "requestNumber": "Request #",
     "title": "Request title",
     "requestType": "Request type",
+    "client": "Client",
     "project": "Project",
+    "scopeItem": "Scope item",
     "status": "Status",
     "priority": "Priority",
+    "assignee": "Assignee",
     "dueDate": "Due date",
     "updatedAt": "Last updated",
-    "description": "Details"
+    "description": "Details",
+    "attachmentUrl": "Attachment link",
+    "clientNotes": "Client notes"
   },
   "status": {
     "NEW": "New",
@@ -25,8 +32,58 @@
     "CONVERTED": "Converted to project",
     "REJECTED": "Rejected"
   },
-  "toast": {
-    "created": "Request submitted successfully"
+  "filters": {
+    "allClients": "All clients",
+    "allProjects": "All projects",
+    "allTypes": "All types",
+    "allStatuses": "All statuses",
+    "allPriorities": "All priorities",
+    "allAssignees": "All assignees",
+    "unassigned": "Unassigned"
   },
-  "noProject": "No project selected"
+  "typeFields": {
+    "design": {
+      "dimensions": "Dimensions",
+      "platform": "Platform",
+      "format": "Format",
+      "references": "Design references",
+      "brandGuidelines": "Brand guidelines"
+    },
+    "video": {
+      "duration": "Duration",
+      "script": "Script",
+      "voiceOver": "Voice over",
+      "platform": "Platform",
+      "aspectRatio": "Aspect ratio",
+      "references": "References"
+    },
+    "brochure": {
+      "pages": "Number of pages",
+      "size": "Size",
+      "language": "Language",
+      "content": "Content",
+      "brandAssets": "Brand assets"
+    },
+    "campaign": {
+      "platform": "Platform",
+      "objective": "Objective",
+      "audience": "Target audience",
+      "budget": "Budget",
+      "duration": "Duration",
+      "landingPage": "Landing page",
+      "tracking": "Conversion tracking"
+    }
+  },
+  "timeline": {
+    "created": "Request created",
+    "statusChanged": "Status updated to {status}",
+    "assigned": "Assigned to {name}"
+  },
+  "toast": {
+    "created": "Request submitted successfully",
+    "statusUpdated": "Request status updated",
+    "assigned": "Request assigned"
+  },
+  "noProject": "No project selected",
+  "noAssignee": "Unassigned"
 }

@@ -1,16 +1,28 @@
 {
   "title": "المهام",
   "subtitle": "المهام الجارية على مشاريعك",
+  "internalTitle": "المهام",
+  "internalSubtitle": "متابعة مهام الفريق عبر جميع المشاريع",
+  "newButton": "مهمة جديدة",
+  "createTitle": "إضافة مهمة جديدة",
+  "boardView": "لوحة",
+  "listView": "قائمة",
   "empty": {
     "title": "لا توجد مهام لعرضها",
     "description": "ستظهر هنا المهام الجارية على مشاريعك أولاً بأول."
   },
   "fields": {
     "task": "المهمة",
+    "title": "عنوان المهمة",
+    "description": "الوصف",
     "project": "المشروع",
+    "scopeItem": "بند نطاق العمل",
+    "assignee": "المسؤول",
+    "priority": "الأولوية",
     "status": "الحالة",
     "progress": "نسبة الإنجاز",
-    "dueDate": "تاريخ التسليم"
+    "dueDate": "تاريخ التسليم",
+    "clientVisible": "مرئية للعميل"
   },
   "status": {
     "TODO": "لم تبدأ",
@@ -18,5 +30,14 @@
     "IN_REVIEW": "قيد المراجعة",
     "DONE": "مكتملة",
     "CANCELLED": "ملغاة"
+  },
+  "filters": {
+    "allProjects": "كل المشاريع",
+    "allAssignees": "كل المسؤولين",
+    "unassigned": "غير مسندة"
+  },
+  "toast": {
+    "created": "تمت إضافة المهمة",
+    "statusUpdated": "تم تحديث حالة المهمة"
   }
 }

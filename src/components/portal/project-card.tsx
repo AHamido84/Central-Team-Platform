@@ -6,6 +6,7 @@ export function ProjectCard({
   id,
   name,
   projectTypeName,
+  clientName,
   statusLabel,
   progressPercent,
   startDateLabel,
@@ -14,10 +15,13 @@ export function ProjectCard({
   deliverableCount,
   openRequestCount,
   fields,
+  basePath = "/portal",
 }: {
   id: string;
   name: string;
   projectTypeName: string;
+  /** Shown for internal users, who manage many clients at once. */
+  clientName?: string;
   statusLabel: string;
   progressPercent: number;
   startDateLabel: string;
@@ -33,16 +37,20 @@ export function ProjectCard({
     deliverables: string;
     openRequests: string;
   };
+  /** "" for internal, "/portal" for the client portal. */
+  basePath?: string;
 }) {
   return (
     <Link
-      href={`/portal/projects/${id}`}
+      href={`${basePath}/projects/${id}`}
       className="flex flex-col gap-4 rounded-xl border border-border bg-card p-5 shadow-sm transition-shadow hover:shadow-md"
     >
       <div className="flex items-start justify-between gap-3">
         <div className="min-w-0">
           <h3 className="truncate font-semibold text-card-foreground">{name}</h3>
-          <p className="text-xs text-muted-foreground">{projectTypeName}</p>
+          <p className="truncate text-xs text-muted-foreground">
+            {clientName ? `${clientName} · ${projectTypeName}` : projectTypeName}
+          </p>
         </div>
         <Badge variant="secondary" className="shrink-0">
           {statusLabel}

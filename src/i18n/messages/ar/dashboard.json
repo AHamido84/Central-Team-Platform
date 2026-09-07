@@ -8,5 +8,35 @@
     "deliverablesInReview": "المخرجات بانتظار المراجعة"
   },
   "projectsOverview": "نظرة عامة على المشاريع",
-  "viewAllProjects": "عرض جميع المشاريع"
+  "viewAllProjects": "عرض جميع المشاريع",
+  "internalGreeting": "مرحباً، {name}",
+  "internalSubtitle": "إليك نظرة عامة على أداء الفريق اليوم",
+  "kpis": {
+    "totalClients": "إجمالي العملاء",
+    "activeProjects": "المشاريع النشطة",
+    "openRequests": "الطلبات المفتوحة",
+    "tasksInProgress": "المهام الجارية",
+    "deliverablesInReview": "المخرجات بانتظار المراجعة",
+    "activeCampaigns": "الحملات النشطة"
+  },
+  "trend": {
+    "vsLastPeriod": "مقارنة بالثلاثين يومًا السابقة"
+  },
+  "projectProgress": {
+    "title": "تقدّم المشاريع",
+    "empty": "لا توجد مشاريع نشطة حاليًا"
+  },
+  "requestActivity": {
+    "title": "نشاط الطلبات حسب الحالة",
+    "empty": "لا توجد طلبات بعد"
+  },
+  "teamWorkload": {
+    "title": "عبء العمل على الفريق",
+    "subtitle": "عدد المهام الجارية لكل عضو",
+    "empty": "لا توجد مهام مسندة حاليًا"
+  },
+  "marketingPerformance": {
+    "title": "أداء الحملات التسويقية",
+    "empty": "لا توجد بيانات أداء متاحة بعد"
+  }
 }

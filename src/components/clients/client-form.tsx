@@ -14,6 +14,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { clientStatusValues } from "@/lib/validations/client";
+import { valuesToSelectItems } from "@/lib/select-items";
 import type { ClientFormState } from "@/lib/actions/client-actions";
 
 type ClientDefaults = {
@@ -73,7 +74,11 @@ export function ClientForm({
           <Input name="phone" defaultValue={defaultValues?.phone} />
         </Field>
         <Field label={t("status")} error={errorFor("status")}>
-          <Select name="status" defaultValue={defaultValues?.status ?? "ACTIVE"}>
+          <Select
+            name="status"
+            defaultValue={defaultValues?.status ?? "ACTIVE"}
+            items={valuesToSelectItems(clientStatusValues, tStatus)}
+          >
             <SelectTrigger className="w-full">
               <SelectValue />
             </SelectTrigger>
