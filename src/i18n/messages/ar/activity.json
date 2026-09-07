@@ -1,0 +1,21 @@
+{
+  "title": "النشاط",
+  "empty": {
+    "title": "لا يوجد نشاط بعد",
+    "description": "سيظهر هنا سجل الأحداث المتعلقة بهذا المشروع أولاً بأول."
+  },
+  "actions": {
+    "PROJECT_CREATED": "تم إنشاء المشروع",
+    "PROJECT_UPDATED": "تم تحديث بيانات المشروع",
+    "SCOPE_ITEM_CREATED": "تمت إضافة بند لنطاق العمل",
+    "REQUEST_CREATED": "تم إنشاء الطلب",
+    "TASK_CREATED": "تمت إضافة مهمة جديدة",
+    "TASK_STARTED": "تم بدء تنفيذ المهمة",
+    "TASK_COMPLETED": "تم إنجاز المهمة",
+    "DELIVERABLE_UPLOADED": "تم رفع مخرج جديد",
+    "DELIVERABLE_VERSION_UPLOADED": "تم رفع نسخة جديدة من المخرج",
+    "DELIVERABLE_SENT_FOR_REVIEW": "تم إرسال المخرج للمراجعة",
+    "DELIVERABLE_APPROVED": "تم اعتماد المخرج",
+    "DELIVERABLE_CHANGES_REQUESTED": "تم طلب تعديل على المخرج"
+  }
+}

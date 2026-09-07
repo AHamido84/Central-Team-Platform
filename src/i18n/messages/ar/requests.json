@@ -1,0 +1,32 @@
+{
+  "title": "الطلبات",
+  "subtitle": "متابعة الطلبات المقدمة لجميع مشاريعك",
+  "newButton": "طلب جديد",
+  "createTitle": "تقديم طلب جديد",
+  "empty": {
+    "title": "لا توجد طلبات بعد",
+    "description": "قدّم طلبك الأول وسنقوم بمراجعته في أقرب وقت."
+  },
+  "fields": {
+    "requestNumber": "رقم الطلب",
+    "title": "عنوان الطلب",
+    "requestType": "نوع الطلب",
+    "project": "المشروع",
+    "status": "الحالة",
+    "priority": "الأولوية",
+    "dueDate": "تاريخ التسليم",
+    "updatedAt": "آخر تحديث",
+    "description": "التفاصيل"
+  },
+  "status": {
+    "NEW": "جديد",
+    "REVIEWING": "قيد المراجعة",
+    "APPROVED": "معتمد",
+    "CONVERTED": "تم التحويل لمشروع",
+    "REJECTED": "مرفوض"
+  },
+  "toast": {
+    "created": "تم تقديم الطلب بنجاح"
+  },
+  "noProject": "بدون مشروع محدد"
+}

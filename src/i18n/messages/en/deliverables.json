@@ -1,0 +1,44 @@
+{
+  "title": "Deliverables",
+  "subtitle": "Designs, videos, and finished files from the team",
+  "empty": {
+    "title": "No deliverables yet",
+    "description": "Designs, videos, and other deliverables will show up here as soon as they're ready for review."
+  },
+  "fields": {
+    "title": "Deliverable",
+    "project": "Project",
+    "category": "Type",
+    "status": "Status",
+    "version": "Version",
+    "dueDate": "Due date"
+  },
+  "status": {
+    "DRAFT": "Draft",
+    "IN_REVIEW": "Awaiting your review",
+    "APPROVED": "Approved",
+    "DELIVERED": "Delivered",
+    "REJECTED": "Needs changes"
+  },
+  "filter": {
+    "all": "All",
+    "DESIGN": "Designs",
+    "VIDEO": "Videos",
+    "VOICE_OVER": "Voice over",
+    "OTHER": "Other"
+  },
+  "actions": {
+    "preview": "Preview",
+    "approve": "Approve",
+    "requestChanges": "Request changes"
+  },
+  "requestChangesDialog": {
+    "title": "Request changes",
+    "commentLabel": "Describe what needs to change",
+    "submit": "Send change request"
+  },
+  "toast": {
+    "approved": "Deliverable approved",
+    "changesRequested": "Change request sent"
+  }
+}

@@ -10,6 +10,15 @@ const namespaces = [
   "projects",
   "errors",
   "validation",
+  "dashboard",
+  "requests",
+  "tasks",
+  "deliverables",
+  "campaigns",
+  "files",
+  "notifications",
+  "account",
+  "activity",
 ] as const;
 
 export default getRequestConfig(async ({ requestLocale }) => {

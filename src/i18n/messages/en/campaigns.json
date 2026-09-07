@@ -1,0 +1,47 @@
+{
+  "title": "Ad Campaigns",
+  "subtitle": "How your ad campaigns are performing across platforms",
+  "empty": {
+    "title": "No ad campaigns",
+    "description": "This project doesn't have any ad campaigns right now."
+  },
+  "fields": {
+    "name": "Campaign name",
+    "project": "Project",
+    "platform": "Platform",
+    "status": "Status",
+    "objective": "Objective",
+    "budget": "Budget",
+    "startDate": "Start date",
+    "endDate": "End date"
+  },
+  "platform": {
+    "META": "Meta",
+    "GOOGLE": "Google",
+    "TIKTOK": "TikTok",
+    "SNAPCHAT": "Snapchat",
+    "LINKEDIN": "LinkedIn",
+    "X": "X",
+    "OTHER": "Other"
+  },
+  "status": {
+    "PLANNED": "Planned",
+    "ACTIVE": "Active",
+    "PAUSED": "Paused",
+    "COMPLETED": "Completed",
+    "CANCELLED": "Cancelled"
+  },
+  "metrics": {
+    "spend": "Spend",
+    "impressions": "Impressions",
+    "reach": "Reach",
+    "clicks": "Clicks",
+    "ctr": "CTR",
+    "cpc": "CPC",
+    "leads": "Leads",
+    "cpl": "CPL",
+    "conversions": "Conversions",
+    "revenue": "Revenue",
+    "roas": "ROAS"
+  }
+}

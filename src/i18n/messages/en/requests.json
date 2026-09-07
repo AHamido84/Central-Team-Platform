@@ -1,0 +1,32 @@
+{
+  "title": "Requests",
+  "subtitle": "Track requests submitted across all your projects",
+  "newButton": "New request",
+  "createTitle": "Submit a new request",
+  "empty": {
+    "title": "No requests yet",
+    "description": "Submit your first request and we'll review it shortly."
+  },
+  "fields": {
+    "requestNumber": "Request #",
+    "title": "Request title",
+    "requestType": "Request type",
+    "project": "Project",
+    "status": "Status",
+    "priority": "Priority",
+    "dueDate": "Due date",
+    "updatedAt": "Last updated",
+    "description": "Details"
+  },
+  "status": {
+    "NEW": "New",
+    "REVIEWING": "Reviewing",
+    "APPROVED": "Approved",
+    "CONVERTED": "Converted to project",
+    "REJECTED": "Rejected"
+  },
+  "toast": {
+    "created": "Request submitted successfully"
+  },
+  "noProject": "No project selected"
+}

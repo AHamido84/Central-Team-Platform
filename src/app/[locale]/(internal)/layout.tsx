@@ -24,13 +24,18 @@ export default async function InternalLayout({
   const t = await getTranslations();
 
   const navItems = [
-    { href: "/", label: t("nav.internal.dashboard"), icon: LayoutDashboard },
+    { href: "/", label: t("nav.internal.dashboard"), icon: LayoutDashboard, exact: true },
     { href: "/clients", label: t("nav.internal.clients"), icon: Building2 },
     { href: "/projects", label: t("nav.internal.projects"), icon: FolderKanban },
   ];
 
   return (
-    <AppShell appName={t("common.appName")} navItems={navItems} user={user}>
+    <AppShell
+      appName={t("common.appName")}
+      navItems={navItems}
+      menuLabel={t("nav.openMenu")}
+      user={user}
+    >
       {children}
     </AppShell>
   );

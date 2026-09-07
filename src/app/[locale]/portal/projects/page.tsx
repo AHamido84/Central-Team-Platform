@@ -1,73 +1,80 @@
-import { getTranslations } from "next-intl/server";
-import { Link } from "@/i18n/navigation";
-import { Badge } from "@/components/ui/badge";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
+import { getTranslations, getLocale } from "next-intl/server";
+import { FolderKanban } from "lucide-react";
 import { requireUser } from "@/lib/authorization";
 import { prisma } from "@/lib/prisma";
-import { FolderKanban } from "lucide-react";
+import { ProjectCard } from "@/components/portal/project-card";
+import { EmptyState } from "@/components/portal/empty-state";
+import { computeProjectProgress } from "@/lib/project-progress";
+import { formatDate } from "@/lib/format-date";
+import { OPEN_REQUEST_STATUSES } from "@/lib/request-status";
 
 export default async function PortalProjectsPage() {
-  const user = await requireUser();
-  const t = await getTranslations("projects");
-  const tStatus = await getTranslations("projects.status");
+  const sessionUser = await requireUser();
+  const t = await getTranslations();
+  const locale = await getLocale();
+
+  const clientId = sessionUser.clientId;
 
   // Client-portal users only ever see their own client's projects — the
   // clientId comes from the session (user.clientId), never from the
   // request. See ARCHITECTURE.md §5.
-  const projects = user.clientId
+  const projects = clientId
     ? await prisma.project.findMany({
-        where: { clientId: user.clientId },
+        where: { clientId },
         orderBy: { createdAt: "desc" },
-        include: { projectType: true },
+        include: {
+          projectType: true,
+          scopes: {
+            orderBy: { version: "desc" },
+            take: 1,
+            include: { items: { select: { quantity: true, status: true } } },
+          },
+          _count: { select: { deliverables: true } },
+          requests: { where: { status: { in: OPEN_REQUEST_STATUSES } }, select: { id: true } },
+        },
       })
     : [];
 
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <h1 className="text-2xl font-semibold tracking-tight">{t("title")}</h1>
+        <h1 className="text-2xl font-semibold tracking-tight">{t("projects.title")}</h1>
       </div>
 
       {projects.length === 0 ? (
-        <div className="flex flex-col items-center justify-center gap-3 rounded-xl border border-dashed border-border py-20 text-center">
-          <FolderKanban className="size-8 text-muted-foreground" />
-          <h2 className="text-lg font-medium">{t("empty.title")}</h2>
-        </div>
+        <EmptyState
+          icon={FolderKanban}
+          title={t("projects.empty.title")}
+          description={t("projects.empty.description")}
+        />
       ) : (
-        <div className="rounded-xl border border-border bg-card">
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>{t("fields.name")}</TableHead>
-                <TableHead>{t("fields.projectType")}</TableHead>
-                <TableHead>{t("fields.status")}</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {projects.map((project) => (
-                <TableRow key={project.id}>
-                  <TableCell className="font-medium">
-                    <Link href={`/portal/projects/${project.id}`} className="hover:underline">
-                      {project.name}
-                    </Link>
-                  </TableCell>
-                  <TableCell className="text-muted-foreground">
-                    {project.projectType.name}
-                  </TableCell>
-                  <TableCell>
-                    <Badge variant="secondary">{tStatus(project.status)}</Badge>
-                  </TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
+        <div className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+          {projects.map((project) => {
+            const progress = computeProjectProgress(project.scopes[0]?.items ?? []);
+            return (
+              <ProjectCard
+                key={project.id}
+                id={project.id}
+                name={project.name}
+                projectTypeName={project.projectType.name}
+                statusLabel={t(`projects.status.${project.status}`)}
+                progressPercent={progress.percent}
+                startDateLabel={formatDate(project.startDate, locale)}
+                dueDateLabel={formatDate(project.dueDate, locale)}
+                scopeItemCount={project.scopes[0]?.items.length ?? 0}
+                deliverableCount={project._count.deliverables}
+                openRequestCount={project.requests.length}
+                fields={{
+                  progress: t("projects.card.progress"),
+                  startDate: t("projects.card.startDate"),
+                  dueDate: t("projects.card.dueDate"),
+                  scopeItems: t("projects.card.scopeItems"),
+                  deliverables: t("projects.card.deliverables"),
+                  openRequests: t("projects.card.openRequests"),
+                }}
+              />
+            );
+          })}
         </div>
       )}
     </div>

@@ -1,0 +1,21 @@
+{
+  "title": "Activity",
+  "empty": {
+    "title": "No activity yet",
+    "description": "A log of everything that happens on this project will show up here."
+  },
+  "actions": {
+    "PROJECT_CREATED": "Project created",
+    "PROJECT_UPDATED": "Project details updated",
+    "SCOPE_ITEM_CREATED": "Scope item added",
+    "REQUEST_CREATED": "Request created",
+    "TASK_CREATED": "Task added",
+    "TASK_STARTED": "Task work started",
+    "TASK_COMPLETED": "Task completed",
+    "DELIVERABLE_UPLOADED": "Deliverable uploaded",
+    "DELIVERABLE_VERSION_UPLOADED": "New version uploaded",
+    "DELIVERABLE_SENT_FOR_REVIEW": "Deliverable sent for review",
+    "DELIVERABLE_APPROVED": "Deliverable approved",
+    "DELIVERABLE_CHANGES_REQUESTED": "Changes requested on deliverable"
+  }
+}

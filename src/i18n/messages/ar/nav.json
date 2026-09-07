@@ -1,4 +1,5 @@
 {
+  "openMenu": "فتح القائمة",
   "internal": {
     "dashboard": "لوحة التحكم",
     "clients": "العملاء",
@@ -14,9 +15,25 @@
   },
   "portal": {
     "dashboard": "الرئيسية",
-    "myProjects": "مشاريعي",
-    "myRequests": "طلباتي",
-    "myDeliverables": "تسليماتي"
+    "projects": "المشاريع",
+    "requests": "الطلبات",
+    "tasks": "المهام",
+    "deliverables": "المخرجات",
+    "campaigns": "الحملات الإعلانية",
+    "files": "الملفات",
+    "notifications": "الإشعارات",
+    "account": "حسابي"
+  },
+  "workspace": {
+    "overview": "نظرة عامة",
+    "scope": "نطاق العمل",
+    "requests": "الطلبات",
+    "tasks": "المهام",
+    "deliverables": "المخرجات",
+    "files": "الملفات",
+    "campaigns": "الحملات الإعلانية",
+    "reports": "التقارير",
+    "activity": "النشاط"
   },
   "userMenu": {
     "profile": "الملف الشخصي",

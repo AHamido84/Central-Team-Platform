@@ -1,0 +1,44 @@
+{
+  "title": "المخرجات",
+  "subtitle": "التصميمات والفيديوهات والملفات الجاهزة من فريق العمل",
+  "empty": {
+    "title": "لا توجد مخرجات بعد",
+    "description": "ستظهر هنا التصميمات والفيديوهات وباقي المخرجات فور جاهزيتها للمراجعة."
+  },
+  "fields": {
+    "title": "المخرج",
+    "project": "المشروع",
+    "category": "النوع",
+    "status": "الحالة",
+    "version": "الإصدار",
+    "dueDate": "تاريخ التسليم"
+  },
+  "status": {
+    "DRAFT": "مسودة",
+    "IN_REVIEW": "بانتظار مراجعتك",
+    "APPROVED": "معتمد",
+    "DELIVERED": "تم التسليم",
+    "REJECTED": "بحاجة لتعديل"
+  },
+  "filter": {
+    "all": "الكل",
+    "DESIGN": "تصميمات",
+    "VIDEO": "فيديوهات",
+    "VOICE_OVER": "تعليق صوتي",
+    "OTHER": "أخرى"
+  },
+  "actions": {
+    "preview": "معاينة",
+    "approve": "اعتماد",
+    "requestChanges": "طلب تعديل"
+  },
+  "requestChangesDialog": {
+    "title": "طلب تعديل",
+    "commentLabel": "وضّح التعديل المطلوب",
+    "submit": "إرسال طلب التعديل"
+  },
+  "toast": {
+    "approved": "تم اعتماد المخرج",
+    "changesRequested": "تم إرسال طلب التعديل"
+  }
+}

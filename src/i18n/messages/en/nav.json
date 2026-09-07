@@ -1,4 +1,5 @@
 {
+  "openMenu": "Open menu",
   "internal": {
     "dashboard": "Dashboard",
     "clients": "Clients",
@@ -13,10 +14,26 @@
     "settings": "Settings"
   },
   "portal": {
-    "dashboard": "Home",
-    "myProjects": "My Projects",
-    "myRequests": "My Requests",
-    "myDeliverables": "My Deliverables"
+    "dashboard": "Dashboard",
+    "projects": "Projects",
+    "requests": "Requests",
+    "tasks": "Tasks",
+    "deliverables": "Deliverables",
+    "campaigns": "Ad Campaigns",
+    "files": "Files",
+    "notifications": "Notifications",
+    "account": "My Account"
+  },
+  "workspace": {
+    "overview": "Overview",
+    "scope": "Scope",
+    "requests": "Requests",
+    "tasks": "Tasks",
+    "deliverables": "Deliverables",
+    "files": "Files",
+    "campaigns": "Ad Campaigns",
+    "reports": "Reports",
+    "activity": "Activity"
   },
   "userMenu": {
     "profile": "Profile",

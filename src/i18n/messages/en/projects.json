@@ -82,5 +82,24 @@
     "updated": "Project updated",
     "deleted": "Project deleted",
     "scopeItemAdded": "Scope item added"
+  },
+  "card": {
+    "progress": "Progress",
+    "startDate": "Start",
+    "dueDate": "Due",
+    "scopeItems": "Scope items",
+    "deliverables": "Deliverables",
+    "openRequests": "Open requests"
+  },
+  "overview": {
+    "scopeProgress": "Scope progress",
+    "quickStats": "Quick stats",
+    "viewFullScope": "View full scope"
+  },
+  "reports": {
+    "empty": {
+      "title": "Reports are on the way",
+      "description": "Reports for this project will be available here soon."
+    }
   }
 }

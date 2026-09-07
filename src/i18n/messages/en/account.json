@@ -1,0 +1,16 @@
+{
+  "title": "My Account",
+  "subtitle": "Your profile and company details",
+  "profile": {
+    "title": "Profile",
+    "name": "Name",
+    "email": "Email",
+    "role": "Role"
+  },
+  "company": {
+    "title": "Company details",
+    "companyName": "Company name",
+    "industry": "Industry",
+    "accountManager": "Account manager"
+  }
+}

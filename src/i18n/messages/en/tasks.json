@@ -1,0 +1,22 @@
+{
+  "title": "Tasks",
+  "subtitle": "What's actively being worked on across your projects",
+  "empty": {
+    "title": "No tasks to show",
+    "description": "Tasks in progress on your projects will show up here."
+  },
+  "fields": {
+    "task": "Task",
+    "project": "Project",
+    "status": "Status",
+    "progress": "Progress",
+    "dueDate": "Due date"
+  },
+  "status": {
+    "TODO": "To do",
+    "IN_PROGRESS": "In progress",
+    "IN_REVIEW": "In review",
+    "DONE": "Done",
+    "CANCELLED": "Cancelled"
+  }
+}

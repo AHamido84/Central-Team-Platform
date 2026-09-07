@@ -70,9 +70,10 @@ export async function createProjectAction(
 
   await recordAudit({
     actorId: user.id,
-    action: "project.created",
+    action: "PROJECT_CREATED",
     entityType: "Project",
     entityId: project.id,
+    projectId: project.id,
   });
 
   revalidatePath("/projects");
@@ -118,9 +119,10 @@ export async function updateProjectAction(
 
   await recordAudit({
     actorId: user.id,
-    action: "project.updated",
+    action: "PROJECT_UPDATED",
     entityType: "Project",
     entityId: projectId,
+    projectId,
   });
 
   revalidatePath("/projects");
@@ -178,9 +180,10 @@ export async function addScopeItemAction(
 
   await recordAudit({
     actorId: user.id,
-    action: "scopeItem.created",
+    action: "SCOPE_ITEM_CREATED",
     entityType: "ProjectScope",
     entityId: projectScopeId,
+    projectId,
   });
 
   revalidatePath(`/projects/${projectId}`);

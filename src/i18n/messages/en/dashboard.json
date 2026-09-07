@@ -1,0 +1,12 @@
+{
+  "greeting": "Welcome, {name}",
+  "subtitle": "Here's a quick summary of what's happening across your projects",
+  "stats": {
+    "activeProjects": "Active projects",
+    "openRequests": "Open requests",
+    "inProgressTasks": "Tasks in progress",
+    "deliverablesInReview": "Deliverables in review"
+  },
+  "projectsOverview": "Projects overview",
+  "viewAllProjects": "View all projects"
+}

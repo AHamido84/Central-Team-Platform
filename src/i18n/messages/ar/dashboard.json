@@ -1,0 +1,12 @@
+{
+  "greeting": "مرحباً، {name}",
+  "subtitle": "إليك ملخص سريع لما يحدث في مشاريعك",
+  "stats": {
+    "activeProjects": "المشاريع النشطة",
+    "openRequests": "الطلبات المفتوحة",
+    "inProgressTasks": "المهام الجارية",
+    "deliverablesInReview": "المخرجات بانتظار المراجعة"
+  },
+  "projectsOverview": "نظرة عامة على المشاريع",
+  "viewAllProjects": "عرض جميع المشاريع"
+}

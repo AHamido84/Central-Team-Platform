@@ -82,5 +82,24 @@
     "updated": "تم تحديث المشروع",
     "deleted": "تم حذف المشروع",
     "scopeItemAdded": "تمت إضافة بند النطاق"
+  },
+  "card": {
+    "progress": "نسبة الإنجاز",
+    "startDate": "البداية",
+    "dueDate": "التسليم",
+    "scopeItems": "بنود النطاق",
+    "deliverables": "المخرجات",
+    "openRequests": "طلبات مفتوحة"
+  },
+  "overview": {
+    "scopeProgress": "نسبة إنجاز النطاق",
+    "quickStats": "ملخص سريع",
+    "viewFullScope": "عرض النطاق بالكامل"
+  },
+  "reports": {
+    "empty": {
+      "title": "التقارير قيد الإعداد",
+      "description": "ستتوفر تقارير هذا المشروع هنا قريبًا."
+    }
   }
 }

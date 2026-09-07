@@ -1,0 +1,9 @@
+{
+  "title": "Notifications",
+  "subtitle": "The latest updates across your projects",
+  "empty": {
+    "title": "No notifications",
+    "description": "Notifications about your projects will show up here."
+  },
+  "markAsRead": "Mark as read"
+}

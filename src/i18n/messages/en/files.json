@@ -1,0 +1,14 @@
+{
+  "title": "Files",
+  "subtitle": "Every file linked to your projects",
+  "empty": {
+    "title": "No files yet",
+    "description": "Files uploaded to your projects will show up here."
+  },
+  "fields": {
+    "fileName": "File name",
+    "project": "Project",
+    "deliverable": "Linked deliverable",
+    "uploadedAt": "Uploaded"
+  }
+}
