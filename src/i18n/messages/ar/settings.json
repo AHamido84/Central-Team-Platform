@@ -31,31 +31,111 @@
     "empty": "لا توجد أنواع طلبات بعد"
   },
   "templates": {
-    "title": "قوالب المهام",
-    "description": "قوالب جاهزة لتوليد مهام الطلبات تلقائيًا",
+    "title": "قوالب الطلبات",
+    "description": "قوالب مبنية بمُنشئ نماذج ومزودة بإصدارات، يمكن إنشاء الطلبات منها",
     "manageButton": "إدارة القوالب",
+    "count": "{count, plural, =0 {لا توجد قوالب} other {# قالب}}"
+  },
+  "requestTemplates": {
+    "title": "قوالب الطلبات",
+    "description": "أنشئ أقسام وحقول ومهام القالب التي يولّدها الطلب",
     "newButton": "قالب جديد",
     "empty": "لا توجد قوالب بعد",
+    "preview": "معاينة",
+    "publish": "نشر",
+    "basicInfo": "معلومات أساسية",
+    "sectionsTitle": "الأقسام والحقول",
+    "tasksTitle": "المهام والاعتماديات",
+    "addSection": "إضافة قسم",
+    "addField": "إضافة حقل",
+    "addOption": "إضافة خيار",
+    "addTaskRow": "إضافة مهمة",
+    "editingDraftNotice": "أنت تعدّل مسودة نسخة جديدة — النشر لن يغيّر الطلبات التي أُنشئت من النسخة الحالية",
+    "builderSubtitle": "مسودة النسخة {version}",
+    "filters": {
+      "allTypes": "كل أنواع الطلبات"
+    },
+    "status": {
+      "draft": "مسودة",
+      "published": "منشور",
+      "archived": "مؤرشف"
+    },
+    "card": {
+      "sections": "{count, plural, =0 {بدون أقسام} other {# قسم}}",
+      "fields": "{count, plural, =0 {بدون حقول} other {# حقل}}",
+      "tasks": "{count, plural, =0 {بدون مهام} other {# مهمة}}",
+      "usage": "{count, plural, =0 {لم يُستخدم بعد} other {استُخدم في # طلب}}",
+      "version": "الإصدار {version}",
+      "updatedAt": "آخر تحديث {date}"
+    },
+    "preview": {
+      "totalHours": "إجمالي الساعات المقدّرة: {hours}",
+      "dependsOnOrder": "تعتمد على المهمة رقم {order}"
+    },
     "fields": {
-      "name": "اسم القالب",
-      "category": "فئة نطاق العمل المرتبطة",
-      "description": "الوصف",
-      "isActive": "مفعّل"
-    },
-    "items": {
-      "title": "المهام",
-      "addRow": "+ إضافة مهمة",
-      "order": "#",
-      "titleLabel": "عنوان المهمة",
-      "department": "القسم",
-      "priority": "الأولوية",
+      "nameAr": "الاسم (عربي)",
+      "nameEn": "الاسم (إنجليزي)",
+      "descriptionAr": "الوصف (عربي)",
+      "descriptionEn": "الوصف (إنجليزي)",
+      "requestType": "نوع الطلب",
+      "icon": "أيقونة",
+      "defaultPriority": "الأولوية الافتراضية",
+      "defaultDurationDays": "المدة الافتراضية (أيام)",
+      "sectionTitleAr": "عنوان القسم (عربي)",
+      "sectionTitleEn": "عنوان القسم (إنجليزي)",
+      "labelAr": "التسمية (عربي)",
+      "labelEn": "التسمية (إنجليزي)",
+      "key": "مفتاح الحقل",
+      "type": "نوع الحقل",
+      "required": "إلزامي",
+      "placeholder": "نص توضيحي",
+      "minValue": "الحد الأدنى للقيمة",
+      "maxValue": "الحد الأقصى للقيمة",
+      "minLength": "الحد الأدنى لطول النص",
+      "maxLength": "الحد الأقصى لطول النص",
+      "options": "الخيارات",
+      "optionValue": "القيمة",
+      "visibleIfField": "يظهر فقط إذا كان الحقل",
+      "visibleIfValue": "...يساوي",
+      "noCondition": "يظهر دائمًا",
+      "taskTitleAr": "عنوان المهمة (عربي)",
+      "taskTitleEn": "عنوان المهمة (إنجليزي)",
       "estimatedHours": "الساعات المقدّرة",
+      "clientVisible": "مرئية للعميل",
       "dependsOn": "تعتمد على",
-      "noDependency": "بدون اعتمادية",
-      "remove": "إزالة"
+      "noDependency": "بدون اعتمادية"
     },
-    "noCategory": "بدون فئة محددة",
-    "save": "حفظ القالب"
+    "fieldTypes": {
+      "TEXT": "نص قصير",
+      "TEXTAREA": "نص طويل",
+      "NUMBER": "رقم",
+      "DECIMAL": "رقم عشري",
+      "DATE": "تاريخ",
+      "DATETIME": "تاريخ ووقت",
+      "CHECKBOX": "خانة اختيار",
+      "RADIO": "اختيار واحد",
+      "SELECT": "قائمة اختيار",
+      "MULTI_SELECT": "اختيار متعدد",
+      "EMAIL": "بريد إلكتروني",
+      "PHONE": "هاتف",
+      "URL": "رابط",
+      "FILE": "ملف",
+      "COLOR": "لون"
+    },
+    "toast": {
+      "saved": "تم حفظ المسودة",
+      "published": "تم نشر القالب"
+    },
+    "errors": {
+      "invalidDraft": "تعذّر التحقق من المسودة — راجع الأقسام والحقول",
+      "duplicateFieldKey": "لا يمكن أن يشترك حقلان في نفس المفتاح",
+      "invalidConditionalField": "شرط ظهور أحد الحقول يشير إلى حقل غير موجود",
+      "invalidTaskDependency": "إحدى المهام تعتمد على مهمة غير موجودة في هذه المسودة",
+      "noDraftVersion": "لا توجد مسودة لهذا القالب للتعديل",
+      "noSections": "أضف قسمًا واحدًا على الأقل قبل النشر",
+      "forbidden": "لا تملك صلاحية إدارة القوالب",
+      "hasDependencies": "لا يمكن حذف هذا القالب لأنه استُخدم في طلبات حقيقية"
+    }
   },
   "toast": {
     "profileUpdated": "تم تحديث الملف الشخصي",

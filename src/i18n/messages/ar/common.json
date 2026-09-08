@@ -18,7 +18,10 @@
     "viewAll": "عرض الكل",
     "submit": "إرسال",
     "saveChanges": "حفظ التغييرات",
-    "confirmDelete": "تأكيد الحذف"
+    "confirmDelete": "تأكيد الحذف",
+    "duplicate": "نسخ",
+    "restore": "استعادة",
+    "reset": "إعادة تعيين"
   },
   "status": {
     "loading": "جارٍ التحميل...",

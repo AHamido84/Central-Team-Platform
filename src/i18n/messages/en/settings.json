@@ -31,31 +31,111 @@
     "empty": "No request types yet"
   },
   "templates": {
-    "title": "Task templates",
-    "description": "Reusable templates that auto-generate a request's tasks",
+    "title": "Request templates",
+    "description": "Versioned, form-builder-driven templates requests can be created from",
     "manageButton": "Manage templates",
+    "count": "{count, plural, =0 {No templates} one {# template} other {# templates}}"
+  },
+  "requestTemplates": {
+    "title": "Request Templates",
+    "description": "Build the sections, fields, and tasks a request template generates",
     "newButton": "New template",
     "empty": "No templates yet",
+    "preview": "Preview",
+    "publish": "Publish",
+    "basicInfo": "Basic information",
+    "sectionsTitle": "Sections & Fields",
+    "tasksTitle": "Tasks & Dependencies",
+    "addSection": "Add section",
+    "addField": "Add field",
+    "addOption": "Add option",
+    "addTaskRow": "Add task",
+    "editingDraftNotice": "Editing a new draft version — publishing won't change requests already created from the current version",
+    "builderSubtitle": "Draft version {version}",
+    "filters": {
+      "allTypes": "All request types"
+    },
+    "status": {
+      "draft": "Draft",
+      "published": "Published",
+      "archived": "Archived"
+    },
+    "card": {
+      "sections": "{count, plural, =0 {No sections} one {# section} other {# sections}}",
+      "fields": "{count, plural, =0 {No fields} one {# field} other {# fields}}",
+      "tasks": "{count, plural, =0 {No tasks} one {# task} other {# tasks}}",
+      "usage": "{count, plural, =0 {Never used} one {Used by # request} other {Used by # requests}}",
+      "version": "v{version}",
+      "updatedAt": "Updated {date}"
+    },
+    "preview": {
+      "totalHours": "{hours} estimated hours total",
+      "dependsOnOrder": "depends on task #{order}"
+    },
     "fields": {
-      "name": "Template name",
-      "category": "Linked scope category",
-      "description": "Description",
-      "isActive": "Active"
-    },
-    "items": {
-      "title": "Tasks",
-      "addRow": "+ Add task",
-      "order": "#",
-      "titleLabel": "Task title",
-      "department": "Department",
-      "priority": "Priority",
+      "nameAr": "Name (Arabic)",
+      "nameEn": "Name (English)",
+      "descriptionAr": "Description (Arabic)",
+      "descriptionEn": "Description (English)",
+      "requestType": "Request type",
+      "icon": "Icon",
+      "defaultPriority": "Default priority",
+      "defaultDurationDays": "Default duration (days)",
+      "sectionTitleAr": "Section title (Arabic)",
+      "sectionTitleEn": "Section title (English)",
+      "labelAr": "Label (Arabic)",
+      "labelEn": "Label (English)",
+      "key": "Field key",
+      "type": "Field type",
+      "required": "Required",
+      "placeholder": "Placeholder",
+      "minValue": "Min value",
+      "maxValue": "Max value",
+      "minLength": "Min length",
+      "maxLength": "Max length",
+      "options": "Options",
+      "optionValue": "Value",
+      "visibleIfField": "Show only if field",
+      "visibleIfValue": "...equals",
+      "noCondition": "Always visible",
+      "taskTitleAr": "Task title (Arabic)",
+      "taskTitleEn": "Task title (English)",
       "estimatedHours": "Estimated hours",
+      "clientVisible": "Visible to client",
       "dependsOn": "Depends on",
-      "noDependency": "No dependency",
-      "remove": "Remove"
+      "noDependency": "No dependency"
     },
-    "noCategory": "No category",
-    "save": "Save template"
+    "fieldTypes": {
+      "TEXT": "Short text",
+      "TEXTAREA": "Long text",
+      "NUMBER": "Number",
+      "DECIMAL": "Decimal",
+      "DATE": "Date",
+      "DATETIME": "Date & time",
+      "CHECKBOX": "Checkbox",
+      "RADIO": "Radio",
+      "SELECT": "Select",
+      "MULTI_SELECT": "Multi select",
+      "EMAIL": "Email",
+      "PHONE": "Phone",
+      "URL": "URL",
+      "FILE": "File",
+      "COLOR": "Color"
+    },
+    "toast": {
+      "saved": "Draft saved",
+      "published": "Template published"
+    },
+    "errors": {
+      "invalidDraft": "The draft couldn't be validated — check the sections and fields",
+      "duplicateFieldKey": "Two fields can't share the same field key",
+      "invalidConditionalField": "A field's visibility condition points at a field that doesn't exist",
+      "invalidTaskDependency": "A task depends on a task that doesn't exist in this draft",
+      "noDraftVersion": "This template has no draft version to edit",
+      "noSections": "Add at least one section before publishing",
+      "forbidden": "You don't have permission to manage templates",
+      "hasDependencies": "This template can't be deleted — it has been used by real requests"
+    }
   },
   "toast": {
     "profileUpdated": "Profile updated",

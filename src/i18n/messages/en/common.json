@@ -18,7 +18,10 @@
     "viewAll": "View all",
     "submit": "Submit",
     "saveChanges": "Save changes",
-    "confirmDelete": "Confirm delete"
+    "confirmDelete": "Confirm delete",
+    "duplicate": "Duplicate",
+    "restore": "Restore",
+    "reset": "Reset"
   },
   "status": {
     "loading": "Loading...",

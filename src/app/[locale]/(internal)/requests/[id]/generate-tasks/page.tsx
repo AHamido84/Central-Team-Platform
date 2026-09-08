@@ -1,8 +1,9 @@
 import { notFound } from "next/navigation";
-import { getTranslations } from "next-intl/server";
+import { getTranslations, getLocale } from "next-intl/server";
 import { prisma } from "@/lib/prisma";
 import { PageBreadcrumb } from "@/components/layout/page-breadcrumb";
 import { TaskGeneratorBuilder } from "@/components/requests/task-generator-builder";
+import { pickLocalized } from "@/lib/dynamic-form-shared";
 
 export default async function GenerateTasksPage({
   params,
@@ -11,21 +12,23 @@ export default async function GenerateTasksPage({
 }) {
   const { id } = await params;
   const t = await getTranslations("requests");
+  const locale = await getLocale();
 
   const request = await prisma.request.findUnique({
     where: { id },
-    select: { id: true, title: true, requestNumber: true, requestType: { select: { category: true } } },
+    select: { id: true, title: true, requestNumber: true, requestTypeId: true },
   });
   if (!request) notFound();
 
   const [templates, departments, internalUsers] = await Promise.all([
     prisma.requestTemplate.findMany({
       where: {
+        requestTypeId: request.requestTypeId,
         isActive: true,
-        OR: [{ category: request.requestType.category }, { category: null }],
+        isArchived: false,
+        currentVersionId: { not: null },
       },
-      include: { items: true },
-      orderBy: { name: "asc" },
+      include: { currentVersion: { include: { tasks: { orderBy: { order: "asc" } } } } },
     }),
     prisma.department.findMany({ orderBy: { name: "asc" } }),
     prisma.user.findMany({ where: { clientId: null }, orderBy: { name: "asc" }, select: { id: true, name: true } }),
@@ -46,19 +49,21 @@ export default async function GenerateTasksPage({
       </div>
       <TaskGeneratorBuilder
         requestId={request.id}
-        templates={templates.map((tpl) => ({
-          id: tpl.id,
-          name: tpl.name,
-          items: tpl.items.map((item) => ({
-            order: item.order,
-            title: item.title,
-            description: item.description,
-            departmentId: item.departmentId,
-            defaultPriority: item.defaultPriority,
-            defaultEstimatedHours: item.defaultEstimatedHours ? item.defaultEstimatedHours.toNumber() : null,
-            dependsOnOrder: item.dependsOnOrder,
-          })),
-        }))}
+        templates={templates
+          .filter((tpl) => tpl.currentVersion)
+          .map((tpl) => ({
+            id: tpl.id,
+            name: pickLocalized(tpl.currentVersion!.nameAr, tpl.currentVersion!.nameEn, locale),
+            items: tpl.currentVersion!.tasks.map((task) => ({
+              order: task.order,
+              title: pickLocalized(task.titleAr, task.titleEn, locale),
+              description: task.description,
+              departmentId: task.departmentId,
+              defaultPriority: task.defaultPriority,
+              defaultEstimatedHours: task.defaultEstimatedHours ? task.defaultEstimatedHours.toNumber() : null,
+              dependsOnOrder: task.dependsOnOrder,
+            })),
+          }))}
         departments={departments.map((d) => ({ id: d.id, label: d.name }))}
         assignees={internalUsers.map((u) => ({ id: u.id, label: u.name }))}
       />

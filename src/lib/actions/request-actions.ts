@@ -17,6 +17,8 @@ import { getLocale } from "next-intl/server";
 import { zodFieldErrors } from "@/lib/form-utils";
 import { fieldSetForCategory, collectRequestMetadata } from "@/lib/request-type-fields";
 import { allTasksComplete } from "@/lib/request-progress";
+import { validateFieldValues, visibleValuesOnly, type FieldDef } from "@/lib/dynamic-field-validation";
+import { taskDraftListSchema } from "@/lib/validations/request-template";
 import type { RequestStatus } from "@prisma/client";
 
 export type CreateRequestState = {
@@ -497,4 +499,263 @@ export async function respondToClientReviewAction(
 
   revalidatePath(`/requests/${requestId}`);
   revalidatePath(`/portal/requests/${requestId}`);
+}
+
+export type CreateFromTemplateState = {
+  formError?: string;
+  fieldErrors?: Record<string, string>;
+} | undefined;
+
+type TemplateSubmission = {
+  clientId: string;
+  projectId: string;
+  templateVersionId: string;
+  title: string;
+  description: string;
+  requestedDate: string;
+  dueDate: string;
+  valuesJson: string;
+  taskDraftsJson: string;
+};
+
+/**
+ * Shared by the internal and portal wizards — the only difference between
+ * them is *how* clientId is obtained (never trusted from the client for the
+ * portal path). Implements the full spec §23/§56 chain in one transaction:
+ * re-validates client/project/template server-side, re-fetches the
+ * template version fresh (never trusts client-cached field definitions),
+ * requires it to still be published, validates the dynamic field values,
+ * then creates the Request + field values + tasks + dependencies together.
+ */
+type TemplateSubmissionResult =
+  | { formError: string; fieldErrors?: undefined; redirectId?: undefined }
+  | { fieldErrors: Record<string, string>; formError?: undefined; redirectId?: undefined }
+  | { redirectId: string; formError?: undefined; fieldErrors?: undefined };
+
+async function submitRequestFromTemplate(
+  userId: string,
+  submission: TemplateSubmission,
+): Promise<TemplateSubmissionResult> {
+  const version = await prisma.requestTemplateVersion.findUnique({
+    where: { id: submission.templateVersionId },
+    include: {
+      template: { select: { id: true, isActive: true, isArchived: true, requestTypeId: true, currentVersionId: true } },
+      sections: { include: { fields: { include: { options: true } } } },
+    },
+  });
+  if (
+    !version ||
+    !version.isPublished ||
+    !version.template.isActive ||
+    version.template.isArchived ||
+    version.template.currentVersionId !== version.id
+  ) {
+    return { formError: "invalidTemplate" };
+  }
+
+  const project = await prisma.project.findUnique({
+    where: { id: submission.projectId },
+    select: { clientId: true },
+  });
+  if (!project || project.clientId !== submission.clientId) {
+    return { formError: "forbidden" };
+  }
+
+  const allFields: FieldDef[] = version.sections.flatMap((section) =>
+    section.fields.map((field) => ({
+      key: field.key,
+      type: field.type,
+      required: field.required,
+      minValue: field.minValue?.toNumber() ?? null,
+      maxValue: field.maxValue?.toNumber() ?? null,
+      minLength: field.minLength,
+      maxLength: field.maxLength,
+      visibleIfFieldKey: field.visibleIfFieldKey,
+      visibleIfValue: field.visibleIfValue,
+      options: field.options,
+    })),
+  );
+  const fieldByKey = new Map(
+    version.sections.flatMap((s) => s.fields.map((f) => [f.key, f.id] as const)),
+  );
+
+  let values: Record<string, unknown>;
+  try {
+    values = JSON.parse(submission.valuesJson);
+  } catch {
+    return { formError: "invalidValues" };
+  }
+  const fieldErrors = validateFieldValues(allFields, values);
+  if (Object.keys(fieldErrors).length > 0) {
+    return { fieldErrors };
+  }
+  const storedValues = visibleValuesOnly(allFields, values);
+
+  let taskDraftsRaw: unknown;
+  try {
+    taskDraftsRaw = JSON.parse(submission.taskDraftsJson);
+  } catch {
+    return { formError: "invalidTasks" };
+  }
+  const draftsResult = taskDraftListSchema.safeParse(taskDraftsRaw);
+  const drafts = draftsResult.success ? draftsResult.data : [];
+
+  const dueDate = submission.dueDate
+    ? new Date(submission.dueDate)
+    : version.defaultDurationDays != null
+      ? new Date(Date.now() + version.defaultDurationDays * 24 * 60 * 60 * 1000)
+      : null;
+
+  const result = await prisma.$transaction(async (tx) => {
+    const request = await tx.request.create({
+      data: {
+        clientId: submission.clientId,
+        projectId: submission.projectId,
+        requestTypeId: version.template.requestTypeId,
+        templateVersionId: version.id,
+        title: submission.title,
+        description: submission.description || null,
+        priority: version.defaultPriority,
+        requestedDate: submission.requestedDate ? new Date(submission.requestedDate) : null,
+        dueDate,
+        requestedById: userId,
+      },
+    });
+
+    for (const [key, value] of Object.entries(storedValues)) {
+      const fieldId = fieldByKey.get(key);
+      if (!fieldId) continue;
+      await tx.requestFieldValue.create({ data: { requestId: request.id, fieldId, value: value as never } });
+    }
+
+    const keyToTaskId = new Map<string, string>();
+    for (const draft of drafts) {
+      const task = await tx.task.create({
+        data: {
+          projectId: submission.projectId,
+          requestId: request.id,
+          departmentId: draft.departmentId || null,
+          assigneeId: draft.assigneeId || null,
+          title: draft.title,
+          description: draft.description || null,
+          priority: draft.priority,
+          estimatedHours: draft.estimatedHours,
+          startDate: draft.startDate ? new Date(draft.startDate) : null,
+          dueDate: draft.dueDate ? new Date(draft.dueDate) : null,
+        },
+      });
+      keyToTaskId.set(draft.key, task.id);
+    }
+    for (const draft of drafts) {
+      const taskId = keyToTaskId.get(draft.key)!;
+      const dependsOnIds = (draft.dependsOnKeys ?? [])
+        .map((key) => keyToTaskId.get(key))
+        .filter((depId): depId is string => Boolean(depId) && depId !== taskId);
+      if (dependsOnIds.length > 0) {
+        await tx.taskDependency.createMany({
+          data: dependsOnIds.map((dependsOnTaskId) => ({ taskId, dependsOnTaskId })),
+          skipDuplicates: true,
+        });
+      }
+    }
+
+    return request;
+  });
+
+  await recordAudit({
+    actorId: userId,
+    action: "REQUEST_CREATED",
+    entityType: "Request",
+    entityId: result.id,
+    projectId: submission.projectId,
+    clientId: submission.clientId,
+    metadata: { templateVersionId: version.id, taskCount: drafts.length },
+  });
+
+  const client = await prisma.client.findUnique({
+    where: { id: submission.clientId },
+    select: { accountManagerId: true },
+  });
+  if (client?.accountManagerId) {
+    await notifyUser(client.accountManagerId, {
+      type: "REQUEST_CREATED",
+      title: result.title,
+      link: `/requests/${result.id}`,
+    });
+  }
+  const assigneeIds = [...new Set(drafts.map((d) => d.assigneeId).filter((id): id is string => Boolean(id)))];
+  await notifyUsers(assigneeIds, {
+    type: "TASK_ASSIGNED",
+    title: result.title,
+    link: `/requests/${result.id}`,
+  });
+
+  revalidatePath("/requests");
+  revalidatePath("/portal/requests");
+  revalidatePath(`/projects/${submission.projectId}/requests`);
+
+  return { redirectId: result.id };
+}
+
+function readTemplateSubmission(formData: FormData, clientId: string): TemplateSubmission {
+  return {
+    clientId,
+    projectId: String(formData.get("projectId") || ""),
+    templateVersionId: String(formData.get("templateVersionId") || ""),
+    title: String(formData.get("title") || ""),
+    description: String(formData.get("description") || ""),
+    requestedDate: String(formData.get("requestedDate") || ""),
+    dueDate: String(formData.get("dueDate") || ""),
+    valuesJson: String(formData.get("valuesJson") || "{}"),
+    taskDraftsJson: String(formData.get("taskDraftsJson") || "[]"),
+  };
+}
+
+/** Internal staff creating a request from a template on behalf of a client
+ * they explicitly choose (mirrors createInternalRequestAction vs
+ * createRequestAction — the client id is only ever trusted from the
+ * session on the portal path, never from form data). */
+export async function createRequestFromTemplateAction(
+  _prevState: CreateFromTemplateState,
+  formData: FormData,
+): Promise<CreateFromTemplateState> {
+  const user = await requireUser();
+  try {
+    await requirePermission(user, "requests.create");
+  } catch (error) {
+    if (error instanceof ForbiddenError) return { formError: "forbidden" };
+    throw error;
+  }
+  const clientId = String(formData.get("clientId") || "");
+  if (!clientId) return { formError: "forbidden" };
+
+  const result = await submitRequestFromTemplate(user.id, readTemplateSubmission(formData, clientId));
+  if (result.redirectId) {
+    const locale = await getLocale();
+    redirect({ href: `/requests/${result.redirectId}`, locale });
+  }
+  return { formError: result.formError, fieldErrors: result.fieldErrors };
+}
+
+/** Client-portal path — clientId always comes from the session. */
+export async function createPortalRequestFromTemplateAction(
+  _prevState: CreateFromTemplateState,
+  formData: FormData,
+): Promise<CreateFromTemplateState> {
+  const user = await requireUser();
+  const clientId = user.clientId;
+  if (!clientId) return { formError: "forbidden" };
+  try {
+    await requirePermission(user, "requests.create");
+  } catch (error) {
+    if (error instanceof ForbiddenError) return { formError: "forbidden" };
+    throw error;
+  }
+
+  const result = await submitRequestFromTemplate(user.id, readTemplateSubmission(formData, clientId));
+  if (result.redirectId) {
+    const locale = await getLocale();
+    redirect({ href: `/portal/requests/${result.redirectId}`, locale });
+  }
+  return { formError: result.formError, fieldErrors: result.fieldErrors };
 }

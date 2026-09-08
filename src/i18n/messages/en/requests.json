@@ -158,6 +158,12 @@
     "skip": "No template",
     "noneAvailable": "No templates available for this type"
   },
+  "wizard": {
+    "customRequest": "Custom request",
+    "fromTemplate": "From a template",
+    "selectContext": "Client, project & request type",
+    "template": "Template"
+  },
   "noProject": "No project selected",
   "noAssignee": "Unassigned"
 }

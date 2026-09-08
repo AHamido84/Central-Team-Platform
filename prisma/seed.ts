@@ -31,6 +31,7 @@ const PERMISSIONS = [
   "team.invite",
   "integrations.manage",
   "settings.manage",
+  "settings.templates.manage",
   "comments.create",
   "contacts.create",
   "contacts.update",

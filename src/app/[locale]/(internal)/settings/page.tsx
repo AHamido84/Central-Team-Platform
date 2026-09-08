@@ -15,12 +15,12 @@ export default async function SettingsPage() {
   const tTeam = await getTranslations("team.departments");
   const tCategory = await getTranslations("projects.scope.category");
 
-  const [user, projectTypes, requestTypes, departments, templates] = await Promise.all([
+  const [user, projectTypes, requestTypes, departments, templateCount] = await Promise.all([
     prisma.user.findUniqueOrThrow({ where: { id: sessionUser.id }, select: { name: true, locale: true } }),
     prisma.projectType.findMany({ orderBy: { name: "asc" } }),
     prisma.requestType.findMany({ orderBy: { name: "asc" } }),
     prisma.department.findMany({ orderBy: { name: "asc" } }),
-    prisma.requestTemplate.findMany({ orderBy: { name: "asc" }, include: { _count: { select: { items: true } } } }),
+    prisma.requestTemplate.count({ where: { isArchived: false } }),
   ]);
 
   return (
@@ -126,27 +126,16 @@ export default async function SettingsPage() {
               <CardTitle>{t("templates.title")}</CardTitle>
               <p className="text-xs text-muted-foreground">{t("templates.description")}</p>
             </div>
+          </CardHeader>
+          <CardContent className="flex items-center justify-between">
+            <p className="text-sm text-muted-foreground">
+              {t("templates.count", { count: templateCount })}
+            </p>
             <Button
               size="sm"
               variant="outline"
-              render={<Link href="/settings/templates/new">{t("templates.newButton")}</Link>}
+              render={<Link href="/settings/request-templates">{t("templates.manageButton")}</Link>}
             />
-          </CardHeader>
-          <CardContent>
-            {templates.length === 0 ? (
-              <p className="text-sm text-muted-foreground">{t("templates.empty")}</p>
-            ) : (
-              <ul className="flex flex-col divide-y divide-border">
-                {templates.map((tpl) => (
-                  <li key={tpl.id} className="flex items-center justify-between py-2 text-sm">
-                    <span className="font-medium">{tpl.name}</span>
-                    <span className="text-xs text-muted-foreground">
-                      {tpl._count.items} {t("templates.items.title")}
-                    </span>
-                  </li>
-                ))}
-              </ul>
-            )}
           </CardContent>
         </Card>
       </div>

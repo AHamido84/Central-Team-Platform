@@ -158,6 +158,12 @@
     "skip": "بدون قالب",
     "noneAvailable": "لا توجد قوالب متاحة لهذا النوع"
   },
+  "wizard": {
+    "customRequest": "طلب مخصص",
+    "fromTemplate": "من قالب",
+    "selectContext": "العميل والمشروع ونوع الطلب",
+    "template": "القالب"
+  },
   "noProject": "بدون مشروع محدد",
   "noAssignee": "غير مسند"
 }

@@ -62,6 +62,9 @@ model User {
   departmentId String?
   department   Department? @relation(fields: [departmentId], references: [id])
 
+  // Phase 2.5
+  requestTemplatesCreated RequestTemplate[] @relation("RequestTemplateCreatedBy")
+
   @@index([clientId])
   @@index([roleId])
   @@index([departmentId])
@@ -80,7 +83,7 @@ model Department {
 
   members       User[]
   tasks         Task[]
-  templateItems RequestTemplateItem[]
+  templateTasks RequestTemplateTask[]
 }
 
 enum UserStatus {
@@ -432,12 +435,15 @@ model RequestType {
   description String?
   // Drives which extra fields the "new request" form shows (dimensions for a
   // design request, duration/script for video, ...) without fuzzy-matching
-  // on the free-text name. Null = generic request, no extra fields.
+  // on the free-text name. Null = generic request, no extra fields. Only
+  // used by the "Custom Request" (no-template) path — a request created
+  // from a RequestTemplate gets its fields from that template instead.
   category    ScopeItemCategory?
   createdAt   DateTime           @default(now())
   updatedAt   DateTime           @updatedAt
 
-  requests Request[]
+  requests  Request[]
+  templates RequestTemplate[]
 }
 
 model Request {
@@ -478,13 +484,22 @@ model Request {
   assignedToId String?
   assignedTo   User?   @relation("RequestAssignee", fields: [assignedToId], references: [id])
 
-  tasks  Task[]
-  assets Asset[]
+  // Set once at creation for a template-based request, never changed
+  // afterwards — this is what makes template versioning actually mean
+  // something: editing/publishing a new version of the template must never
+  // alter a request that already exists. Null for a "Custom Request".
+  templateVersionId String?
+  templateVersion   RequestTemplateVersion? @relation(fields: [templateVersionId], references: [id])
+
+  tasks       Task[]
+  assets      Asset[]
+  fieldValues RequestFieldValue[]
 
   @@index([clientId])
   @@index([projectId])
   @@index([assignedToId])
   @@index([campaignId])
+  @@index([templateVersionId])
 }
 
 enum RequestStatus {
@@ -573,40 +588,202 @@ model TaskDependency {
   @@index([dependsOnTaskId])
 }
 
-// A named, ordered set of task drafts a Request Type suggests (e.g. "Video
-// Template": Script -> Script Review -> Voice Over -> ...). Applying a
-// template only ever pre-fills the task-generation draft screen — nothing
-// here is created as a real Task until the user reviews/edits and submits.
-model RequestTemplate {
-  id          String             @id @default(cuid())
-  name        String
-  category    ScopeItemCategory?
-  description String?
-  isActive    Boolean            @default(true)
-  createdAt   DateTime           @default(now())
-  updatedAt   DateTime           @updatedAt
+// ---------------------------------------------------------------------------
+// Phase 2.5: Request Templates — versioned Sections -> Fields -> Options,
+// plus Tasks -> Dependencies. A RequestTemplate is the stable identity an
+// admin edits; publishing freezes the current draft into an immutable
+// RequestTemplateVersion. A Request stores the exact version id it was
+// created from (Request.templateVersionId) so a later edit/publish of the
+// template can never alter a request that already exists — only new
+// requests ever see the new version (via RequestTemplate.currentVersionId).
+// ---------------------------------------------------------------------------
 
-  items RequestTemplateItem[]
+model RequestTemplate {
+  id            String      @id @default(cuid())
+  requestTypeId String
+  requestType   RequestType @relation(fields: [requestTypeId], references: [id])
+
+  icon       String?
+  isActive   Boolean @default(true)
+  isArchived Boolean @default(false)
+  sortOrder  Int     @default(0)
+
+  // The latest *published* version — what new requests are created from.
+  // Null until the template has been published at least once (a
+  // template with only a draft version isn't selectable yet).
+  currentVersionId String?                 @unique
+  currentVersion   RequestTemplateVersion? @relation("CurrentVersion", fields: [currentVersionId], references: [id])
+
+  createdById String?
+  createdBy   User?    @relation("RequestTemplateCreatedBy", fields: [createdById], references: [id])
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  // All versions ever created for this template (drafts and published) —
+  // distinct from `currentVersion`, which is only ever a published one.
+  versions RequestTemplateVersion[] @relation("TemplateVersions")
+
+  @@index([requestTypeId])
 }
 
-model RequestTemplateItem {
+model RequestTemplateVersion {
   id         String          @id @default(cuid())
   templateId String
-  template   RequestTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+  template   RequestTemplate @relation("TemplateVersions", fields: [templateId], references: [id], onDelete: Cascade)
+  version    Int
+
+  nameAr        String
+  nameEn        String
+  descriptionAr String?
+  descriptionEn String?
+
+  defaultPriority     Priority @default(MEDIUM)
+  // Days added to the requested date to seed the request's due date when
+  // one isn't set explicitly — a pragmatic stand-in for a full SLA engine.
+  defaultDurationDays Int?
+
+  isPublished Boolean   @default(false)
+  publishedAt DateTime?
+
+  createdAt DateTime @default(now())
+
+  sections           RequestTemplateSection[]
+  fields             RequestTemplateField[]
+  tasks              RequestTemplateTask[]
+  requests           Request[]
+  // Opposite side of RequestTemplate.currentVersionId — a version can be
+  // "current" for at most one template, but Prisma still requires the
+  // named relation on both ends.
+  currentForTemplate RequestTemplate?         @relation("CurrentVersion")
+
+  @@unique([templateId, version])
+  @@index([templateId])
+}
+
+model RequestTemplateSection {
+  id        String                 @id @default(cuid())
+  versionId String
+  version   RequestTemplateVersion @relation(fields: [versionId], references: [id], onDelete: Cascade)
+
+  titleAr String
+  titleEn String
+  order   Int
+
+  fields RequestTemplateField[]
+
+  @@index([versionId])
+}
+
+enum TemplateFieldType {
+  TEXT
+  TEXTAREA
+  NUMBER
+  DECIMAL
+  DATE
+  DATETIME
+  CHECKBOX
+  RADIO
+  SELECT
+  MULTI_SELECT
+  EMAIL
+  PHONE
+  URL
+  FILE
+  COLOR
+}
+
+model RequestTemplateField {
+  id String @id @default(cuid())
+
+  // Denormalized alongside sectionId purely so `key` can be enforced
+  // unique across the whole version (conditional visibility references a
+  // field by key regardless of which section it lives in).
+  versionId String
+  version   RequestTemplateVersion @relation(fields: [versionId], references: [id], onDelete: Cascade)
+  sectionId String
+  section   RequestTemplateSection @relation(fields: [sectionId], references: [id], onDelete: Cascade)
+
+  key          String
+  labelAr      String
+  labelEn      String
+  description  String?
+  placeholder  String?
+  type         TemplateFieldType
+  required     Boolean           @default(false)
+  order        Int
+  defaultValue String?
+
+  minValue  Decimal? @db.Decimal(14, 2)
+  maxValue  Decimal? @db.Decimal(14, 2)
+  minLength Int?
+  maxLength Int?
+
+  // Single-condition visibility: this field only shows (and is only
+  // validated/stored) when the field named `visibleIfFieldKey` currently
+  // has the value `visibleIfValue`. Covers every example in the spec
+  // ("Need Voice Over? Yes -> show voice fields", "Platform = TikTok ->
+  // show TikTok fields") without a general expression engine.
+  visibleIfFieldKey String?
+  visibleIfValue    String?
+
+  options RequestTemplateFieldOption[]
+  values  RequestFieldValue[]
+
+  @@unique([versionId, key])
+  @@index([sectionId])
+}
+
+model RequestTemplateFieldOption {
+  id      String               @id @default(cuid())
+  fieldId String
+  field   RequestTemplateField @relation(fields: [fieldId], references: [id], onDelete: Cascade)
+
+  labelAr  String
+  labelEn  String
+  value    String
+  order    Int
+  isActive Boolean @default(true)
+
+  @@index([fieldId])
+}
+
+model RequestTemplateTask {
+  id        String                 @id @default(cuid())
+  versionId String
+  version   RequestTemplateVersion @relation(fields: [versionId], references: [id], onDelete: Cascade)
 
   order                 Int
-  title                 String
+  titleAr               String
+  titleEn               String
   description           String?
   departmentId          String?
   department            Department? @relation(fields: [departmentId], references: [id])
   defaultPriority       Priority    @default(MEDIUM)
   defaultEstimatedHours Decimal?    @db.Decimal(6, 2)
-  // `order` value of another item in the SAME template that must complete
+  clientVisible         Boolean     @default(true)
+  // `order` value of another task in the SAME version that must complete
   // first — resolved into a real TaskDependency only once tasks are
   // generated from this template (see generateTasksFromTemplateAction).
   dependsOnOrder        Int?
 
-  @@index([templateId])
+  @@index([versionId])
+}
+
+// One submitted value per (Request, RequestTemplateField) — the
+// template-based counterpart to Request.metadata (which only ever holds
+// the Phase 3 hardcoded-per-category fields for a no-template "Custom
+// Request"). `value` is a scalar for most field types and a JSON array
+// for MULTI_SELECT.
+model RequestFieldValue {
+  id        String               @id @default(cuid())
+  requestId String
+  request   Request              @relation(fields: [requestId], references: [id], onDelete: Cascade)
+  fieldId   String
+  field     RequestTemplateField @relation(fields: [fieldId], references: [id])
+  value     Json?
+
+  @@unique([requestId, fieldId])
+  @@index([requestId])
 }
 
 model Deliverable {
