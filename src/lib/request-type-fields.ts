@@ -6,13 +6,24 @@ import type { ScopeItemCategory } from "@prisma/client";
  * a video request asks for duration/script, etc. `null` means a generic
  * request with no extra fields beyond title/description.
  */
-export type RequestFieldSet = "design" | "video" | "brochure" | "campaign";
+export type RequestFieldSet =
+  | "design"
+  | "video"
+  | "voiceOver"
+  | "brochure"
+  | "website"
+  | "landingPage"
+  | "campaign";
 
 const CATEGORY_TO_FIELD_SET: Partial<Record<ScopeItemCategory, RequestFieldSet>> = {
   DESIGN: "design",
   PHOTOGRAPHY: "design",
+  PRESENTATION: "design",
   VIDEO: "video",
+  VOICE_OVER: "voiceOver",
   BROCHURE: "brochure",
+  WEBSITE: "website",
+  LANDING_PAGE: "landingPage",
   ADVERTISING: "campaign",
   MEDIA_BUYING: "campaign",
   MARKETING_STRATEGY: "campaign",
@@ -43,12 +54,32 @@ export const REQUEST_FIELD_KEYS: Record<RequestFieldSet, { key: string; kind: Fi
     { key: "aspectRatio", kind: "text" },
     { key: "references", kind: "textarea" },
   ],
+  voiceOver: [
+    { key: "language", kind: "text" },
+    { key: "voice", kind: "text" },
+    { key: "duration", kind: "text" },
+    { key: "script", kind: "textarea" },
+  ],
   brochure: [
     { key: "pages", kind: "number" },
     { key: "size", kind: "text" },
     { key: "language", kind: "text" },
     { key: "content", kind: "textarea" },
     { key: "brandAssets", kind: "text" },
+  ],
+  website: [
+    { key: "numberOfPages", kind: "number" },
+    { key: "platform", kind: "text" },
+    { key: "content", kind: "textarea" },
+    { key: "referenceWebsites", kind: "textarea" },
+    { key: "requirements", kind: "textarea" },
+  ],
+  landingPage: [
+    { key: "objective", kind: "text" },
+    { key: "cta", kind: "text" },
+    { key: "content", kind: "textarea" },
+    { key: "reference", kind: "textarea" },
+    { key: "trackingRequirements", kind: "textarea" },
   ],
   campaign: [
     { key: "platform", kind: "text" },

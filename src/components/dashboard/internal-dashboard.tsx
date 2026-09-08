@@ -18,9 +18,11 @@ import { requireUser } from "@/lib/authorization";
 import { computeProjectProgress } from "@/lib/project-progress";
 import { computeTrendPercent } from "@/lib/compute-trend";
 import { OPEN_REQUEST_STATUSES } from "@/lib/request-status";
+import { ACTIVE_TASK_STATUSES, IN_PROGRESS_TASK_STATUSES } from "@/lib/task-capacity";
+import { requestStatusValues } from "@/lib/validations/request-status-values";
 import type { RequestStatus } from "@prisma/client";
 
-const REQUEST_STATUSES: RequestStatus[] = ["NEW", "REVIEWING", "APPROVED", "CONVERTED", "REJECTED"];
+const REQUEST_STATUSES: RequestStatus[] = [...requestStatusValues];
 
 export async function InternalDashboard() {
   const sessionUser = await requireUser();
@@ -56,7 +58,7 @@ export async function InternalDashboard() {
     prisma.client.count(),
     prisma.project.count({ where: { status: { notIn: ["COMPLETED", "CANCELLED"] } } }),
     prisma.request.count({ where: { status: { in: OPEN_REQUEST_STATUSES } } }),
-    prisma.task.count({ where: { status: { in: ["IN_PROGRESS", "IN_REVIEW"] } } }),
+    prisma.task.count({ where: { status: { in: IN_PROGRESS_TASK_STATUSES } } }),
     prisma.deliverable.count({ where: { status: "IN_REVIEW" } }),
     prisma.campaign.count({ where: { status: "ACTIVE" } }),
     Promise.all([
@@ -106,7 +108,7 @@ export async function InternalDashboard() {
       where: { clientId: null },
       include: {
         _count: {
-          select: { assignedTasks: { where: { status: { in: ["TODO", "IN_PROGRESS", "IN_REVIEW"] } } } },
+          select: { assignedTasks: { where: { status: { in: ACTIVE_TASK_STATUSES } } } },
         },
       },
     }),

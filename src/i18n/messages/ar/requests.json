@@ -5,6 +5,7 @@
   "internalSubtitle": "إدارة جميع الطلبات الواردة من العملاء",
   "newButton": "طلب جديد",
   "createTitle": "تقديم طلب جديد",
+  "editTitle": "تعديل الطلب",
   "empty": {
     "title": "لا توجد طلبات بعد",
     "description": "قدّم طلبك الأول وسنقوم بمراجعته في أقرب وقت."
@@ -16,21 +17,28 @@
     "client": "العميل",
     "project": "المشروع",
     "scopeItem": "البند من نطاق العمل",
+    "campaign": "الحملة الإعلانية",
     "status": "الحالة",
     "priority": "الأولوية",
-    "assignee": "المسؤول",
+    "assignee": "المدير المسؤول",
+    "requestedDate": "تاريخ الطلب",
     "dueDate": "تاريخ التسليم",
     "updatedAt": "آخر تحديث",
     "description": "التفاصيل",
+    "notes": "ملاحظات داخلية",
     "attachmentUrl": "رابط المرفقات",
     "clientNotes": "ملاحظات العميل"
   },
   "status": {
     "NEW": "جديد",
-    "REVIEWING": "قيد المراجعة",
-    "APPROVED": "معتمد",
-    "CONVERTED": "تم التحويل لمشروع",
-    "REJECTED": "مرفوض"
+    "UNDER_REVIEW": "قيد المراجعة",
+    "ASSIGNED": "تم الإسناد",
+    "IN_PROGRESS": "قيد التنفيذ",
+    "INTERNAL_REVIEW": "مراجعة داخلية",
+    "CLIENT_REVIEW": "مراجعة العميل",
+    "CHANGES_REQUIRED": "يتطلب تعديلات",
+    "COMPLETED": "مكتمل",
+    "ARCHIVED": "مؤرشف"
   },
   "filters": {
     "allClients": "كل العملاء",
@@ -39,7 +47,9 @@
     "allStatuses": "كل الحالات",
     "allPriorities": "كل الأولويات",
     "allAssignees": "كل المسؤولين",
-    "unassigned": "غير مسند"
+    "unassigned": "غير مسند",
+    "apply": "تطبيق",
+    "reset": "إعادة تعيين"
   },
   "typeFields": {
     "title": "تفاصيل إضافية",
@@ -58,12 +68,32 @@
       "aspectRatio": "نسبة العرض للارتفاع",
       "references": "مراجع"
     },
+    "voiceOver": {
+      "language": "اللغة",
+      "voice": "الصوت",
+      "duration": "المدة",
+      "script": "النص"
+    },
     "brochure": {
       "pages": "عدد الصفحات",
       "size": "المقاس",
       "language": "اللغة",
       "content": "المحتوى",
       "brandAssets": "عناصر الهوية البصرية"
+    },
+    "website": {
+      "numberOfPages": "عدد الصفحات",
+      "platform": "المنصة",
+      "content": "المحتوى",
+      "referenceWebsites": "مواقع مرجعية",
+      "requirements": "المتطلبات"
+    },
+    "landingPage": {
+      "objective": "الهدف",
+      "cta": "دعوة لاتخاذ إجراء",
+      "content": "المحتوى",
+      "reference": "مرجع",
+      "trackingRequirements": "متطلبات التتبع"
     },
     "campaign": {
       "platform": "المنصة",
@@ -83,7 +113,50 @@
   "toast": {
     "created": "تم تقديم الطلب بنجاح",
     "statusUpdated": "تم تحديث حالة الطلب",
-    "assigned": "تم إسناد الطلب"
+    "assigned": "تم إسناد الطلب",
+    "updated": "تم تحديث بيانات الطلب",
+    "archived": "تمت أرشفة الطلب",
+    "deleted": "تم حذف الطلب",
+    "sentForReview": "تم إرسال الطلب لمراجعة العميل",
+    "approved": "تم اعتماد الطلب",
+    "changesRequested": "تم تسجيل طلب التعديلات"
+  },
+  "errors": {
+    "tasksIncomplete": "لا يمكن إكمال الطلب قبل إنجاز جميع المهام المرتبطة به",
+    "hasDependencies": "لا يمكن حذف الطلب لوجود مهام مرتبطة به"
+  },
+  "detail": {
+    "sections": {
+      "info": "معلومات الطلب",
+      "scope": "نطاق العمل",
+      "tasks": "المهام",
+      "deliverables": "المخرجات",
+      "approvals": "الموافقات",
+      "files": "الملفات",
+      "activity": "النشاط"
+    },
+    "progress": "نسبة الإنجاز",
+    "editRequest": "تعديل الطلب",
+    "archiveRequest": "أرشفة الطلب",
+    "deleteRequest": "حذف الطلب",
+    "deleteRequestConfirm": "سيتم حذف هذا الطلب نهائيًا. هل أنت متأكد؟",
+    "noTasks": "لا توجد مهام بعد",
+    "addTask": "+ إضافة مهمة",
+    "generateFromTemplate": "توليد من قالب",
+    "sendForReview": "إرسال لمراجعة العميل"
+  },
+  "clientReview": {
+    "title": "مراجعة الطلب",
+    "description": "يرجى مراجعة الأعمال المنجزة واتخاذ قرار.",
+    "approve": "اعتماد",
+    "requestChanges": "طلب تعديلات",
+    "commentPlaceholder": "أضف ملاحظاتك (اختياري عند الاعتماد، مطلوب عند طلب تعديلات)",
+    "commentRequired": "يرجى توضيح التعديلات المطلوبة"
+  },
+  "template": {
+    "pickerTitle": "اختر قالب المهام",
+    "skip": "بدون قالب",
+    "noneAvailable": "لا توجد قوالب متاحة لهذا النوع"
   },
   "noProject": "بدون مشروع محدد",
   "noAssignee": "غير مسند"

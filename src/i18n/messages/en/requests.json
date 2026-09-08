@@ -5,6 +5,7 @@
   "internalSubtitle": "Manage every request coming in from clients",
   "newButton": "New request",
   "createTitle": "Submit a new request",
+  "editTitle": "Edit request",
   "empty": {
     "title": "No requests yet",
     "description": "Submit your first request and we'll review it shortly."
@@ -16,21 +17,28 @@
     "client": "Client",
     "project": "Project",
     "scopeItem": "Scope item",
+    "campaign": "Campaign",
     "status": "Status",
     "priority": "Priority",
-    "assignee": "Assignee",
+    "assignee": "Assigned manager",
+    "requestedDate": "Requested date",
     "dueDate": "Due date",
     "updatedAt": "Last updated",
     "description": "Details",
+    "notes": "Internal notes",
     "attachmentUrl": "Attachment link",
     "clientNotes": "Client notes"
   },
   "status": {
     "NEW": "New",
-    "REVIEWING": "Reviewing",
-    "APPROVED": "Approved",
-    "CONVERTED": "Converted to project",
-    "REJECTED": "Rejected"
+    "UNDER_REVIEW": "Under review",
+    "ASSIGNED": "Assigned",
+    "IN_PROGRESS": "In progress",
+    "INTERNAL_REVIEW": "Internal review",
+    "CLIENT_REVIEW": "Client review",
+    "CHANGES_REQUIRED": "Changes required",
+    "COMPLETED": "Completed",
+    "ARCHIVED": "Archived"
   },
   "filters": {
     "allClients": "All clients",
@@ -39,7 +47,9 @@
     "allStatuses": "All statuses",
     "allPriorities": "All priorities",
     "allAssignees": "All assignees",
-    "unassigned": "Unassigned"
+    "unassigned": "Unassigned",
+    "apply": "Apply",
+    "reset": "Reset"
   },
   "typeFields": {
     "title": "Additional details",
@@ -58,12 +68,32 @@
       "aspectRatio": "Aspect ratio",
       "references": "References"
     },
+    "voiceOver": {
+      "language": "Language",
+      "voice": "Voice",
+      "duration": "Duration",
+      "script": "Script"
+    },
     "brochure": {
       "pages": "Number of pages",
       "size": "Size",
       "language": "Language",
       "content": "Content",
       "brandAssets": "Brand assets"
+    },
+    "website": {
+      "numberOfPages": "Number of pages",
+      "platform": "Platform",
+      "content": "Content",
+      "referenceWebsites": "Reference websites",
+      "requirements": "Requirements"
+    },
+    "landingPage": {
+      "objective": "Objective",
+      "cta": "Call to action",
+      "content": "Content",
+      "reference": "Reference",
+      "trackingRequirements": "Tracking requirements"
     },
     "campaign": {
       "platform": "Platform",
@@ -83,7 +113,50 @@
   "toast": {
     "created": "Request submitted successfully",
     "statusUpdated": "Request status updated",
-    "assigned": "Request assigned"
+    "assigned": "Request assigned",
+    "updated": "Request details updated",
+    "archived": "Request archived",
+    "deleted": "Request deleted",
+    "sentForReview": "Request sent for client review",
+    "approved": "Request approved",
+    "changesRequested": "Change request recorded"
+  },
+  "errors": {
+    "tasksIncomplete": "The request can't be completed until all of its tasks are done",
+    "hasDependencies": "This request can't be deleted while it still has tasks"
+  },
+  "detail": {
+    "sections": {
+      "info": "Request information",
+      "scope": "Scope",
+      "tasks": "Tasks",
+      "deliverables": "Deliverables",
+      "approvals": "Approvals",
+      "files": "Files",
+      "activity": "Activity"
+    },
+    "progress": "Progress",
+    "editRequest": "Edit request",
+    "archiveRequest": "Archive request",
+    "deleteRequest": "Delete request",
+    "deleteRequestConfirm": "This request will be permanently deleted. Are you sure?",
+    "noTasks": "No tasks yet",
+    "addTask": "+ Add task",
+    "generateFromTemplate": "Generate from template",
+    "sendForReview": "Send for client review"
+  },
+  "clientReview": {
+    "title": "Review request",
+    "description": "Please review the completed work and make a decision.",
+    "approve": "Approve",
+    "requestChanges": "Request changes",
+    "commentPlaceholder": "Add your notes (optional when approving, required when requesting changes)",
+    "commentRequired": "Please describe the changes needed"
+  },
+  "template": {
+    "pickerTitle": "Choose a task template",
+    "skip": "No template",
+    "noneAvailable": "No templates available for this type"
   },
   "noProject": "No project selected",
   "noAssignee": "Unassigned"

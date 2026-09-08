@@ -1,7 +1,11 @@
 export const requestStatusValues = [
   "NEW",
-  "REVIEWING",
-  "APPROVED",
-  "CONVERTED",
-  "REJECTED",
+  "UNDER_REVIEW",
+  "ASSIGNED",
+  "IN_PROGRESS",
+  "INTERNAL_REVIEW",
+  "CLIENT_REVIEW",
+  "CHANGES_REQUIRED",
+  "COMPLETED",
+  "ARCHIVED",
 ] as const;

@@ -14,7 +14,7 @@ export default async function InternalProjectTasksPage({
   const t = await getTranslations("tasks");
   const locale = await getLocale();
 
-  const [tasks, scopeItems, internalUsers] = await Promise.all([
+  const [tasks, scopeItems, internalUsers, departments] = await Promise.all([
     prisma.task.findMany({
       where: { projectId: id },
       orderBy: { createdAt: "desc" },
@@ -29,6 +29,7 @@ export default async function InternalProjectTasksPage({
       orderBy: { name: "asc" },
       select: { id: true, name: true },
     }),
+    prisma.department.findMany({ orderBy: { name: "asc" } }),
   ]);
 
   return (
@@ -37,6 +38,7 @@ export default async function InternalProjectTasksPage({
         <AddTaskDialog
           projectId={id}
           scopeItems={scopeItems.map((s) => ({ id: s.id, label: s.name }))}
+          departments={departments.map((d) => ({ id: d.id, label: d.name }))}
           assignees={internalUsers.map((u) => ({ id: u.id, label: u.name }))}
         />
       </div>

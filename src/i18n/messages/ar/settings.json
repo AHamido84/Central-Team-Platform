@@ -30,9 +30,38 @@
     "noCategory": "بدون فئة محددة",
     "empty": "لا توجد أنواع طلبات بعد"
   },
+  "templates": {
+    "title": "قوالب المهام",
+    "description": "قوالب جاهزة لتوليد مهام الطلبات تلقائيًا",
+    "manageButton": "إدارة القوالب",
+    "newButton": "قالب جديد",
+    "empty": "لا توجد قوالب بعد",
+    "fields": {
+      "name": "اسم القالب",
+      "category": "فئة نطاق العمل المرتبطة",
+      "description": "الوصف",
+      "isActive": "مفعّل"
+    },
+    "items": {
+      "title": "المهام",
+      "addRow": "+ إضافة مهمة",
+      "order": "#",
+      "titleLabel": "عنوان المهمة",
+      "department": "القسم",
+      "priority": "الأولوية",
+      "estimatedHours": "الساعات المقدّرة",
+      "dependsOn": "تعتمد على",
+      "noDependency": "بدون اعتمادية",
+      "remove": "إزالة"
+    },
+    "noCategory": "بدون فئة محددة",
+    "save": "حفظ القالب"
+  },
   "toast": {
     "profileUpdated": "تم تحديث الملف الشخصي",
     "projectTypeCreated": "تمت إضافة نوع المشروع",
-    "requestTypeCreated": "تمت إضافة نوع الطلب"
+    "requestTypeCreated": "تمت إضافة نوع الطلب",
+    "templateCreated": "تمت إضافة القالب",
+    "departmentCreated": "تمت إضافة القسم"
   }
 }

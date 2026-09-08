@@ -9,6 +9,7 @@ import { EmptyState } from "@/components/portal/empty-state";
 import { computeProjectProgress } from "@/lib/project-progress";
 import { formatDate } from "@/lib/format-date";
 import { OPEN_REQUEST_STATUSES } from "@/lib/request-status";
+import { IN_PROGRESS_TASK_STATUSES } from "@/lib/task-capacity";
 
 export default async function PortalDashboardPage() {
   const sessionUser = await requireUser();
@@ -33,7 +34,7 @@ export default async function PortalDashboardPage() {
         where: {
           project: { clientId },
           clientVisible: true,
-          status: { in: ["IN_PROGRESS", "IN_REVIEW"] },
+          status: { in: IN_PROGRESS_TASK_STATUSES },
         },
       }),
       prisma.deliverable.count({

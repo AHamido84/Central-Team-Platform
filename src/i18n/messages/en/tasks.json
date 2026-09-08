@@ -1,43 +1,87 @@
 {
   "title": "Tasks",
-  "subtitle": "What's actively being worked on across your projects",
+  "subtitle": "Work in progress across your projects",
   "internalTitle": "Tasks",
-  "internalSubtitle": "Track team tasks across every project",
+  "internalSubtitle": "Track the team's tasks across every project",
   "newButton": "New task",
   "createTitle": "Add a new task",
+  "editTitle": "Edit task",
   "boardView": "Board",
   "listView": "List",
+  "calendarView": "Calendar",
   "empty": {
     "title": "No tasks to show",
-    "description": "Tasks in progress on your projects will show up here."
+    "description": "Work in progress on your projects will show up here."
   },
   "fields": {
     "task": "Task",
     "title": "Task title",
     "description": "Description",
+    "request": "Request",
     "project": "Project",
     "scopeItem": "Scope item",
+    "department": "Department",
     "assignee": "Assignee",
     "priority": "Priority",
     "status": "Status",
     "progress": "Progress",
+    "estimatedHours": "Estimated hours",
+    "actualHours": "Actual hours",
+    "startDate": "Start date",
     "dueDate": "Due date",
-    "clientVisible": "Visible to client"
+    "notes": "Notes",
+    "clientVisible": "Visible to client",
+    "dependencies": "Depends on"
   },
   "status": {
     "TODO": "To do",
     "IN_PROGRESS": "In progress",
-    "IN_REVIEW": "In review",
-    "DONE": "Done",
-    "CANCELLED": "Cancelled"
+    "BLOCKED": "Blocked",
+    "INTERNAL_REVIEW": "Internal review",
+    "CLIENT_REVIEW": "Client review",
+    "CHANGES_REQUIRED": "Changes required",
+    "COMPLETED": "Completed",
+    "CANCELLED": "Cancelled",
+    "ARCHIVED": "Archived"
   },
   "filters": {
     "allProjects": "All projects",
+    "allClients": "All clients",
+    "allRequests": "All requests",
     "allAssignees": "All assignees",
-    "unassigned": "Unassigned"
+    "allDepartments": "All departments",
+    "allPriorities": "All priorities",
+    "allStatuses": "All statuses",
+    "unassigned": "Unassigned",
+    "apply": "Apply",
+    "reset": "Reset"
   },
   "toast": {
     "created": "Task added",
-    "statusUpdated": "Task status updated"
+    "statusUpdated": "Task status updated",
+    "updated": "Task details updated",
+    "assigned": "Task assigned",
+    "reassigned": "Task reassigned",
+    "archived": "Task archived",
+    "deleted": "Task deleted",
+    "overloaded": "Heads up: this person already has a heavy workload",
+    "dependencyBlocked": "This task can't start until its dependencies are completed",
+    "hasDependents": "This task can't be deleted — other tasks depend on it",
+    "cycleDetected": "That dependency would create a cycle between tasks"
+  },
+  "dependencies": {
+    "title": "Dependencies",
+    "add": "Add dependency",
+    "remove": "Remove",
+    "none": "No dependencies",
+    "unmet": "Waiting on: {title}",
+    "selectTask": "Select a task"
+  },
+  "detail": {
+    "editTask": "Edit task",
+    "reassign": "Reassign",
+    "archiveTask": "Archive task",
+    "deleteTask": "Delete task",
+    "deleteTaskConfirm": "This task will be permanently deleted. Are you sure?"
   }
 }

@@ -11,7 +11,16 @@
     "email": "البريد الإلكتروني",
     "role": "الدور",
     "status": "الحالة",
-    "workload": "عبء العمل"
+    "workload": "عبء العمل",
+    "department": "القسم"
+  },
+  "departments": {
+    "title": "الأقسام",
+    "description": "تُستخدم لتصنيف المهام والموظفين",
+    "empty": "لا توجد أقسام بعد",
+    "newButton": "قسم جديد",
+    "nameLabel": "اسم القسم",
+    "noDepartment": "بدون قسم"
   },
   "status": {
     "ACTIVE": "نشط",

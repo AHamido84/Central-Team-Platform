@@ -42,7 +42,7 @@ export default async function ProjectScopePage({
     if (!task.scopeItemId) continue;
     const stats = taskStatsByItemId.get(task.scopeItemId) ?? { total: 0, done: 0 };
     stats.total += 1;
-    if (task.status === "DONE") stats.done += 1;
+    if (task.status === "COMPLETED") stats.done += 1;
     taskStatsByItemId.set(task.scopeItemId, stats);
   }
 

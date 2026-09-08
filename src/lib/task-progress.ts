@@ -5,9 +5,13 @@ import type { TaskStatus } from "@prisma/client";
 export const TASK_STATUS_PERCENT: Record<TaskStatus, number> = {
   TODO: 0,
   IN_PROGRESS: 50,
-  IN_REVIEW: 80,
-  DONE: 100,
+  BLOCKED: 25,
+  INTERNAL_REVIEW: 75,
+  CLIENT_REVIEW: 85,
+  CHANGES_REQUIRED: 60,
+  COMPLETED: 100,
   CANCELLED: 0,
+  ARCHIVED: 0,
 };
 
 export function taskProgressPercent(status: TaskStatus): number {

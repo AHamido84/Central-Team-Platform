@@ -18,9 +18,11 @@ const PERMISSIONS = [
   "projects.delete",
   "requests.create",
   "requests.update",
+  "requests.delete",
   "deliverables.approve",
   "tasks.create",
   "tasks.update",
+  "tasks.delete",
   "deliverables.create",
   "campaigns.create",
   "campaigns.update",
@@ -65,12 +67,21 @@ const ROLES: {
       "contacts.create",
       "contacts.update",
       "contracts.view",
+      // Phase 3: PMs own request triage and task decomposition.
+      "requests.create",
+      "requests.update",
+      "requests.delete",
+      "tasks.create",
+      "tasks.update",
+      "tasks.delete",
     ],
   },
   {
     name: "STAFF",
     description: "General internal staff, read access",
-    permissions: ["clients.view", "projects.view"],
+    // Phase 3: staff execute tasks day to day, so they need to move their
+    // own kanban cards even though they can't create/delete/decompose.
+    permissions: ["clients.view", "projects.view", "tasks.update"],
   },
   {
     name: "CLIENT_ADMIN",
@@ -82,6 +93,16 @@ const ROLES: {
     description: "Client-side user with read access to their own projects",
     permissions: ["projects.view", "requests.create", "deliverables.approve", "comments.create"],
   },
+];
+
+// Phase 3: default departments tasks/staff can be grouped into.
+const DEPARTMENTS = [
+  "التصميم",
+  "الفيديو",
+  "المحتوى",
+  "المواقع الإلكترونية",
+  "الإعلانات",
+  "إدارة الحسابات",
 ];
 
 // Arabic-first: ProjectType/RequestType names are free-text DB content (not
@@ -112,6 +133,17 @@ const REQUEST_TYPES: { name: string; category: ScopeItemCategory | null }[] = [
   { name: "طلب فيديو", category: "VIDEO" },
   { name: "طلب بروشور", category: "BROCHURE" },
   { name: "طلب حملة إعلانية", category: "ADVERTISING" },
+  // Phase 3: the spec's full request-type list (§3).
+  { name: "طلب تعليق صوتي", category: "VOICE_OVER" },
+  { name: "طلب محتوى", category: "COPYWRITING" },
+  { name: "طلب موقع إلكتروني", category: "WEBSITE" },
+  { name: "طلب صفحة هبوط", category: "LANDING_PAGE" },
+  { name: "طلب تحسين محركات البحث", category: "SEO" },
+  { name: "طلب استراتيجية تسويقية", category: "MARKETING_STRATEGY" },
+  { name: "طلب دعم مبيعات", category: "SALES_SUPPORT" },
+  { name: "طلب تصوير فوتوغرافي", category: "PHOTOGRAPHY" },
+  { name: "طلب عرض تقديمي", category: "PRESENTATION" },
+  { name: "طلب آخر", category: "OTHER" },
 ];
 
 // One-time rename of the English names Phase 0/1 originally seeded — a
@@ -197,6 +229,17 @@ async function main() {
         create: { roleId: role.id, permissionId },
       });
     }
+  }
+
+  console.log("Seeding departments...");
+  const departmentIdByName = new Map<string, string>();
+  for (const name of DEPARTMENTS) {
+    const department = await prisma.department.upsert({
+      where: { name },
+      update: {},
+      create: { name },
+    });
+    departmentIdByName.set(name, department.id);
   }
 
   console.log("Renaming legacy English project/request types to Arabic...");
@@ -396,14 +439,14 @@ async function main() {
   const tasks: {
     id: string;
     title: string;
-    status: "TODO" | "IN_PROGRESS" | "IN_REVIEW" | "DONE";
+    status: "TODO" | "IN_PROGRESS" | "INTERNAL_REVIEW" | "COMPLETED";
     clientVisible: boolean;
     dueDate: Date;
   }[] = [
-    { id: "demo-task-copy-review", title: "مراجعة المحتوى النصي للبروشور", status: "DONE", clientVisible: true, dueDate: daysAgo(14) },
+    { id: "demo-task-copy-review", title: "مراجعة المحتوى النصي للبروشور", status: "COMPLETED", clientVisible: true, dueDate: daysAgo(14) },
     { id: "demo-task-design", title: "تصميم الهوية البصرية للبروشور", status: "IN_PROGRESS", clientVisible: true, dueDate: daysFromNow(3) },
     { id: "demo-task-print", title: "تجهيز ملف الطباعة النهائي", status: "TODO", clientVisible: true, dueDate: daysFromNow(10) },
-    { id: "demo-task-qa", title: "مراجعة جودة داخلية", status: "IN_REVIEW", clientVisible: false, dueDate: daysFromNow(1) },
+    { id: "demo-task-qa", title: "مراجعة جودة داخلية", status: "INTERNAL_REVIEW", clientVisible: false, dueDate: daysFromNow(1) },
     { id: "demo-task-report", title: "إعداد تقرير الأداء الشهري", status: "TODO", clientVisible: false, dueDate: daysFromNow(20) },
   ];
   for (const task of tasks) {
@@ -515,7 +558,7 @@ async function main() {
       requestTypeId: requestTypeIdByName.get("طلب تعديل")!,
       title: "طلب إضافة بانر إعلاني إضافي",
       description: "نحتاج بانر بمقاس مربع لمنصات التواصل الاجتماعي",
-      status: "REVIEWING",
+      status: "UNDER_REVIEW",
       dueDate: daysFromNow(5),
     },
   });
@@ -737,6 +780,7 @@ async function main() {
       roleId: projectManagerRoleId,
       status: "ACTIVE",
       locale: "ar",
+      departmentId: departmentIdByName.get("إدارة الحسابات"),
     },
   });
   const staffUser = await prisma.user.upsert({
@@ -749,6 +793,7 @@ async function main() {
       roleId: staffRoleId,
       status: "ACTIVE",
       locale: "ar",
+      departmentId: departmentIdByName.get("التصميم"),
     },
   });
   // One INVITED user, so Team page's status badge and the "invite" flow's
@@ -847,14 +892,14 @@ async function main() {
     id: string;
     projectId: string;
     title: string;
-    status: "TODO" | "IN_PROGRESS" | "IN_REVIEW" | "DONE";
+    status: "TODO" | "IN_PROGRESS" | "INTERNAL_REVIEW" | "COMPLETED";
     assigneeId: string;
     dueDate: Date;
   }[] = [
     { id: "demo-task-food-design", projectId: thirdProject.id, title: "تصميم العبوة النهائية", status: "IN_PROGRESS", assigneeId: staffUser.id, dueDate: daysFromNow(5) },
     { id: "demo-task-food-video", projectId: thirdProject.id, title: "تصوير الإعلان الرئيسي", status: "TODO", assigneeId: staffUser.id, dueDate: daysFromNow(12) },
     { id: "demo-task-food-media-plan", projectId: thirdProject.id, title: "إعداد خطة الشراء الإعلاني", status: "IN_PROGRESS", assigneeId: projectManagerUser.id, dueDate: daysFromNow(7) },
-    { id: "demo-task-branding-brief", projectId: secondProject.id, title: "إعداد ملخص الهوية البصرية", status: "IN_REVIEW", assigneeId: projectManagerUser.id, dueDate: daysFromNow(2) },
+    { id: "demo-task-branding-brief", projectId: secondProject.id, title: "إعداد ملخص الهوية البصرية", status: "INTERNAL_REVIEW", assigneeId: projectManagerUser.id, dueDate: daysFromNow(2) },
     { id: "demo-task-brochure-followup", projectId: demoProject.id, title: "متابعة طباعة البروشور", status: "IN_PROGRESS", assigneeId: staffUser.id, dueDate: daysFromNow(6) },
   ];
   for (const task of moreTasks) {

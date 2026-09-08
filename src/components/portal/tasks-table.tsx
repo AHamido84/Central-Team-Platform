@@ -57,7 +57,15 @@ export async function TasksTable({
             const percent = taskProgressPercent(task.status);
             return (
               <TableRow key={task.id}>
-                <TableCell className="font-medium">{task.title}</TableCell>
+                <TableCell className="font-medium">
+                  {basePath === "" ? (
+                    <Link href={`/tasks/${task.id}`} className="hover:underline">
+                      {task.title}
+                    </Link>
+                  ) : (
+                    task.title
+                  )}
+                </TableCell>
                 {showProject && (
                   <TableCell className="text-muted-foreground">
                     {task.project && (

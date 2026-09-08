@@ -30,9 +30,38 @@
     "noCategory": "No category",
     "empty": "No request types yet"
   },
+  "templates": {
+    "title": "Task templates",
+    "description": "Reusable templates that auto-generate a request's tasks",
+    "manageButton": "Manage templates",
+    "newButton": "New template",
+    "empty": "No templates yet",
+    "fields": {
+      "name": "Template name",
+      "category": "Linked scope category",
+      "description": "Description",
+      "isActive": "Active"
+    },
+    "items": {
+      "title": "Tasks",
+      "addRow": "+ Add task",
+      "order": "#",
+      "titleLabel": "Task title",
+      "department": "Department",
+      "priority": "Priority",
+      "estimatedHours": "Estimated hours",
+      "dependsOn": "Depends on",
+      "noDependency": "No dependency",
+      "remove": "Remove"
+    },
+    "noCategory": "No category",
+    "save": "Save template"
+  },
   "toast": {
     "profileUpdated": "Profile updated",
     "projectTypeCreated": "Project type added",
-    "requestTypeCreated": "Request type added"
+    "requestTypeCreated": "Request type added",
+    "templateCreated": "Template added",
+    "departmentCreated": "Department added"
   }
 }

@@ -8,6 +8,7 @@ import { computeProjectProgress } from "@/lib/project-progress";
 import { ProgressMeter } from "@/components/portal/progress-meter";
 import { ActivityTimeline } from "@/components/portal/activity-timeline";
 import { OPEN_REQUEST_STATUSES } from "@/lib/request-status";
+import { IN_PROGRESS_TASK_STATUSES } from "@/lib/task-capacity";
 import { ChevronRight } from "lucide-react";
 import { DirectionalIcon } from "@/components/layout/directional-icon";
 
@@ -31,7 +32,7 @@ export default async function ProjectOverviewPage({
       prisma.deliverable.count({ where: { projectId: id } }),
       prisma.request.count({ where: { projectId: id, status: { in: OPEN_REQUEST_STATUSES } } }),
       prisma.task.count({
-        where: { projectId: id, clientVisible: true, status: { in: ["IN_PROGRESS", "IN_REVIEW"] } },
+        where: { projectId: id, clientVisible: true, status: { in: IN_PROGRESS_TASK_STATUSES } },
       }),
       prisma.auditLog.findMany({
         where: { projectId: id },

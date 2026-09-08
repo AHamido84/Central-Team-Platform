@@ -5,8 +5,10 @@
   "internalSubtitle": "متابعة مهام الفريق عبر جميع المشاريع",
   "newButton": "مهمة جديدة",
   "createTitle": "إضافة مهمة جديدة",
+  "editTitle": "تعديل المهمة",
   "boardView": "لوحة",
   "listView": "قائمة",
+  "calendarView": "تقويم",
   "empty": {
     "title": "لا توجد مهام لعرضها",
     "description": "ستظهر هنا المهام الجارية على مشاريعك أولاً بأول."
@@ -15,29 +17,71 @@
     "task": "المهمة",
     "title": "عنوان المهمة",
     "description": "الوصف",
+    "request": "الطلب",
     "project": "المشروع",
     "scopeItem": "بند نطاق العمل",
+    "department": "القسم",
     "assignee": "المسؤول",
     "priority": "الأولوية",
     "status": "الحالة",
     "progress": "نسبة الإنجاز",
+    "estimatedHours": "الساعات المقدّرة",
+    "actualHours": "الساعات الفعلية",
+    "startDate": "تاريخ البدء",
     "dueDate": "تاريخ التسليم",
-    "clientVisible": "مرئية للعميل"
+    "notes": "ملاحظات",
+    "clientVisible": "مرئية للعميل",
+    "dependencies": "المهام التي تعتمد عليها"
   },
   "status": {
     "TODO": "لم تبدأ",
     "IN_PROGRESS": "قيد التنفيذ",
-    "IN_REVIEW": "قيد المراجعة",
-    "DONE": "مكتملة",
-    "CANCELLED": "ملغاة"
+    "BLOCKED": "معلّقة",
+    "INTERNAL_REVIEW": "مراجعة داخلية",
+    "CLIENT_REVIEW": "مراجعة العميل",
+    "CHANGES_REQUIRED": "يتطلب تعديلات",
+    "COMPLETED": "مكتملة",
+    "CANCELLED": "ملغاة",
+    "ARCHIVED": "مؤرشفة"
   },
   "filters": {
     "allProjects": "كل المشاريع",
+    "allClients": "كل العملاء",
+    "allRequests": "كل الطلبات",
     "allAssignees": "كل المسؤولين",
-    "unassigned": "غير مسندة"
+    "allDepartments": "كل الأقسام",
+    "allPriorities": "كل الأولويات",
+    "allStatuses": "كل الحالات",
+    "unassigned": "غير مسندة",
+    "apply": "تطبيق",
+    "reset": "إعادة تعيين"
   },
   "toast": {
     "created": "تمت إضافة المهمة",
-    "statusUpdated": "تم تحديث حالة المهمة"
+    "statusUpdated": "تم تحديث حالة المهمة",
+    "updated": "تم تحديث بيانات المهمة",
+    "assigned": "تم إسناد المهمة",
+    "reassigned": "تمت إعادة إسناد المهمة",
+    "archived": "تمت أرشفة المهمة",
+    "deleted": "تم حذف المهمة",
+    "overloaded": "تنبيه: هذا الموظف لديه عبء عمل مرتفع حاليًا",
+    "dependencyBlocked": "لا يمكن بدء هذه المهمة قبل إنجاز المهام التي تعتمد عليها",
+    "hasDependents": "لا يمكن حذف هذه المهمة لأن مهام أخرى تعتمد عليها",
+    "cycleDetected": "لا يمكن إضافة هذه الاعتمادية لأنها تُنشئ حلقة دائرية بين المهام"
+  },
+  "dependencies": {
+    "title": "الاعتماديات",
+    "add": "إضافة اعتمادية",
+    "remove": "إزالة",
+    "none": "لا توجد اعتماديات",
+    "unmet": "بانتظار إنجاز: {title}",
+    "selectTask": "اختر مهمة"
+  },
+  "detail": {
+    "editTask": "تعديل المهمة",
+    "reassign": "إعادة الإسناد",
+    "archiveTask": "أرشفة المهمة",
+    "deleteTask": "حذف المهمة",
+    "deleteTaskConfirm": "سيتم حذف هذه المهمة نهائيًا. هل أنت متأكد؟"
   }
 }

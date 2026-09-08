@@ -11,7 +11,16 @@
     "email": "Email",
     "role": "Role",
     "status": "Status",
-    "workload": "Workload"
+    "workload": "Workload",
+    "department": "Department"
+  },
+  "departments": {
+    "title": "Departments",
+    "description": "Used to group tasks and staff",
+    "empty": "No departments yet",
+    "newButton": "New department",
+    "nameLabel": "Department name",
+    "noDepartment": "No department"
   },
   "status": {
     "ACTIVE": "Active",

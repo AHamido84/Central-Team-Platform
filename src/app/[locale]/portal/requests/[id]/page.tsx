@@ -10,6 +10,7 @@ import { Link } from "@/i18n/navigation";
 import { RequestMetadataCard } from "@/components/requests/request-metadata-card";
 import { RequestTimeline, type RequestTimelineEntry } from "@/components/portal/request-timeline";
 import { CommentThread } from "@/components/portal/comment-thread";
+import { ClientReviewActions } from "@/components/portal/client-review-actions";
 import { fieldSetForCategory } from "@/lib/request-type-fields";
 
 export default async function RequestDetailPage({
@@ -20,6 +21,7 @@ export default async function RequestDetailPage({
   const user = await requireUser();
   const { id } = await params;
   const t = await getTranslations("requests");
+  const tTaskStatus = await getTranslations("tasks.status");
   const locale = await getLocale();
 
   const request = await prisma.request.findUnique({
@@ -40,7 +42,7 @@ export default async function RequestDetailPage({
     throw error;
   }
 
-  const [auditEntries, comments] = await Promise.all([
+  const [auditEntries, comments, tasks] = await Promise.all([
     prisma.auditLog.findMany({
       where: { entityType: "Request", entityId: id },
       orderBy: { createdAt: "asc" },
@@ -49,6 +51,13 @@ export default async function RequestDetailPage({
       where: { entityType: "REQUEST", entityId: id },
       orderBy: { createdAt: "asc" },
       include: { author: { select: { name: true } } },
+    }),
+    // Client Portal visibility rule (spec §16): only clientVisible tasks, and
+    // only title/status/due date — no assignee, hours, notes, dependencies.
+    prisma.task.findMany({
+      where: { requestId: id, clientVisible: true },
+      orderBy: { createdAt: "asc" },
+      select: { id: true, title: true, status: true, dueDate: true },
     }),
   ]);
 
@@ -133,6 +142,31 @@ export default async function RequestDetailPage({
             fieldSet={fieldSetForCategory(request.requestType.category)}
             metadata={request.metadata as Record<string, string> | null}
           />
+
+          {tasks.length > 0 && (
+            <Card>
+              <CardHeader>
+                <CardTitle>{t("detail.sections.tasks")}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ul className="flex flex-col divide-y divide-border text-sm">
+                  {tasks.map((task) => (
+                    <li key={task.id} className="flex items-center justify-between gap-2 py-2">
+                      <span>{task.title}</span>
+                      <div className="flex items-center gap-3">
+                        <span className="text-xs text-muted-foreground">
+                          {formatDate(task.dueDate, locale)}
+                        </span>
+                        <Badge variant="secondary">{tTaskStatus(task.status)}</Badge>
+                      </div>
+                    </li>
+                  ))}
+                </ul>
+              </CardContent>
+            </Card>
+          )}
+
+          {request.status === "CLIENT_REVIEW" && <ClientReviewActions requestId={request.id} />}
 
           <CommentThread
             comments={comments.map((c) => ({

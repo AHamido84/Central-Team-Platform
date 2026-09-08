@@ -12,6 +12,7 @@ import {
 import { prisma } from "@/lib/prisma";
 import { EmptyState } from "@/components/portal/empty-state";
 import { TeamInviteDialog } from "@/components/team/team-invite-dialog";
+import { ACTIVE_TASK_STATUSES } from "@/lib/task-capacity";
 
 const INTERNAL_ROLE_NAMES = ["SUPER_ADMIN", "ACCOUNT_MANAGER", "PROJECT_MANAGER", "STAFF"];
 
@@ -25,7 +26,7 @@ export default async function TeamPage() {
       include: {
         role: { select: { name: true } },
         _count: {
-          select: { assignedTasks: { where: { status: { in: ["TODO", "IN_PROGRESS", "IN_REVIEW"] } } } },
+          select: { assignedTasks: { where: { status: { in: ACTIVE_TASK_STATUSES } } } },
         },
       },
     }),

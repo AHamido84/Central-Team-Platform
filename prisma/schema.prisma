@@ -58,8 +58,29 @@ model User {
   projectsCreated  Project[]  @relation("ProjectCreatedBy")
   projectsUpdated  Project[]  @relation("ProjectUpdatedBy")
 
+  // Phase 3
+  departmentId String?
+  department   Department? @relation(fields: [departmentId], references: [id])
+
   @@index([clientId])
   @@index([roleId])
+  @@index([departmentId])
+}
+
+// ---------------------------------------------------------------------------
+// Phase 3: Departments (task/staff grouping — Design, Video, Web, ...)
+// ---------------------------------------------------------------------------
+
+model Department {
+  id        String   @id @default(cuid())
+  name      String   @unique
+  isCustom  Boolean  @default(false)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  members       User[]
+  tasks         Task[]
+  templateItems RequestTemplateItem[]
 }
 
 enum UserStatus {
@@ -390,6 +411,7 @@ enum ScopeItemCategory {
   LEAD_GENERATION
   SALES_SUPPORT
   REPORTING
+  PRESENTATION
   OTHER
 }
 
@@ -429,70 +451,162 @@ model Request {
   requestType   RequestType @relation(fields: [requestTypeId], references: [id])
   scopeItemId   String?
   scopeItem     ScopeItem?  @relation(fields: [scopeItemId], references: [id])
+  campaignId    String?
+  campaign      Campaign?   @relation(fields: [campaignId], references: [id])
 
-  title       String
-  description String?
-  status      RequestStatus @default(NEW)
-  priority    Priority      @default(MEDIUM)
-  dueDate     DateTime?
+  title         String
+  description   String?
+  status        RequestStatus @default(NEW)
+  priority      Priority      @default(MEDIUM)
+  requestedDate DateTime?
+  dueDate       DateTime?
   // Request-type-specific fields (design dimensions, video duration, campaign
   // budget, ...) that don't warrant their own rarely-populated columns.
-  metadata    Json?
-  createdAt   DateTime      @default(now())
-  updatedAt   DateTime      @updatedAt
+  metadata      Json?
+  // Internal-only notes — never selected/rendered on any portal/* query
+  // (same visibility precedent as Task.clientVisible, just field-shaped
+  // instead of a boolean since the whole column is agency-internal).
+  notes         String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
 
   requestedById String?
   requestedBy   User?   @relation("RequestedBy", fields: [requestedById], references: [id])
 
+  // "Assigned Manager" in the spec — kept as the pre-existing assignedTo
+  // relation rather than adding a second field for the same concept.
   assignedToId String?
   assignedTo   User?   @relation("RequestAssignee", fields: [assignedToId], references: [id])
+
+  tasks  Task[]
+  assets Asset[]
 
   @@index([clientId])
   @@index([projectId])
   @@index([assignedToId])
+  @@index([campaignId])
 }
 
 enum RequestStatus {
   NEW
-  REVIEWING
-  APPROVED
-  CONVERTED
-  REJECTED
+  UNDER_REVIEW
+  ASSIGNED
+  IN_PROGRESS
+  INTERNAL_REVIEW
+  CLIENT_REVIEW
+  CHANGES_REQUIRED
+  COMPLETED
+  ARCHIVED
 }
 
 model Task {
-  id          String     @id @default(cuid())
-  projectId   String
-  project     Project    @relation(fields: [projectId], references: [id], onDelete: Cascade)
-  scopeItemId String?
-  scopeItem   ScopeItem? @relation(fields: [scopeItemId], references: [id])
+  id           String      @id @default(cuid())
+  projectId    String
+  project      Project     @relation(fields: [projectId], references: [id], onDelete: Cascade)
+  scopeItemId  String?
+  scopeItem    ScopeItem?  @relation(fields: [scopeItemId], references: [id])
+  // Which client Request this task executes — nullable so standalone
+  // project-level tasks (not tied to a client request) keep working.
+  requestId    String?
+  request      Request?    @relation(fields: [requestId], references: [id])
+  departmentId String?
+  department   Department? @relation(fields: [departmentId], references: [id])
 
-  title         String
-  description   String?
-  status        TaskStatus @default(TODO)
-  priority      Priority   @default(MEDIUM)
-  dueDate       DateTime?
+  title          String
+  description    String?
+  status         TaskStatus @default(TODO)
+  priority       Priority   @default(MEDIUM)
+  estimatedHours Decimal?   @db.Decimal(6, 2)
+  actualHours    Decimal?   @db.Decimal(6, 2)
+  startDate      DateTime?
+  dueDate        DateTime?
+  notes          String?
   // Internal-only tasks (e.g. "internal QA pass") stay off the client portal;
   // everything else is visible there by default. See ARCHITECTURE.md.
-  clientVisible Boolean    @default(true)
-  createdAt     DateTime   @default(now())
-  updatedAt     DateTime   @updatedAt
+  clientVisible  Boolean    @default(true)
+  createdAt      DateTime   @default(now())
+  updatedAt      DateTime   @updatedAt
 
   assigneeId String?
   assignee   User?   @relation("TaskAssignee", fields: [assigneeId], references: [id])
 
   deliverables Deliverable[]
+  assets       Asset[]
+
+  // Dependency graph: this task's prerequisites, and the tasks that name
+  // this one as a prerequisite. See TaskDependency below.
+  dependsOn   TaskDependency[] @relation("TaskDependents")
+  blockingFor TaskDependency[] @relation("TaskPrerequisites")
 
   @@index([projectId])
   @@index([assigneeId])
+  @@index([requestId])
+  @@index([departmentId])
 }
 
 enum TaskStatus {
   TODO
   IN_PROGRESS
-  IN_REVIEW
-  DONE
+  BLOCKED
+  INTERNAL_REVIEW
+  CLIENT_REVIEW
+  CHANGES_REQUIRED
+  COMPLETED
   CANCELLED
+  ARCHIVED
+}
+
+// Directed edge: `task` cannot start until `dependsOnTask` is COMPLETED.
+// A dedicated join table (rather than a self-relation array field) because
+// the relation is many-to-many in both directions and needs its own
+// identity for cycle/unmet-dependency checks in src/lib/task-dependencies.ts.
+model TaskDependency {
+  id              String   @id @default(cuid())
+  taskId          String
+  task            Task     @relation("TaskDependents", fields: [taskId], references: [id], onDelete: Cascade)
+  dependsOnTaskId String
+  dependsOnTask   Task     @relation("TaskPrerequisites", fields: [dependsOnTaskId], references: [id], onDelete: Cascade)
+  createdAt       DateTime @default(now())
+
+  @@unique([taskId, dependsOnTaskId])
+  @@index([taskId])
+  @@index([dependsOnTaskId])
+}
+
+// A named, ordered set of task drafts a Request Type suggests (e.g. "Video
+// Template": Script -> Script Review -> Voice Over -> ...). Applying a
+// template only ever pre-fills the task-generation draft screen — nothing
+// here is created as a real Task until the user reviews/edits and submits.
+model RequestTemplate {
+  id          String             @id @default(cuid())
+  name        String
+  category    ScopeItemCategory?
+  description String?
+  isActive    Boolean            @default(true)
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+
+  items RequestTemplateItem[]
+}
+
+model RequestTemplateItem {
+  id         String          @id @default(cuid())
+  templateId String
+  template   RequestTemplate @relation(fields: [templateId], references: [id], onDelete: Cascade)
+
+  order                 Int
+  title                 String
+  description           String?
+  departmentId          String?
+  department            Department? @relation(fields: [departmentId], references: [id])
+  defaultPriority       Priority    @default(MEDIUM)
+  defaultEstimatedHours Decimal?    @db.Decimal(6, 2)
+  // `order` value of another item in the SAME template that must complete
+  // first — resolved into a real TaskDependency only once tasks are
+  // generated from this template (see generateTasksFromTemplateAction).
+  dependsOnOrder        Int?
+
+  @@index([templateId])
 }
 
 model Deliverable {
@@ -545,6 +659,10 @@ model Asset {
   project       Project?     @relation(fields: [projectId], references: [id])
   deliverableId String?
   deliverable   Deliverable? @relation(fields: [deliverableId], references: [id])
+  taskId        String?
+  task          Task?        @relation(fields: [taskId], references: [id])
+  requestId     String?
+  request       Request?     @relation(fields: [requestId], references: [id])
 
   fileName  String
   fileUrl   String
@@ -558,6 +676,8 @@ model Asset {
   @@index([clientId])
   @@index([projectId])
   @@index([deliverableId])
+  @@index([taskId])
+  @@index([requestId])
 }
 
 // ---------------------------------------------------------------------------
@@ -580,8 +700,9 @@ model Campaign {
   createdAt DateTime         @default(now())
   updatedAt DateTime         @updatedAt
 
-  leads  Lead[]
-  metric CampaignMetric?
+  leads    Lead[]
+  requests Request[]
+  metric   CampaignMetric?
 
   @@index([projectId])
 }

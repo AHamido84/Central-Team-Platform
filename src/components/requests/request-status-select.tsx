@@ -2,6 +2,7 @@
 
 import { useTransition } from "react";
 import { useTranslations } from "next-intl";
+import { toast } from "sonner";
 import {
   Select,
   SelectContent,
@@ -22,6 +23,7 @@ export function RequestStatusSelect({
   currentStatus: RequestStatus;
 }) {
   const t = useTranslations("requests.status");
+  const tErrors = useTranslations("requests.errors");
   const [isPending, startTransition] = useTransition();
 
   return (
@@ -30,8 +32,11 @@ export function RequestStatusSelect({
       disabled={isPending}
       items={valuesToSelectItems(requestStatusValues, t)}
       onValueChange={(value) => {
-        startTransition(() => {
-          void updateRequestStatusAction(requestId, value as RequestStatus);
+        startTransition(async () => {
+          const result = await updateRequestStatusAction(requestId, value as RequestStatus);
+          if (result?.formError === "tasksIncomplete") {
+            toast.error(tErrors("tasksIncomplete"));
+          }
         });
       }}
     >

@@ -47,6 +47,7 @@ export const scopeItemCategoryValues = [
   "LEAD_GENERATION",
   "SALES_SUPPORT",
   "REPORTING",
+  "PRESENTATION",
   "OTHER",
 ] as const;
 

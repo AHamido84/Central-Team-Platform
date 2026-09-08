@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useTransition } from "react";
+import { toast } from "sonner";
 import { cn } from "@/lib/utils";
 
 export type KanbanItem = {
@@ -46,10 +47,11 @@ export function KanbanBoard({
       prev.map((item) => (item.id === itemId ? { ...item, columnId } : item)),
     );
     startTransition(() => {
-      onMove(itemId, columnId).catch(() => {
-        // Revert on failure (e.g. permission error) — the server is the
-        // source of truth, this optimistic move was wrong.
+      onMove(itemId, columnId).catch((error: unknown) => {
+        // Revert on failure (e.g. permission error, unmet dependency) — the
+        // server is the source of truth, this optimistic move was wrong.
         setLocalItems(items);
+        toast.error(error instanceof Error ? error.message : String(error));
       });
     });
   }

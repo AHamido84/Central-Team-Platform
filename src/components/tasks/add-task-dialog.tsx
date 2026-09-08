@@ -30,11 +30,15 @@ type Option = { id: string; label: string };
 
 export function AddTaskDialog({
   projectId,
+  requestId,
   scopeItems,
+  departments = [],
   assignees,
 }: {
   projectId: string;
+  requestId?: string;
   scopeItems: Option[];
+  departments?: Option[];
   assignees: Option[];
 }) {
   const t = useTranslations("tasks");
@@ -76,6 +80,7 @@ export function AddTaskDialog({
         </DialogHeader>
         <form action={formAction} className="flex flex-col gap-4">
           <input type="hidden" name="projectId" value={projectId} />
+          {requestId && <input type="hidden" name="requestId" value={requestId} />}
           <div className="flex flex-col gap-2">
             <Label>{t("fields.title")}</Label>
             <Input name="title" required />
@@ -97,6 +102,23 @@ export function AddTaskDialog({
                     {scopeItems.map((item) => (
                       <SelectItem key={item.id} value={item.id}>
                         {item.label}
+                      </SelectItem>
+                    ))}
+                  </SelectContent>
+                </Select>
+              </div>
+            )}
+            {departments.length > 0 && (
+              <div className="flex flex-col gap-2">
+                <Label>{t("fields.department")}</Label>
+                <Select name="departmentId" items={optionsToSelectItems(departments)}>
+                  <SelectTrigger className="w-full">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    {departments.map((d) => (
+                      <SelectItem key={d.id} value={d.id}>
+                        {d.label}
                       </SelectItem>
                     ))}
                   </SelectContent>
@@ -136,6 +158,14 @@ export function AddTaskDialog({
                   ))}
                 </SelectContent>
               </Select>
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label>{t("fields.estimatedHours")}</Label>
+              <Input name="estimatedHours" type="number" min={0} step="0.5" />
+            </div>
+            <div className="flex flex-col gap-2">
+              <Label>{t("fields.startDate")}</Label>
+              <Input name="startDate" type="date" />
             </div>
             <div className="flex flex-col gap-2">
               <Label>{t("fields.dueDate")}</Label>

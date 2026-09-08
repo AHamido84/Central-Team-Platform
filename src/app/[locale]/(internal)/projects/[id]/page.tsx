@@ -7,6 +7,7 @@ import { prisma } from "@/lib/prisma";
 import { computeProjectProgress } from "@/lib/project-progress";
 import { formatDate } from "@/lib/format-date";
 import { OPEN_REQUEST_STATUSES } from "@/lib/request-status";
+import { IN_PROGRESS_TASK_STATUSES } from "@/lib/task-capacity";
 import { Inbox, ListChecks, PackageCheck } from "lucide-react";
 
 export default async function InternalProjectOverviewPage({
@@ -24,7 +25,7 @@ export default async function InternalProjectOverviewPage({
       include: { owner: { select: { name: true } }, accountManager: { select: { name: true } } },
     }),
     prisma.request.count({ where: { projectId: id, status: { in: OPEN_REQUEST_STATUSES } } }),
-    prisma.task.count({ where: { projectId: id, status: { in: ["IN_PROGRESS", "IN_REVIEW"] } } }),
+    prisma.task.count({ where: { projectId: id, status: { in: IN_PROGRESS_TASK_STATUSES } } }),
     prisma.deliverable.count({ where: { projectId: id, status: "IN_REVIEW" } }),
     prisma.projectScope.findFirst({
       where: { projectId: id },

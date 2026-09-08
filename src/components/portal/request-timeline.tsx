@@ -23,7 +23,12 @@ export async function RequestTimeline({ entries }: { entries: RequestTimelineEnt
           <p className="text-sm font-medium text-foreground">
             {entry.type === "created" && t("created")}
             {entry.type === "statusChanged" &&
-              t("statusChanged", { status: tStatus(entry.status) })}
+              t("statusChanged", {
+                // Falls back to the raw stored value for an audit-log status
+                // string from a since-retired enum member, rather than
+                // throwing on a missing translation key.
+                status: tStatus.has(entry.status) ? tStatus(entry.status) : entry.status,
+              })}
             {entry.type === "assigned" && t("assigned", { name: entry.name })}
           </p>
           <p className="text-xs text-muted-foreground">{entry.atLabel}</p>
